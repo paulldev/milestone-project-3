@@ -7,6 +7,11 @@ app = Flask(__name__)
 if os.path.exists("env.py"):
     import env
 
+# print(os.environ)
+# Get the username from the Gitpod workspace
+username = os.getenv('mysqluser')
+password = os.getenv('vmpdbpw')
+
 @app.route('/')
 def index():
     return render_template("index.html")
