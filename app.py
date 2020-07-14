@@ -4,23 +4,24 @@ from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 
-if os.path.exists("env.py"):
-    import env
+# if os.path.exists("env.py"):
+#    import env
 
 # print(os.environ)
 # Get the username from the Gitpod workspace
 username = os.getenv('mysqluser')
 password = os.getenv('vmpdbpw')
 
-# Connect to the database
-connection = pymysql.connect(host='localhost',
-                             user=username,
-                             password=password,
-                             db='vmpdb')
 
 @app.route('/')
 def index():
     try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
