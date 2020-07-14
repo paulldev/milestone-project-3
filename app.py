@@ -26,11 +26,10 @@ def index():
             sql = "SELECT * FROM mealType;"
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("index.html")
+    return render_template("index.html", result=result)
 
 
 if __name__ == '__main__':
