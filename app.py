@@ -12,6 +12,12 @@ if os.path.exists("env.py"):
 username = os.getenv('mysqluser')
 password = os.getenv('vmpdbpw')
 
+# Connect to the database
+connection = pymysql.connect(host='localhost',
+                             user=username,
+                             password=password,
+                             db='vmpdb')
+
 @app.route('/')
 def index():
     return render_template("index.html")
