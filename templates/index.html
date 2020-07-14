@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <p>Child</p>
+{% for record in result %}
+    {{record.mealName}}
+{% endfor %}
 {% endblock %}
