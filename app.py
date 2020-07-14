@@ -1,9 +1,11 @@
 import os
 import pymysql
 from flask import Flask, render_template, url_for
-print(os.environ)
+
 app = Flask(__name__)
 
+if os.path.exists("env.py"):
+    import env
 
 @app.route('/')
 def index():
