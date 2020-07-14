@@ -33,9 +33,11 @@ def index():
 
 @app.route('/recipes')
 def recipes():
+    return render_template("recipes.html")
 
 @app.route('/ingredients')
 def ingredients():
+    return render_template("ingredients.html")
 
 
 if __name__ == '__main__':
