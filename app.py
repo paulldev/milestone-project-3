@@ -20,6 +20,16 @@ connection = pymysql.connect(host='localhost',
 
 @app.route('/')
 def index():
+    try:
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = "SELECT * FROM mealType;"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            print(result)
+    finally:
+        # Close the connection, regardless of whether or not the above was successful
+        connection.close()
     return render_template("index.html")
 
 
