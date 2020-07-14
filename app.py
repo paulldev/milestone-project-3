@@ -31,6 +31,12 @@ def index():
         connection.close()
     return render_template("index.html", result=result)
 
+@app.route('/recipes')
+def recipes():
+
+@app.route('/ingredients')
+def ingredients():
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
