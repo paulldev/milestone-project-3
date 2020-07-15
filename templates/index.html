@@ -1,7 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>Child</p>
-{% for record in result %}
-    {{record.mealName}}
-{% endfor %}
+<h3>Daily Meal Plan</h3>
+<p>Pick recipes for each meal. Try to achieve your nutritional goals.</p>
+<div class="col s12">
+    <a class="waves-effect waves-light right btn"><i class="material-icons right">help</i>Quickstart guide</a>
+</div>
+<h3>Add a meal</h3>
+<div class="row">
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field col s5">
+                <input id="recipe_name" type="text" class="validate">
+                <label for="recipe_name">Recipe Name</label>
+            </div>
+            <div class="input-field col s4">
+                <select>
+                    {% for record in result %}
+                    <option value="">{{record.mealName}}</option>
+                    {% endfor %}
+                </select>
+                <label>Meal type</label>
+            </div>
+            <div class="col s3">
+                <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <h5 class="col s4">Protein</h5>
+    <h5 class="col s2 right-align">30g</h5>
+</div>
+<div class="row">
+    <div class="col s6">
+        <div class="progress">
+        <div class="determinate" style="width: 50%"></div>
+    </div>
+</div>
 {% endblock %}
