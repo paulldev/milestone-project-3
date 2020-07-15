@@ -1,4 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>RECIPES</p>
+<h3>Recipes</h3>
+<p>When creating a new recipe, you must create the ingredients first.</p>
+<h3>Enter recipe details</h3>
+<div class="row">
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="recipe_name" type="text" class="validate">
+                <label for="recipe_name">Recipe Name</label>
+            </div>
+            <div class="input-field col s3">
+                <input id="ingredient_amount" type="number" class="validate">
+                <label for="ingredient_amount">Servings</label>
+            </div>
+        </div>
+        <div class="row">
+            <h5>Ingredients</h5>
+            <div class="input-field col s5">
+                <input id="ingredient_name" type="text" class="validate">
+                <label for="ingredient_name">Ingredient name</label>
+            </div>
+            <div class="input-field col s2">
+                <input id="ingredient_amount" type="number" class="validate">
+                <label for="ingredient_amount">Amount</label>
+            </div>
+            <div class="input-field col s2">
+                <select>
+                    <option value="" selected>g</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                <label>Unit</label>
+            </div>
+            <div class="col s3">
+                <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
+            </div>
+        </div>
+        <div class="row">
+            <h5>Steps</h5>
+            <div class="input-field col s2">
+                <input id="step_number" type="number" class="validate">
+                <label for="step_number">Step number</label>
+            </div>
+            <div class="input-field col s7">
+                <input id="step_description" type="text" class="validate">
+                <label for="step_description">Step description</label>
+            </div>
+            <div class="col s3">
+                <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <a class="waves-effect waves-light right btn"><i class="material-icons right">save</i>Save</a>
+                <a class="waves-effect waves-light right btn"><i class="material-icons right">delete_forever</i>Delete</a>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}
