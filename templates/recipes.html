@@ -7,22 +7,25 @@
     <form class="col s12">
         <div class="row">
             <div class="input-field col s6">
+                <i class="material-icons prefix">search</i>
                 <input id="recipe_name" type="text" class="validate">
                 <label for="recipe_name">Recipe Name</label>
             </div>
             <div class="input-field col s3">
+                <i class="material-icons prefix">people</i>
                 <input id="servings" type="number" class="validate">
                 <label for="servings">Servings</label>
             </div>
         </div>
         <div class="row">
             <h5>Ingredients</h5>
-            <div class="input-field col s5">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">search</i>
                 <input id="ingredient_name" type="text" class="validate">
                 <label for="ingredient_name">Ingredient name</label>
             </div>
-            <div class="input-field col s2">
-                <input id="ingredient_amount" type="number" placeholder="0" step="0.01" class="validate">
+            <div class="input-field col s1">
+                <input id="ingredient_amount" type="number" placeholder="0.00" step="0.01" class="validate">
                 <label for="ingredient_amount">Amount</label>
             </div>
             <div class="input-field col s2">
@@ -43,9 +46,9 @@
                         <option value="item" selected>item</option>
                     </optgroup>
                 </select>
-                <label for="ingredient_units">Optgroups</label>
+                <label for="ingredient_units">Units</label>
             </div>
-            <div class="col s3">
+            <div class="col s2">
                 <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
             </div>
         </div>
@@ -59,7 +62,7 @@
                 <input id="step_description" type="text" class="validate">
                 <label for="step_description">Step description</label>
             </div>
-            <div class="col s3">
+            <div class="col s2">
                 <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
             </div>
         </div>
