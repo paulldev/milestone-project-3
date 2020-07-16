@@ -26,13 +26,24 @@
                 <label for="ingredient_amount">Amount</label>
             </div>
             <div class="input-field col s2">
-                <select>
-                    <option value="" selected>g</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
+                <select name="ingredient_units" id="ingredient_units">
+                    <optgroup label="Weight">
+                        <option value="microgram">microgram (μg)</option>
+                        <option value="milligram">milligram (mg)</option>
+                        <option value="gram">gram (g)</option>
+                        <option value="kilogram">kilogram (kg)</option>
+                    </optgroup>
+                    <optgroup label="Volume">
+                        <option value="teaspoon">teaspoon (tsp.)</option>
+                        <option value="tablespoon">tablespoon (tbsp.)</option>
+                        <option value="cup">cup</option>
+                        <option value="millilitre">millilitre (ml)</option>
+                        <option value="litre">litre (L)</option>
+                    <optgroup label="Quantity">
+                        <option value="item" selected>item</option>
+                    </optgroup>
                 </select>
-                <label>Unit</label>
+                <label for="ingredient_units">Optgroups</label>
             </div>
             <div class="col s3">
                 <a class="waves-effect waves-light right btn"><i class="material-icons right">playlist_add</i>Add</a>
