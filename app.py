@@ -79,7 +79,7 @@ def get_ingredients():
     return jsonify(result)
 
 def get_names(table, column_name):
-    sql_read = "SELECT "+column_name+" FROM "+table+";"
+    sql_read = f"SELECT {column_name} FROM {table};"
 
     try:
         # Connect to the database
