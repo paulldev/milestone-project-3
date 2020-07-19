@@ -4,9 +4,12 @@ $(document).ready(function () {
 
   if (location.href.match(/ingredients/)) {
     console.log("Found ingredients page");
+    //getNames();
     getNames('ingredient', 'name');
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
+  } else {
+      console.log("Error, unknown page");
   }
 
   $("#ingredient_name").on("keyup", function (event) {
@@ -32,12 +35,13 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         console.log("Error");
-      },
+      }
     });
   });
 
-  function getNames(table, column, event) {
-    event.preventDefault();
+  function getNames(table, column) {
+  //function getNames() {
+      console.log("inside jquery (getNames): ")
     //get names of ingredients/recipes
     $.ajax({
       //create an ajax request to get_ingredients()
@@ -48,7 +52,7 @@ $(document).ready(function () {
       },
       type: "POST",
       dataType: "json",
-      url: "get_names",
+      url: "/get_names",
       success: function (result, status, xhr) {
         console.log("returned data: ", result);
         if (result[0]) {
@@ -60,8 +64,8 @@ $(document).ready(function () {
         }
       },
       error: function (xhr, status, error) {
-        console.log("Error");
-      },
+        console.log("Error??", xhr);
+      }
     });
   }
 
