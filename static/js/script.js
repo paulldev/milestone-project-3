@@ -6,12 +6,12 @@ $(document).ready(function () {
         event.preventDefault();
         //check if ingredient exists
         $.ajax({    //create an ajax request to get_ingredients
-            data: {
+            data: { //data that gets sent to python
                 ingredient_name : $('#ingredient_name').val()
             },
             type : 'POST',
             dataType: 'json',
-            url : '/get_ingredients',
+            url : '/ingredient_exists',
             success : function(result,status,xhr){
 //                console.log('returned data: ', result);
                 if(result[0]) { //found ingredient in database
