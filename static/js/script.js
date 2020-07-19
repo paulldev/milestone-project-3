@@ -11,20 +11,20 @@ $(document).ready(function () {
             },
             type : 'POST',
             dataType: 'json',
-            url : '/get_ingredients'
-        })
-        .done(function(data) {
-            console.log('returned data: ', data);
-            if(data[0]) { //found ingredient in database
-                console.log('found '+data[0].name);
+            url : '/get_ingredients',
+            success : function(result,status,xhr){
+                console.log('returned data: ', result);
+                if(result[0]) { //found ingredient in database
+                    console.log('found '+result[0].name);
+                }
+    //            console.log('result: ',result);
+                console.log('result[0]: ',result[0]);
+    //            console.log('result[0].COUNT(*): ',result[0].COUNT(*));
+            },
+            error : function(xhr,status,error){
+                console.log("error");
             }
-//            console.log('data: ',data);
-            console.log('data[0]: ',data[0]);
-//            console.log('data[0].COUNT(*): ',data[0].COUNT(*));
         })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("error");
-        });
     });
 /*    let mydata = {
       "aa": null,
