@@ -38,9 +38,12 @@ def recipes():
 
 @app.route('/ingredients')
 def ingredients():
+    print("*inside ingredients()")
     #get ingredient names for drop down list (return js object)
     ingredient_list = get_names('ingredient', 'name')
+    print("INDREDIENT LIST (START)")
     print(ingredient_list)
+    print("INDREDIENT LIST (END)")
 
     #if ingredient name is defined, get nutritional data
     exists = name_exists('ingredient', 'name', 'apple')
@@ -48,7 +51,7 @@ def ingredients():
     print(exists)
     return render_template("ingredients.html")
 
-@app.route('/get_ingredients', methods=['POST'])
+@app.route('/ingredient_exists', methods=['POST'])
 def get_ingredients():
     #get data from request object
 #    ingredient = request.form.to_dict()
@@ -81,6 +84,7 @@ def get_ingredients():
     return jsonify(result)
 
 def get_names(table, column_name):
+    print("*inside get_names()")
     sql_read = f"SELECT {column_name} FROM {table};"
 
     try:
@@ -95,13 +99,11 @@ def get_names(table, column_name):
             cursor.execute(sql_read)
             result = cursor.fetchall() #returns a dictionary
             #connection.commit();
-            if result:
-                print(result)
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(result)
+    return result
 
 
 def name_exists(table, column_name, name):    
