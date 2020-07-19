@@ -40,15 +40,15 @@ def recipes():
 def ingredients():
     print("*inside ingredients()")
     #get ingredient names for drop down list (return js object)
-    ingredient_list = get_names('ingredient', 'name')
-    print("INDREDIENT LIST (START)")
-    print(ingredient_list)
-    print("INDREDIENT LIST (END)")
+    #ingredient_list = get_names('ingredient', 'name')
+    #print("INDREDIENT LIST (START)")
+    #print(ingredient_list)
+    #print("INDREDIENT LIST (END)")
 
     #if ingredient name is defined, get nutritional data
-    exists = name_exists('ingredient', 'name', 'apple')
-    print("exists:")
-    print(exists)
+    #exists = name_exists('ingredient', 'name', 'apple')
+    #print("exists:")
+    #print(exists)
     return render_template("ingredients.html")
 
 @app.route('/ingredient_exists', methods=['POST'])
@@ -83,9 +83,13 @@ def get_ingredients():
 #    return jsonify({'found': result}) #dictionary -> json
     return jsonify(result)
 
-def get_names(table, column_name):
-    print("*inside get_names()")
-    sql_read = f"SELECT {column_name} FROM {table};"
+
+@app.route('/get_names', methods=['POST'])
+def get_names():
+    table = request.form['table']
+    column = request.form['column']
+    
+    sql = f"SELECT {column} FROM {table};"
 
     try:
         # Connect to the database
@@ -96,14 +100,14 @@ def get_names(table, column_name):
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_read)
+            cursor.execute(sql)
             result = cursor.fetchall() #returns a dictionary
-            #connection.commit();
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-
-    return result
+    print("*3.returning result:")
+    print(result)
+    return jsonify(result)
 
 
 def name_exists(table, column_name, name):    
