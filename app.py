@@ -39,11 +39,13 @@ def recipes():
 @app.route('/ingredients')
 def ingredients():
     #get ingredient names for drop down list (return js object)
-    print(get_names('ingredient', 'name'))
+    ingredient_list = get_names('ingredient', 'name')
+    print(ingredient_list)
 
     #if ingredient name is defined, get nutritional data
-
-    
+    exists = name_exists('ingredient', 'name', 'apple')
+    print("exists:")
+    print(exists)
     return render_template("ingredients.html")
 
 @app.route('/get_ingredients', methods=['POST'])
@@ -101,6 +103,32 @@ def get_names(table, column_name):
 
     return jsonify(result)
 
+
+def name_exists(table, column_name, name):    
+    sql_read = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
+#    sql = "SELECT EXISTS(SELECT * FROM ingredient WHERE name = '"+ingredient+"');"
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql_read)
+            result = cursor.fetchall() #returns a dictionary
+            #connection.commit();
+            if result:
+                print('result is:')
+                print(result)
+    finally:
+        # Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+#    return jsonify({'found': result}) #dictionary -> json
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
