@@ -13,16 +13,15 @@ $(document).ready(function () {
             dataType: 'json',
             url : '/get_ingredients',
             success : function(result,status,xhr){
-                console.log('returned data: ', result);
+//                console.log('returned data: ', result);
                 if(result[0]) { //found ingredient in database
-                    console.log('found '+result[0].name);
+                    console.log('Found '+result[0].name);
+                } else {
+                    console.log('Couldn\'t find ingredient');
                 }
-    //            console.log('result: ',result);
-                console.log('result[0]: ',result[0]);
-    //            console.log('result[0].COUNT(*): ',result[0].COUNT(*));
             },
             error : function(xhr,status,error){
-                console.log("error");
+                console.log("Error");
             }
         })
     });
