@@ -2,14 +2,16 @@ $(document).ready(function () {
   $(".button-collapse").sideNav();
   $("select").material_select();
 
-    function getNames(table, column) {
+  function getNames(table, column) {
     console.log("3. inside getNames(). AJAX call starting");
-    console.log("3. using table ("+table+") and column ("+column+")");
+    console.log("3. using table (" + table + ") and column (" + column + ")");
     //get names of ingredients/recipes
-    $.ajax({ //create an ajax request to get_names()
-      data: { //data that gets sent to python
+    $.ajax({
+      //create an ajax request to get_names()
+      data: {
+        //data that gets sent to python
         table: table,
-        column: column
+        column: column,
       },
       type: "POST",
       dataType: "json",
@@ -33,7 +35,7 @@ $(document).ready(function () {
       },
       complete: function (result) {
         console.log("AJAX call complete", result.responseText);
-      }
+      },
     });
     console.log("6. end of getNames(). AJAX call ending");
   }
@@ -41,7 +43,7 @@ $(document).ready(function () {
   if (location.href.match(/ingredients/)) {
     console.log("1. Found ingredients page");
     console.log("2. Calling getNames() ");
-      //debugger;
+    //debugger;
 
     ingredientNames = getNames("ingredient", "name");
     console.log("** Back from calling getNames() >>>>>>", ingredientNames);
@@ -51,7 +53,7 @@ $(document).ready(function () {
     console.log("Error, unknown page");
   }
 
-/*  $("#ingredient_name").on("keyup", function (event) {
+  /*  $("#ingredient_name").on("keyup", function (event) {
     event.preventDefault();
     //check if ingredient exists
     $.ajax({
@@ -78,8 +80,7 @@ $(document).ready(function () {
     });
   });*/
 
-
-/*  var names = {};
+  /*  var names = {};
   console.log("6. populating autocomplete object with returned data", ingredientNames);
   for (var i = 0; i < 5; i++) {
     names["ape"] = null;
