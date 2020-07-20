@@ -3,13 +3,16 @@ $(document).ready(function () {
   $("select").material_select();
 
   if (location.href.match(/ingredients/)) {
-    console.log("Found ingredients page");
-    //getNames();
-    getNames('ingredient', 'name');
+    console.log("0. Found ingredients page");
+    console.log("1. Calling getNames() ");
+//      debugger;
+
+    mydata = getNames("ingredient", "name");
+    console.log("Back from calling allNames() >>>>>>", mydata);
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
   } else {
-      console.log("Error, unknown page");
+    console.log("Error, unknown page");
   }
 
   $("#ingredient_name").on("keyup", function (event) {
@@ -19,7 +22,7 @@ $(document).ready(function () {
       //create an ajax request to get_ingredients
       data: {
         //data that gets sent to python
-        ingredient_name: $("#ingredient_name").val(),
+        ingredient_name: $("#ingredient_name").val()
       },
       type: "POST",
       dataType: "json",
@@ -40,25 +43,28 @@ $(document).ready(function () {
   });
 
   function getNames(table, column) {
-  //function getNames() {
-      console.log("inside jquery (getNames): ")
+    console.log("2. inside getNames(). AJAX call starting");
     //get names of ingredients/recipes
     $.ajax({
-      //create an ajax request to get_ingredients()
+      //create an ajax request to get_names()
       data: {
         //data that gets sent to python
         table: table,
-        column: column
+        column: column,
       },
       type: "POST",
-      dataType: "json",
+//      dataType: "json",
       url: "/get_names",
       success: function (result, status, xhr) {
-        console.log("returned data: ", result);
-        if (result[0]) {
+        console.log("3. successful ajax call");
+//        console.log("4. ajax type returned (result): ", typeof result);
+//        console.log("5. ajax type returned (result[0]): ", typeof result[0]);
+//        console.log("6. ajax result (stringify): ", JSON.stringify(result));
+        if (result) {
           //found in database
-          console.log("Found " + result); //object
-          return result[0];
+          console.log("7. Return result:", result); //object
+          //return JSON.parse(result);
+          return result;
         } else {
           console.log("Couldn't find");
         }
@@ -69,20 +75,20 @@ $(document).ready(function () {
     });
   }
 
-  /*    let mydata = {
-      "aa": null,
-      "ab": null,
-      "abc": 'https://placehold.it/250x250'
-    }
-
-    //http://archives.materializecss.com/0.100.2/forms.html
-    $('input.autocomplete').autocomplete({
-    data: mydata,
+  var names = {};
+  console.log("populating autocomplete object");
+  for (var i = 0; i < 5; i++) {
+    names["ape"] = null;
+  }
+  console.log("8. autocomplete object: ", names);
+  //http://archives.materializecss.com/0.100.2/forms.html
+  $("input.autocomplete").autocomplete({
+    data: names,
     limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-    onAutocomplete: function(val) {
+    onAutocomplete: function (val) {
       // Callback function when value is autcompleted.
       alert(val);
     },
     minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
-  });*/
+  });
 });
