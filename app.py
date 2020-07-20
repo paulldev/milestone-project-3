@@ -33,9 +33,11 @@ def index():
         connection.close()
     return render_template("index.html", result=result)
 
+
 @app.route('/recipes')
 def recipes():
     return render_template("recipes.html")
+
 
 @app.route('/ingredients')
 def ingredients():
@@ -52,10 +54,11 @@ def ingredients():
     #print(exists)
     return render_template("ingredients.html")
 
+
 @app.route('/ingredient_exists', methods=['POST'])
 def get_ingredients():
     #get data from request object
-#    ingredient = request.form.to_dict()
+    #ingredient = request.form.to_dict()
 
     ingredient = request.form['ingredient_name']
     #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
@@ -72,16 +75,16 @@ def get_ingredients():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql_read)
-            result = cursor.fetchall() #returns a dictionary
+            result = cursor.fetchall()  #returns a dictionary
             #connection.commit();
             if result:
                 print('result is:')
                 print(result)
     finally:
-        # Close the connection, regardless of whether or not the above was successful
+        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-#    return jsonify({'found': result}) #dictionary -> json
+    #  return jsonify({'found': result}) #dictionary -> json
     return jsonify(result)
 
 
@@ -90,8 +93,6 @@ def get_names():
     table = request.form['table']
     column = request.form['column']
     print('----------jQuery: page has loaded-----------')
-    #print(f'TABLE (from AJAX): {table}')
-    #print(f'COL (from AJAX): {column}')
 
     sql = f"SELECT {column} FROM {table};"
     print(f"MySQL query: {sql}")
@@ -107,18 +108,21 @@ def get_names():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
             print('Running SQL query...')
-            result = cursor.fetchall() #returns a dictionary
+            result = cursor.fetchall()  #returns a dictionary
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-        print(f'RAW query result: {result[0]}')
-        print(f'json.dumps query result: {json.dumps(result[0])}')
-        print(f'jsonify query result: {jsonify(result[0])}')
+        print(f'RAW query result: {result}')
+        if type(result) is dict:
+            print(f'RESULT is a dictionary: {result}')
+        else:
+            print(f'RESULT is NOT a dictionary: {result}')
+        print(f'jsonify query result. return this > {jsonify(result)}')
     return jsonify(result)
     #return json.dumps(result)
 
 
-def name_exists(table, column_name, name):    
+def name_exists(table, column_name, name):
     sql_read = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 #    sql = "SELECT EXISTS(SELECT * FROM ingredient WHERE name = '"+ingredient+"');"
 
@@ -132,7 +136,7 @@ def name_exists(table, column_name, name):
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql_read)
-            result = cursor.fetchall() #returns a dictionary
+            result = cursor.fetchall()  #returns a dictionary
             #connection.commit();
             if result:
                 print('result is:')
@@ -148,6 +152,7 @@ def name_exists(table, column_name, name):
     print("*** 4. jsonify(result):")
     print(jsonify(result))
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
