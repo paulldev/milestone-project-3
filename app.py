@@ -39,7 +39,7 @@ def recipes():
 
 @app.route('/ingredients')
 def ingredients():
-    print("******** inside ingredients()")
+    print("******** Opening ingredients.html")
     #get ingredient names for drop down list (return js object)
     #ingredient_list = get_names('ingredient', 'name')
     #print("INDREDIENT LIST (START)")
@@ -89,12 +89,12 @@ def get_ingredients():
 def get_names():
     table = request.form['table']
     column = request.form['column']
-    print(f'TABLE: {table}')
-    print(f'COL: {column}')
-    print("MySQL query:")
-    print(f"SELECT {column} FROM {table};")
-    
+    print('----------jQuery: page has loaded-----------')
+    #print(f'TABLE (from AJAX): {table}')
+    #print(f'COL (from AJAX): {column}')
+
     sql = f"SELECT {column} FROM {table};"
+    print(f"MySQL query: {sql}")
 
     try:
         # Connect to the database
@@ -106,18 +106,16 @@ def get_names():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
+            print('Running SQL query...')
             result = cursor.fetchall() #returns a dictionary
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    print("*** 1. result from python:")
-    print(result)
-    print("*** 2. json.dumps(result):")
-    print(json.dumps(result))
-    print("*** 2. jsonify(result):")
-    print(jsonify(result))
-    #return jsonify(result)
-    return json.dumps(result)
+        print(f'RAW query result: {result[0]}')
+        print(f'json.dumps query result: {json.dumps(result[0])}')
+        print(f'jsonify query result: {jsonify(result[0])}')
+    return jsonify(result)
+    #return json.dumps(result)
 
 
 def name_exists(table, column_name, name):    
@@ -143,7 +141,12 @@ def name_exists(table, column_name, name):
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-#    return jsonify({'found': result}) #dictionary -> json
+    print("*** 3. result from python:")
+    print(result)
+    print("*** 4. json.dumps(result):")
+    print(json.dumps(result))
+    print("*** 4. jsonify(result):")
+    print(jsonify(result))
     return jsonify(result)
 
 if __name__ == '__main__':
