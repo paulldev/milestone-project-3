@@ -1,5 +1,6 @@
 import os
 import pymysql
+import json
 from flask import Flask, render_template, url_for, request, jsonify
 
 app = Flask(__name__)
@@ -38,7 +39,7 @@ def recipes():
 
 @app.route('/ingredients')
 def ingredients():
-    print("*inside ingredients()")
+    print("******** inside ingredients()")
     #get ingredient names for drop down list (return js object)
     #ingredient_list = get_names('ingredient', 'name')
     #print("INDREDIENT LIST (START)")
@@ -88,6 +89,10 @@ def get_ingredients():
 def get_names():
     table = request.form['table']
     column = request.form['column']
+    print(f'TABLE: {table}')
+    print(f'COL: {column}')
+    print("MySQL query:")
+    print(f"SELECT {column} FROM {table};")
     
     sql = f"SELECT {column} FROM {table};"
 
@@ -105,9 +110,14 @@ def get_names():
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    print("*3.returning result:")
+    print("*** 1. result from python:")
     print(result)
-    return jsonify(result)
+    print("*** 2. json.dumps(result):")
+    print(json.dumps(result))
+    print("*** 2. jsonify(result):")
+    print(jsonify(result))
+    #return jsonify(result)
+    return json.dumps(result)
 
 
 def name_exists(table, column_name, name):    
