@@ -43,8 +43,8 @@ $(document).ready(function () {
     console.log("2. Calling getNames() ");
       //debugger;
 
-    mydata = getNames("ingredient", "name");
-    console.log("** Back from calling getNames() >>>>>>", mydata);
+    ingredientNames = getNames("ingredient", "name");
+    console.log("** Back from calling getNames() >>>>>>", ingredientNames);
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
   } else {
@@ -80,7 +80,7 @@ $(document).ready(function () {
 
 
 /*  var names = {};
-  console.log("6. populating autocomplete object with returned data", mydata);
+  console.log("6. populating autocomplete object with returned data", ingredientNames);
   for (var i = 0; i < 5; i++) {
     names["ape"] = null;
   }
