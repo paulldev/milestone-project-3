@@ -52,8 +52,8 @@ let matchedRecipe = false;
         data: ingredients,
         limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
-        // Callback function when value is autcompleted.
-        //alert(val);
+            // Callback function when value is autcompleted.
+            matchedIngredient = true;
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -66,9 +66,9 @@ let matchedRecipe = false;
         data: ingredients,
         limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
-        // Callback function when value is autcompleted.
-        //alert(val);
-        },
+            // Callback function when value is autcompleted.
+             matchedIngredient = true;
+       },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
     //http://archives.materializecss.com/0.100.2/forms.html
@@ -76,8 +76,8 @@ let matchedRecipe = false;
         data: recipes,
         limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
-        // Callback function when value is autcompleted.
-        //alert(val);
+            // Callback function when value is autcompleted.
+            matchedIngredient = true;
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -90,7 +90,7 @@ let matchedRecipe = false;
         limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
         // Callback function when value is autcompleted.
-        //alert(val);
+            matchedRecipe = true;
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
