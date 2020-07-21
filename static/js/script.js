@@ -1,12 +1,9 @@
 $(document).ready(function () {
-let names = {};
+let names = {}; //used to hold result from the ajax call. Materialize autocomplete feature uses the names object.
   $(".button-collapse").sideNav();
   $("select").material_select();
 
-  function getNames(table, column) {
-    console.log("3. inside getNames(). AJAX call starting");
-    console.log("3. using table (" + table + ") and column (" + column + ")");
-    //get names of ingredients/recipes
+  function getNames(url, table, column) { //get names from the database using an ajax call
     $.ajax({
       //create an ajax request to get_names()
       data: {
@@ -14,22 +11,19 @@ let names = {};
         table: table,
         column: column
       },
-      async:false,
+      async:false, //locks browser until request completes
       type: "POST",
       dataType: "json",
-      url: "/get_names",
+      url: url,
       success: function (result, status, xhr) {
         console.log("4. [success:] successful ajax call", result); //this is a js object
         if (result) {
           //found in database
-            console.log("6. populating autocomplete object with returned data", result);
             //https://stackoverflow.com/questions/5223/length-of-a-javascript-object
             for (var i = 0; i < Object.keys(result).length; i++) {
                 names[result[i].name] = null;
                 console.log("Iteration ("+i+") ", names);
-                console.log("Iteration ("+i+") ", names[result[i].name]);
             }
-            console.log("7. autocomplete object: ", names);
         } else {
           console.log("5. Couldn't find");
         }
@@ -45,11 +39,7 @@ let names = {};
 
   if (location.href.match(/ingredients/)) {
     console.log("1. Found ingredients page");
-    console.log("2. Calling getNames() ");
-
-    console.log("NAMES: ", names);
-    getNames("ingredient", "name");
-    console.log("NAMES: ", names);
+    getNames("/get_names", "ingredient", "name");
 
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
