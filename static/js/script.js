@@ -1,4 +1,5 @@
 $(document).ready(function () {
+let names = {};
   $(".button-collapse").sideNav();
   $("select").material_select();
 
@@ -11,21 +12,24 @@ $(document).ready(function () {
       data: {
         //data that gets sent to python
         table: table,
-        column: column,
+        column: column
       },
+      async:false,
       type: "POST",
       dataType: "json",
       url: "/get_names",
       success: function (result, status, xhr) {
-        console.log("4. [success:] successful ajax call");
-        console.log("4. ajax type returned (result): ", typeof result);
-        console.log("4. ajax type returned (result[0]): ", typeof result[0]);
-        console.log("4. ajax result (stringify): ", JSON.stringify(result));
+        console.log("4. [success:] successful ajax call", result); //this is a js object
         if (result) {
           //found in database
-          console.log("5. Return result:", result); //object
-          //return JSON.parse(result);
-          return result.responseText;
+            console.log("6. populating autocomplete object with returned data", result);
+            //https://stackoverflow.com/questions/5223/length-of-a-javascript-object
+            for (var i = 0; i < Object.keys(result).length; i++) {
+                names[result[i].name] = null;
+                console.log("Iteration ("+i+") ", names);
+                console.log("Iteration ("+i+") ", names[result[i].name]);
+            }
+            console.log("7. autocomplete object: ", names);
         } else {
           console.log("5. Couldn't find");
         }
@@ -34,21 +38,22 @@ $(document).ready(function () {
         console.log("4. [Error:] Error??", xhr);
       },
       complete: function (result) {
-        console.log("AJAX call complete", result.responseText);
-      },
+        console.log("AJAX call complete, check NAMES ", names);
+      }
     });
-    console.log("6. end of getNames(). AJAX call ending");
   }
 
   if (location.href.match(/ingredients/)) {
     console.log("1. Found ingredients page");
     console.log("2. Calling getNames() ");
-    //debugger;
 
-    ingredientNames = getNames("ingredient", "name");
-    console.log("** Back from calling getNames() >>>>>>", ingredientNames);
+    console.log("NAMES: ", names);
+    getNames("ingredient", "name");
+    console.log("NAMES: ", names);
+
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
+    getNames("ingredient", "name");
   } else {
     console.log("Error, unknown page");
   }
@@ -80,12 +85,7 @@ $(document).ready(function () {
     });
   });*/
 
-  /*  var names = {};
-  console.log("6. populating autocomplete object with returned data", ingredientNames);
-  for (var i = 0; i < 5; i++) {
-    names["ape"] = null;
-  }
-  console.log("7. autocomplete object: ", names);
+  //names = {applezz: null, orangezz: null};
   //http://archives.materializecss.com/0.100.2/forms.html
   $("input.autocomplete").autocomplete({
     data: names,
@@ -95,5 +95,5 @@ $(document).ready(function () {
       alert(val);
     },
     minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
-  });*/
+  });
 });
