@@ -61,6 +61,7 @@ $(document).ready(function () {
       onAutocomplete: function (val) {
         // Callback function when value is autcompleted.
         matchedIngredient = true;
+        getIngredientNutrition();
         console.log("MATCHED INGREDIENT: ", matchedIngredient);
         console.log("MATCHED RECIPE: ", matchedRecipe);
       },
@@ -164,6 +165,7 @@ $(document).ready(function () {
           //found ingredient in database
           console.log("Found " + result[0].name);
           matchedIngredient = true;
+          getIngredientNutrition();
           console.log("MATCHED INGREDIENT: ", matchedIngredient);
           console.log("MATCHED RECIPE: ", matchedRecipe);
         } else {
@@ -195,18 +197,12 @@ $(document).ready(function () {
       },
       type: "POST",
       dataType: "json",
-      url: "/recipe_exists",
+      url: "/get_ingredient_nutrition",
       success: function (result, status, xhr) {
         if (result[0]) {
-          //found recipe in database
-          console.log("Found " + result[0].name);
-          matchedRecipe = true;
           console.log("MATCHED INGREDIENT: ", matchedIngredient);
           console.log("MATCHED RECIPE: ", matchedRecipe);
         } else {
-          matchedRecipe = false;
-
-          console.log("Couldn't find recipe");
           console.log("MATCHED INGREDIENT: ", matchedIngredient);
           console.log("MATCHED RECIPE: ", matchedRecipe);
         }
