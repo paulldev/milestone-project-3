@@ -25,7 +25,7 @@ let recipes = {}; //used to hold result from the ajax call. Materialize autocomp
                 if (table == 'ingredient') {
                     ingredients[result[i].name] = null;
                 } else if (table == 'recipe') {
-                    recipe[result[i].name] = null;
+                    recipes[result[i].name] = null;
                 }
                 console.log("Iteration ("+i+") ", ingredients);
             }
@@ -45,11 +45,40 @@ let recipes = {}; //used to hold result from the ajax call. Materialize autocomp
   if (location.href.match(/ingredients/)) {
     console.log("1. Found ingredients page");
     getNames("/get_names", "ingredient", "name");
-
+    //http://archives.materializecss.com/0.100.2/forms.html
+    $("input.autocomplete").autocomplete({
+        data: ingredients,
+        limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
+        onAutocomplete: function (val) {
+        // Callback function when value is autcompleted.
+        //alert(val);
+        },
+        minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
     getNames("/get_names", "ingredient", "name");
     getNames("/get_names", "recipe", "name");
+    //http://archives.materializecss.com/0.100.2/forms.html
+    $("input#ingredient_name").autocomplete({
+        data: ingredients,
+        limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
+        onAutocomplete: function (val) {
+        // Callback function when value is autcompleted.
+        //alert(val);
+        },
+        minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
+    //http://archives.materializecss.com/0.100.2/forms.html
+    $("input#recipe_name").autocomplete({
+        data: recipes,
+        limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
+        onAutocomplete: function (val) {
+        // Callback function when value is autcompleted.
+        //alert(val);
+        },
+        minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
   } else {
     console.log("Error, unknown page");
   }
@@ -81,14 +110,4 @@ let recipes = {}; //used to hold result from the ajax call. Materialize autocomp
     });
   });
 
-  //http://archives.materializecss.com/0.100.2/forms.html
-  $("input.autocomplete").autocomplete({
-    data: ingredients,
-    limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-    onAutocomplete: function (val) {
-      // Callback function when value is autcompleted.
-      //alert(val);
-    },
-    minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
-  });
 });
