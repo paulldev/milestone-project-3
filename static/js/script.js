@@ -1,5 +1,5 @@
 $(document).ready(function () {
-let names = {}; //used to hold result from the ajax call. Materialize autocomplete feature uses the names object.
+let ingredients = {}; //used to hold result from the ajax call. Materialize autocomplete feature uses the ingredients object.
   $(".button-collapse").sideNav();
   $("select").material_select();
 
@@ -21,8 +21,10 @@ let names = {}; //used to hold result from the ajax call. Materialize autocomple
           //found in database
             //https://stackoverflow.com/questions/5223/length-of-a-javascript-object
             for (var i = 0; i < Object.keys(result).length; i++) {
-                names[result[i].name] = null;
-                console.log("Iteration ("+i+") ", names);
+                if (table == 'ingredient') {
+                    ingredients[result[i].name] = null;
+                }
+                console.log("Iteration ("+i+") ", ingredients);
             }
         } else {
           console.log("5. Couldn't find");
@@ -32,7 +34,7 @@ let names = {}; //used to hold result from the ajax call. Materialize autocomple
         console.log("4. [Error:] Error??", xhr);
       },
       complete: function (result) {
-        console.log("AJAX call complete, check NAMES ", names);
+        console.log("AJAX call complete, check NAMES ", ingredients);
       }
     });
   }
@@ -43,12 +45,13 @@ let names = {}; //used to hold result from the ajax call. Materialize autocomple
 
   } else if (location.href.match(/recipes/)) {
     console.log("Found recipes page");
-    getNames("ingredient", "name");
+    getNames("/get_names", "ingredient", "name");
+    getNames("/get_names", "recipe", "name");
   } else {
     console.log("Error, unknown page");
   }
 
-  /*  $("#ingredient_name").on("keyup", function (event) {
+    $("#ingredient_name").on("keyup", function (event) {
     event.preventDefault();
     //check if ingredient exists
     $.ajax({
@@ -73,16 +76,15 @@ let names = {}; //used to hold result from the ajax call. Materialize autocomple
         console.log("Error");
       }
     });
-  });*/
+  });
 
-  //names = {applezz: null, orangezz: null};
   //http://archives.materializecss.com/0.100.2/forms.html
   $("input.autocomplete").autocomplete({
-    data: names,
+    data: ingredients,
     limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
     onAutocomplete: function (val) {
       // Callback function when value is autcompleted.
-      alert(val);
+      //alert(val);
     },
     minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
   });
