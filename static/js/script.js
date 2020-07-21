@@ -31,6 +31,11 @@ let matchedRecipe = false;
                 }
                 console.log("Iteration ("+i+") ", ingredients);
             }
+            if (table == 'ingredient') {
+                matchedIngredient = true;
+            } else if (table == 'recipe') {
+                matchedRecipe = true;
+            }
         } else {
           console.log("5. Couldn't find");
         }
