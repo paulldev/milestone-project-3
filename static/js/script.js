@@ -59,6 +59,8 @@ let matchedRecipe = false;
         onAutocomplete: function (val) {
             // Callback function when value is autcompleted.
             matchedIngredient = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -73,6 +75,8 @@ let matchedRecipe = false;
         onAutocomplete: function (val) {
             // Callback function when value is autcompleted.
              matchedIngredient = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
        },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -83,6 +87,8 @@ let matchedRecipe = false;
         onAutocomplete: function (val) {
             // Callback function when value is autcompleted.
             matchedIngredient = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -96,12 +102,47 @@ let matchedRecipe = false;
         onAutocomplete: function (val) {
         // Callback function when value is autcompleted.
             matchedRecipe = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
         },
         minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
     });
   } else {
       console.log("Page not found");
   }
+
+    $("#recipe_name").on("keyup", function (event) {
+    event.preventDefault();
+    //check if recipe exists
+    $.ajax({
+      //create an ajax request to get_recipes
+      data: {
+        //data that gets sent to python
+        recipe_name: $("#recipe_name").val()
+      },
+      type: "POST",
+      dataType: "json",
+      url: "/recipe_exists",
+      success: function (result, status, xhr) {
+        if (result[0]) {
+          //found recipe in database
+          console.log("Found " + result[0].name);
+          matchedRecipe = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
+        } else {
+            matchedRecipe = false;
+
+          console.log("Couldn't find recipe");
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error");
+      }
+    });
+  });  
 
     $("#ingredient_name").on("keyup", function (event) {
     event.preventDefault();
