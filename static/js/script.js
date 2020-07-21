@@ -24,6 +24,8 @@ let recipes = {}; //used to hold result from the ajax call. Materialize autocomp
             for (var i = 0; i < Object.keys(result).length; i++) {
                 if (table == 'ingredient') {
                     ingredients[result[i].name] = null;
+                } else if (table == 'recipe') {
+                    recipe[result[i].name] = null;
                 }
                 console.log("Iteration ("+i+") ", ingredients);
             }
