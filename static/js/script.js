@@ -31,11 +31,11 @@ let matchedRecipe = false;
                 }
                 console.log("Iteration ("+i+") ", ingredients);
             }
-            if (table == 'ingredient') {
+/*            if (table == 'ingredient') {
                 matchedIngredient = true;
             } else if (table == 'recipe') {
                 matchedRecipe = true;
-            }
+            }*/
         } else {
           console.log("5. Couldn't find");
         }
@@ -120,8 +120,15 @@ let matchedRecipe = false;
         if (result[0]) {
           //found ingredient in database
           console.log("Found " + result[0].name);
+          matchedIngredient = true;
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
         } else {
+            matchedIngredient = false;
+
           console.log("Couldn't find ingredient");
+          console.log("MATCHED INGREDIENT: ", matchedIngredient);
+          console.log("MATCHED RECIPE: ", matchedRecipe);
         }
       },
       error: function (xhr, status, error) {
