@@ -36,6 +36,7 @@ def index():
 
 @app.route('/recipes')
 def recipes():
+    print("******** Opening recipes.html")
     return render_template("recipes.html")
 
 
@@ -88,6 +89,71 @@ def get_ingredients():
     return jsonify(result)
 
 
+@app.route('/recipe_exists', methods=['POST'])
+def get_recipes():
+    #get data from request object
+
+    recipe = request.form['recipe_name']
+    sql = "SELECT name, COUNT(*) FROM ingredient WHERE name = '"+recipe+"'GROUP BY name;"
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()  #returns a dictionary
+            if result:
+                print('result is:')
+                print(result)
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify(result)
+
+
+@app.route('/get_ingredient_nutrition', methods=['POST'])
+def get_ingredient_nutrition():
+    #get data from request object
+     
+    ingredient_name = request.form['ingredient_name']
+    #energy_amount = request.form['energy_amount']
+    #carbohydrate_amount = request.form['carbohydrate_amount']
+    #fats_amount = request.form['fats_amount']
+    #protein_amount = request.form['protein_amount']
+    #calcium_amount = request.form['calcium_amount']
+    #zinc_amount = request.form['zinc_amount']
+
+    print(ingredient_name)
+#    sql = "SELECT  energy_amount, carbohydrate_amount, fats_amount, protein_amount, calcium_amount, zinc_amount FROM ingredient;"
+    sql = f"SELECT energy, carbohydrate, fat, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()  #returns a dictionary
+            if result:
+                print('result is:')
+                print(result)
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify(result)
+
+
 @app.route('/get_names', methods=['POST'])
 def get_names():
     table = request.form['table']
@@ -123,8 +189,7 @@ def get_names():
 
 
 def name_exists(table, column_name, name):
-    sql_read = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
-#    sql = "SELECT EXISTS(SELECT * FROM ingredient WHERE name = '"+ingredient+"');"
+    sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
         # Connect to the database
@@ -147,8 +212,6 @@ def name_exists(table, column_name, name):
 
     print("*** 3. result from python:")
     print(result)
-    print("*** 4. json.dumps(result):")
-    print(json.dumps(result))
     print("*** 4. jsonify(result):")
     print(jsonify(result))
     return jsonify(result)
