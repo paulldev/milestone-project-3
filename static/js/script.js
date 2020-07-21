@@ -1,5 +1,6 @@
 $(document).ready(function () {
 let ingredients = {}; //used to hold result from the ajax call. Materialize autocomplete feature uses the ingredients object.
+let recipes = {}; //used to hold result from the ajax call. Materialize autocomplete feature uses the recipes object.
   $(".button-collapse").sideNav();
   $("select").material_select();
 
