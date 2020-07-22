@@ -187,6 +187,39 @@ $(document).ready(function () {
     saveIngredientNutrition();
   });
 
+  $("#delete-nutrition-data").on("click", function (event) {
+    event.preventDefault();
+    let value = $("#ingredient_name").val();
+    deleteItem('ingredient', 'name', value);
+  });
+
+
+  function deleteItem(table, column, value) {
+    event.preventDefault();
+    $.ajax({
+      //create an ajax request to delete_item
+      data: {
+        //data that gets sent to python
+        table: table,
+        column: column,
+        value: value
+      },
+      type: "POST",
+      dataType: "json",
+      url: "/delete_item",
+      success: function (result, status, xhr) {
+        if (result[0]) {
+          console.log("NUTRITION: ", result);
+        } else {
+        }
+      },
+      complete: function () {
+        Materialize.toast('Deleted ingredient', 4000) // 4000 is the duration of the toast
+      }
+    });
+  }
+
+
   function getIngredientNutrition() {
     event.preventDefault();
     $.ajax({
