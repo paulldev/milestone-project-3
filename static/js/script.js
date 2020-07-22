@@ -271,16 +271,51 @@ $(document).ready(function () {
       //dataType: "json",
       url: "/save_ingredient_nutrition",
       success: function (result, status, xhr) {
-//        if (result[0]) {
-//          console.log("NUTRITION: ", result);
         Materialize.toast('Saved nutritional data', 4000) // 4000 is the duration of the toast
-//        } else {
- //       }
       },
       error: function (xhr, status, error) {
         console.log("Error:(", error);
       }
     });
+  }
+
+    $("#add-ingredient-to-recipe").on("click", function (event) {
+    event.preventDefault();
+    let value = $("#ingredient_name").val();
+    let amount = $("#ingredient_amount").val();
+    let unit = $("#ingredient_units option:selected").text();
+    console.log("Running function...");
+    addIngredientToRecipe(value, amount, unit);
+  });
+
+
+  function addIngredientToRecipe(value, amount, unit) {
+    event.preventDefault();
+    console.log("Iside function ...");
+    //add ingredient details to a new row
+    $("#ingredient-row").append("<div class='col s12'><i class='material-icons'>search</i><h3>"+value+"</h3></div>");
+/*    $.ajax({
+      //create an ajax request to delete_item
+      data: {
+        //data that gets sent to python
+        value: value,
+        amount: amount,
+        unit: unit
+      },
+      type: "POST",
+      dataType: "json",
+      url: "/add_ingredient_to_recipe",
+      success: function (result, status, xhr) {
+        if (result[0]) {
+          console.log("NUTRITION: ", result);
+        } else {
+        }
+      },
+      complete: function () {
+        Materialize.toast('Added ingredient to list', 4000) // 4000 is the duration of the toast
+      }
+    });
+    */
   }
 
 
