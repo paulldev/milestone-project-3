@@ -154,6 +154,39 @@ def get_ingredient_nutrition():
     return jsonify(result)
 
 
+@app.route('/delete_item', methods=['POST'])
+def delete_item():
+    #get data from request object
+     
+    table = request.form['table']
+    column = request.form['column']
+    value = request.form['value']
+
+    sql = f"DELETE FROM {table} WHERE {column} = '{value}';"
+    print("DELETE COMPLETE")
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            #result = cursor.fetchall()  #returns a dictionary
+            connection.commit()
+            #if result:
+                #print('result is:')
+                #print(result)
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+#    return redirect(url_for('ingredients'))
+    return render_template("ingredients.html")
+
+
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
     #get data from request object
