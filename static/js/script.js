@@ -214,4 +214,36 @@ $(document).ready(function () {
     });
   }
 
+    function saveIngredientNutrition() {
+    event.preventDefault();
+    $.ajax({
+      //create an ajax request to save_ingredient_nutrition
+      data: {
+        //data that gets sent to python
+        ingredient_name: $("#ingredient_name").val(),
+        energy_amount: $("#energy_amount").val(),
+        carbohydrate_amount: $("#carbohydrate_amount").val(),
+        fats_amount: $("#fats_amount").val(),
+        protein_amount: $("#protein_amount").val(),
+        calcium_amount: $("#calcium_amount").val(),
+        iron_amount: $("#iron_amount").val(),
+        zinc_amount: $("#zinc_amount").val(),
+      },
+      type: "POST",
+      dataType: "json",
+      url: "/save_ingredient_nutrition",
+      success: function (result, status, xhr) {
+        if (result[0]) {
+          console.log("NUTRITION: ", result);
+        Materialize.toast('Saved nutritional data', 4000) // 4000 is the duration of the toast
+        } else {
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error:(");
+      }
+    });
+  }
+
+
 });
