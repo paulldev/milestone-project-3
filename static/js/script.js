@@ -182,6 +182,11 @@ $(document).ready(function () {
     });
   });
 
+  $("#save-nutrition-data").on("click", function (event) {
+    event.preventDefault();
+    saveIngredientNutrition();
+  });
+
   function getIngredientNutrition() {
     event.preventDefault();
     $.ajax({
@@ -199,7 +204,7 @@ $(document).ready(function () {
           console.log("IRON VALUE: ", result[0].iron);
         $("#energy_amount").val(result[0].energy);
         $("#carbohydrate_amount").val(result[0].carbohydrate);
-        $("#fats_amount").val(result[0].fat);
+        $("#fats_amount").val(result[0].fats);
         $("#protein_amount").val(result[0].protein);
         $("#calcium_amount").val(result[0].calcium);
         $("#iron_amount").val(result[0].iron);
@@ -230,17 +235,17 @@ $(document).ready(function () {
         zinc_amount: $("#zinc_amount").val(),
       },
       type: "POST",
-      dataType: "json",
+      //dataType: "json",
       url: "/save_ingredient_nutrition",
       success: function (result, status, xhr) {
-        if (result[0]) {
-          console.log("NUTRITION: ", result);
+//        if (result[0]) {
+//          console.log("NUTRITION: ", result);
         Materialize.toast('Saved nutritional data', 4000) // 4000 is the duration of the toast
-        } else {
-        }
+//        } else {
+ //       }
       },
       error: function (xhr, status, error) {
-        console.log("Error:(");
+        console.log("Error:(", error);
       }
     });
   }
