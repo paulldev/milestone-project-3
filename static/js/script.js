@@ -188,29 +188,30 @@ $(document).ready(function () {
       //create an ajax request to get_ingredient_nutrition
       data: {
         //data that gets sent to python
-        energy_amount: $("#energy_amount").val(),
-        carbohydrate_amount: $("#carbohydrate_amount").val(),
-        fats_amount: $("#fats_amount").val(),
-        protein_amount: $("#protein_amount").val(),
-        calcium_amount: $("#calcium_amount").val(),
-        zinc_amount: $("#zinc_amount").val(),
+        ingredient_name: $("#ingredient_name").val()
       },
       type: "POST",
       dataType: "json",
       url: "/get_ingredient_nutrition",
       success: function (result, status, xhr) {
         if (result[0]) {
-          console.log("MATCHED INGREDIENT: ", matchedIngredient);
-          console.log("MATCHED RECIPE: ", matchedRecipe);
+          console.log("NUTRITION: ", result);
+          console.log("IRON VALUE: ", result[0].iron);
+        $("#energy_amount").val(result[0].energy);
+        $("#carbohydrate_amount").val(result[0].carbohydrate);
+        $("#fats_amount").val(result[0].fat);
+        $("#protein_amount").val(result[0].protein);
+        $("#calcium_amount").val(result[0].calcium);
+        $("#iron_amount").val(result[0].iron);
+        $("#zinc_amount").val(result[0].zinc);
+        Materialize.toast('Loaded nutritional data', 4000) // 4000 is the duration of the toast
         } else {
-          console.log("MATCHED INGREDIENT: ", matchedIngredient);
-          console.log("MATCHED RECIPE: ", matchedRecipe);
         }
       },
       error: function (xhr, status, error) {
-        console.log("Error");
-      },
+        console.log("Error:(");
+      }
     });
-  });
+  }
 
 });
