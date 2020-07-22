@@ -1,7 +1,7 @@
 import os
 import pymysql
 import json
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
 
@@ -167,9 +167,8 @@ def save_ingredient_nutrition():
     iron_amount = request.form['iron_amount']
     zinc_amount = request.form['zinc_amount']
 
-#    sql = "SELECT  energy_amount, carbohydrate_amount, fats_amount, protein_amount, calcium_amount, zinc_amount FROM ingredient;"
     sql = f"INSERT INTO ingredient (name, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
-
+    print("INSERT COMPLETE")
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -181,6 +180,7 @@ def save_ingredient_nutrition():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
+            connection.commit()
             if result:
                 print('result is:')
                 print(result)
@@ -188,7 +188,7 @@ def save_ingredient_nutrition():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(result)
+    return redirect(url_for('ingredients'))
 
 
 @app.route('/get_names', methods=['POST'])
