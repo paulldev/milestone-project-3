@@ -120,18 +120,10 @@ def get_recipes():
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
     #get data from request object
-     
     ingredient_name = request.form['ingredient_name']
-    #energy_amount = request.form['energy_amount']
-    #carbohydrate_amount = request.form['carbohydrate_amount']
-    #fats_amount = request.form['fats_amount']
-    #protein_amount = request.form['protein_amount']
-    #calcium_amount = request.form['calcium_amount']
-    #zinc_amount = request.form['zinc_amount']
-
+ 
     print(ingredient_name)
-#    sql = "SELECT  energy_amount, carbohydrate_amount, fats_amount, protein_amount, calcium_amount, zinc_amount FROM ingredient;"
-    sql = f"SELECT energy, carbohydrate, fats, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
+    sql = f"SELECT ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
 
     try:
         # Connect to the database
