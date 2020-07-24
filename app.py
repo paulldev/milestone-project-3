@@ -190,8 +190,9 @@ def delete_item():
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
     #get data from request object
-     
+    action = request.form['action']
     ingredient_name = request.form['ingredient_name']
+    ingredient_amount = request.form['ingredient_amount']
     energy_amount = request.form['energy_amount']
     carbohydrate_amount = request.form['carbohydrate_amount']
     fats_amount = request.form['fats_amount']
@@ -200,8 +201,12 @@ def save_ingredient_nutrition():
     iron_amount = request.form['iron_amount']
     zinc_amount = request.form['zinc_amount']
 
-    sql = f"INSERT INTO ingredient (name, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
-    print("INSERT COMPLETE")
+    if action == "save":
+        sql = f"INSERT INTO ingredient (name, ingredient_amount, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
+        print("INSERT COMPLETE")
+    elif action == "update":
+        sql = f"UPDATE ingredient SET ingredient_amount={energy_amount}, energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
+        print("INSERT COMPLETE")
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
