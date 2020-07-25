@@ -130,7 +130,8 @@ $(document).ready(function () {
 				if (result[0]) {
 					//found recipe in database
 					console.log("Found " + result[0].name);
-					matchedRecipe = true;
+                    matchedRecipe = true;
+                    getRecipeData();
 					console.log("MATCHED INGREDIENT: ", matchedIngredient);
 					console.log("MATCHED RECIPE: ", matchedRecipe);
 				} else {
@@ -253,6 +254,31 @@ $(document).ready(function () {
 					$("#iron_amount").val(result[0].iron);
 					$("#zinc_amount").val(result[0].zinc);
 					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
+				} else {
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log("Error:(");
+			},
+		});
+	}
+
+	function getRecipeData() {
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to get_recipe_data
+			data: {
+				//data that gets sent to python
+				recipe_name: $("#recipe_name").val(),
+			},
+			type: "POST",
+			dataType: "json",
+			url: "/get_recipe_data",
+			success: function (result, status, xhr) {
+				if (result[0]) {
+//					console.log("NUTRITION: ", result);
+					$("#servings").val(result[0].servings);
+					Materialize.toast("Loaded recipe data", 4000); // 4000 is the duration of the toast
 				} else {
 				}
 			},
