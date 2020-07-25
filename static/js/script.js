@@ -384,8 +384,24 @@ $(document).ready(function () {
 		event.preventDefault();
 		//add ingredient details
 		$("#ingredient-list").append(
-			"<li class='row list-item'><div class='col s6'><i class='material-icons prefix'>navigate_next</i>" + value + "</div><div class='col s1'>" + amount + "</div><div class='col s2'>" + unit + "</div><div class='col s3'></div></li>"
+            `<li class='row list-item'>
+                <div class='col s6'>
+                    <i class='material-icons prefix'>navigate_next</i>${value}
+                </div>
+                <div class='col s1'>
+                    ${amount}
+                </div>
+                <div class='col s2'>
+                    ${unit}
+                </div>
+                <div class='col s3'>
+                    <i class='material-icons prefix'>delete_forever</i>
+                </div>
+            </li>`
         );
+		$("#ingredient_name").val(""); //reset ingredient name
+		$("#ingredient_amount").val(""); //reset ingredient amount
+    	Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
 
 		/*    $.ajax({
       //create an ajax request to delete_item
