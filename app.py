@@ -116,13 +116,12 @@ def get_recipes():
 
     return jsonify(result)
 
-
+get_recipe_data
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
     #get data from request object
     ingredient_name = request.form['ingredient_name']
  
-    print(ingredient_name)
     sql = f"SELECT ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
 
     try:
@@ -136,9 +135,35 @@ def get_ingredient_nutrition():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
-            if result:
-                print('result is:')
-                print(result)
+            print('get_ingredient_nutrition:')
+            print(result)
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify(result)
+
+
+@app.route('/get_recipe_data', methods=['POST'])
+def get_recipe_data():
+    #get data from request object
+    recipe_name = request.form['recipe_name']
+ 
+    sql = f"SELECT * FROM recipe WHERE name='{recipe_name}';"
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()  #returns a dictionary
+            print('get_recipe_data:')
+            print(result)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -155,7 +180,6 @@ def delete_item():
     value = request.form['value']
 
     sql = f"DELETE FROM {table} WHERE {column} = '{value}';"
-    print("DELETE COMPLETE")
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -168,9 +192,7 @@ def delete_item():
             cursor.execute(sql)
             #result = cursor.fetchall()  #returns a dictionary
             connection.commit()
-            #if result:
-                #print('result is:')
-                #print(result)
+            print("DELETE COMPLETE")
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
