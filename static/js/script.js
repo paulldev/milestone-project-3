@@ -384,10 +384,43 @@ $(document).ready(function () {
 
 	});
 
-	function clearIngredientInputs() {
+    $("#add-step-to-recipe").on("click", function (event) {
+        event.preventDefault();
+		let step_number = $("#step_number").val();
+		let step_description = $("#step_description").val();
+        if (step_number.length > 0 & step_description.length > 0) {
+            addStepToRecipe(step_number, step_description);
+        } else {
+        	Materialize.toast("Please fill out all step fields", 4000); // 4000 is the duration of the toast
+        }
+	});
+
+
+    function clearIngredientInputs() {
 		$("input[required]").val(""); //reset all requred inputs
 		$(window).scrollTop(0); //scroll window to top
 	}
+
+	function addStepToRecipe(step_number, step_description) {
+		event.preventDefault();
+		//add step details
+		$("#step-list").append(
+            `<li class='row list-item'>
+                <div class='col s2'>
+                    ${step_number}
+                </div>
+                <div class='col s7'>
+                    ${step_description}
+                </div>
+            </li>`
+        );
+		$("#step_number").val(parseInt(step_number) + 1); //increment step number
+        $("#step_description").val(""); //reset step description
+        $("#step_description").focus(); //position cursor for next step description
+    	Materialize.toast("Added to steps list", 3000); // 4000 is the duration of the toast
+
+	}
+
 
 	function addIngredientToRecipe(value, amount, unit) {
 		event.preventDefault();
