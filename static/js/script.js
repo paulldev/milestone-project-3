@@ -305,7 +305,68 @@ $(document).ready(function () {
 		}
 	}
 
-	$("#add-ingredient-to-recipe").on("click", function (event) {
+
+
+//*************************************************************************** */
+	function saveRecipe() {
+		event.preventDefault();
+        let action = "save"; //action determines whether to use INSERT or UPDATE in our database
+        if (matchedRecipe) {
+            action = "update";
+        }
+
+		//https://stackoverflow.com/questions/18465508/check-if-inputs-form-are-empty-jquery
+		var isFormValid = true;
+
+		$("input[required]").each(function () {
+			if ($.trim($(this).val()).length == 0) {
+				isFormValid = false;
+			} else {
+			}
+		});
+
+		if (isFormValid) {
+			//checks if all required inputs have a value
+			$.ajax({
+				//create an ajax request to save_ingredient_nutrition
+				data: {
+                    //data that gets sent to python
+                    action: action,
+					ingredient_name: $("#ingredient_name").val(),
+					ingredient_amount: $("#ingredient_amount").val(),
+					energy_amount: $("#energy_amount").val(),
+					carbohydrate_amount: $("#carbohydrate_amount").val(),
+					fats_amount: $("#fats_amount").val(),
+					protein_amount: $("#protein_amount").val(),
+					calcium_amount: $("#calcium_amount").val(),
+					iron_amount: $("#iron_amount").val(),
+					zinc_amount: $("#zinc_amount").val(),
+				},
+				type: "POST",
+				//dataType: "json",
+				url: "/save_ingredient_nutrition",
+				success: function (result, status, xhr) {
+                    if (action == "save") {
+					    Materialize.toast("Saved nutritional data", 4000); // 4000 is the duration of the toast
+                        clearIngredientInputs();
+                    } else if (action == "update") {
+					    Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
+            			$(window).scrollTop(0); //scroll window to top
+                    }
+				},
+				error: function (xhr, status, error) {
+					console.log("Error:(", error);
+				},
+			});
+		} else {
+			Materialize.toast("All fields must be filled out", 4000); // 4000 is the duration of the toast
+			$(window).scrollTop(0); //scroll window to top
+		}
+	}
+//''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+    $("#add-ingredient-to-recipe").on("click", function (event) {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
@@ -321,13 +382,11 @@ $(document).ready(function () {
 
 	function addIngredientToRecipe(value, amount, unit) {
 		event.preventDefault();
-		console.log("Iside function ...");
-		//add ingredient details to a new row
-		$("#ingredient-row").append(
-			"<div class='col s12'><i class='material-icons'>search</i><h3>" +
-				value +
-				"</h3></div>"
-		);
+		//add ingredient details
+		$("#ingredient-list").append(
+			"<li class='row list-item'><div class='col s6'><i class='material-icons prefix'>navigate_next</i>" + value + "</div><div class='col s1'>" + amount + "</div><div class='col s2'>" + unit + "</div><div class='col s3'></div></li>"
+        );
+
 		/*    $.ajax({
       //create an ajax request to delete_item
       data: {
