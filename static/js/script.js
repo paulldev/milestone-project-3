@@ -220,7 +220,11 @@ $(document).ready(function () {
 				}
 			},
 			complete: function () {
-				Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
+                if (table == "ingredient") {
+                    Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
+                } else if (table == "recipe") {
+                    Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
+                }
 			},
 		});
 	}
