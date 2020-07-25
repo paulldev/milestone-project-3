@@ -367,12 +367,21 @@ $(document).ready(function () {
 
 
     $("#add-ingredient-to-recipe").on("click", function (event) {
-		event.preventDefault();
+        event.preventDefault();
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
-		let unit = $("#ingredient_units option:selected").text();
-		console.log("Running function...");
-		addIngredientToRecipe(value, amount, unit);
+        let unit = $("#ingredient_units option:selected").text();
+        if (value.length > 0 && amount.length > 0 & unit.length > 0) {
+            if (matchedIngredient) {
+                addIngredientToRecipe(value, amount, unit);
+            } else {
+                let $toastContent = $('<span>Ingredient not found</span>').add($('<button class="btn-flat toast-action">CREATE INGREDIENT</button>'));
+                Materialize.toast($toastContent, 10000);
+            }
+        } else {
+        	Materialize.toast("Please fill out all ingredient fields", 4000); // 4000 is the duration of the toast
+        }
+
 	});
 
 	function clearIngredientInputs() {
