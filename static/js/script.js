@@ -77,9 +77,13 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-                matchedIngredient = true;
-                getIngredientNutrition();
-				console.log("MATCHED INGREDIENT: ", matchedRecipe, matchedIngredient);
+				matchedIngredient = true;
+				getIngredientNutrition();//??? maybe not needed
+				console.log(
+					"MATCHED INGREDIENT: ",
+					matchedRecipe,
+					matchedIngredient
+				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -89,9 +93,13 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-                matchedRecipe = true;
-                getRecipeData();
-				console.log("MATCHED RECIPE: ", matchedRecipe, matchedIngredient);
+				matchedRecipe = true;
+				getRecipeData();
+				console.log(
+					"MATCHED RECIPE: ",
+					matchedRecipe,
+					matchedIngredient
+				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -104,9 +112,13 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-                matchedRecipe = true;
-                getRecipeData();
-				console.log("MATCHED RECIPE: ", matchedRecipe, matchedIngredient);
+				matchedRecipe = true;
+				getRecipeData();
+				console.log(
+					"MATCHED RECIPE: ",
+					matchedRecipe,
+					matchedIngredient
+				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -125,17 +137,25 @@ $(document).ready(function () {
 			},
 			type: "POST",
 			dataType: "json",
-			url: "/recipe_exists",//xxx
+			url: "/recipe_exists",
 			success: function (result, status, xhr) {
 				if (result[0]) {
 					//found recipe in database
 					console.log("FOUND RECIPE >>>> ", result);
-                    matchedRecipe = true;
-                    getRecipeData();
-					console.log("Found Recipe. keyup MATCHES: ", matchedRecipe , matchedIngredient);
+					matchedRecipe = true;
+					getRecipeData();
+					console.log(
+						"Found Recipe. keyup MATCHES: ",
+						matchedRecipe,
+						matchedIngredient
+					);
 				} else {
 					matchedRecipe = false;
-					console.log("Didn't find Recipe. keyup MATCHES: ", matchedRecipe , matchedIngredient);
+					console.log(
+						"Didn't find Recipe. keyup MATCHES: ",
+						matchedRecipe,
+						matchedIngredient
+					);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -145,7 +165,9 @@ $(document).ready(function () {
 	});
 
 	$("#ingredient_name").on("keyup", function (event) {
-		event.preventDefault();
+		//yyy
+        event.preventDefault();
+        console.log("--ONKEYUP. Sending ingredient name to python (/ingredient_exists): ", $("#ingredient_name").val());
 		//check if ingredient exists
 		$.ajax({
 			//create an ajax request to get_ingredients
@@ -157,17 +179,23 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/ingredient_exists",
 			success: function (result, status, xhr) {
-				//                console.log('returned data: ', result);
+                console.log("--Successfully received data from server: ", result);
 				if (result[0]) {
 					//found ingredient in database
-					console.log("Found ingredient >>> " + result[0].name);
 					matchedIngredient = true;
 					getIngredientNutrition();
-					console.log("Found Ingredient. keyup MATCHES: ", matchedRecipe , matchedIngredient);
+					console.log(
+						"--Found Ingredient. Matched (recipe, ingredient): ",
+						matchedRecipe,
+						matchedIngredient
+					);
 				} else {
 					matchedIngredient = false;
-
-					console.log("Didn't find Ingredient. keyup MATCHES: ", matchedRecipe , matchedIngredient);
+					console.log(
+						"--Didn't find Ingredient. Matched (recipe, ingredient): ",
+						matchedRecipe,
+						matchedIngredient
+					);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -176,12 +204,52 @@ $(document).ready(function () {
 		});
 	});
 
+	function getIngredientNutrition() {
+		//yyy
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to get_ingredient_nutrition
+			data: {
+				//data that gets sent to python
+				ingredient_name: $("#ingredient_name").val(),
+			},
+			type: "POST",
+			dataType: "json",
+			url: "/get_ingredient_nutrition",
+			success: function (result, status, xhr) {
+				if (result[0]) {
+					console.log("--getIngredientNutrition returns: ", result);
+					console.log("--ingredient_unit: ", result[0].ingredient_unit);//zzz
+                    
+                    $("#ingredient_amount").val(result[0].ingredient_amount);
+                    $('#ingredient_unit').val(result[0].ingredient_unit);
+                    //https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
+                    $("#ingredient_unit").material_select(); //needs to be re-initialized
+					$("#energy_amount").val(result[0].energy);
+					$("#carbohydrate_amount").val(result[0].carbohydrate);
+					$("#fats_amount").val(result[0].fats);
+					$("#protein_amount").val(result[0].protein);
+					$("#calcium_amount").val(result[0].calcium);
+					$("#iron_amount").val(result[0].iron);
+					$("#zinc_amount").val(result[0].zinc);
+					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
+				} else {
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log("Error:(");
+			},
+		});
+	}
+
 	$("#save-nutrition-data").on("click", function (event) {
+		//yyy
 		event.preventDefault();
 		saveIngredientNutrition();
 	});
 
 	$("#delete-nutrition-data").on("click", function (event) {
+		//yyy
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		deleteItem("ingredient", "name", value);
@@ -214,47 +282,15 @@ $(document).ready(function () {
 				}
 			},
 			complete: function () {
-                if (table == "ingredient") {
-                    Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
-                } else if (table == "recipe") {
-                    Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
-                }
+				if (table == "ingredient") {
+					Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
+				} else if (table == "recipe") {
+					Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
+				}
 			},
 		});
 	}
 
-	function getIngredientNutrition() {
-		event.preventDefault();
-		$.ajax({
-			//create an ajax request to get_ingredient_nutrition
-			data: {
-				//data that gets sent to python
-				ingredient_name: $("#ingredient_name").val(),
-			},
-			type: "POST",
-			dataType: "json",
-			url: "/get_ingredient_nutrition",
-			success: function (result, status, xhr) {
-				if (result[0]) {
-					console.log("NUTRITION: ", result);
-					$("#ingredient_amount").val(result[0].ingredient_amount);
-					$("#ingredient_unit").val(result[0].ingredient_unit);
-					$("#energy_amount").val(result[0].energy);
-					$("#carbohydrate_amount").val(result[0].carbohydrate);
-					$("#fats_amount").val(result[0].fats);
-					$("#protein_amount").val(result[0].protein);
-					$("#calcium_amount").val(result[0].calcium);
-					$("#iron_amount").val(result[0].iron);
-					$("#zinc_amount").val(result[0].zinc);
-					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
-				} else {
-				}
-			},
-			error: function (xhr, status, error) {
-				console.log("Error:(");
-			},
-		});
-	}
 
 	function getRecipeData() {
 		event.preventDefault();
@@ -282,6 +318,7 @@ $(document).ready(function () {
 	}
 
 	function saveIngredientNutrition() {
+		//yyy
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
 		if (matchedIngredient) {
@@ -298,6 +335,12 @@ $(document).ready(function () {
 		});
 
 		if (isFormValid) {
+			console.log(
+				"TEST INGREDIENT UNIT: ",
+				$("#ingredient_unit").val(),
+				matchedRecipe,
+				matchedIngredient
+			);
 			//checks if all required inputs have a value
 			$.ajax({
 				//create an ajax request to save_ingredient_nutrition
@@ -306,6 +349,7 @@ $(document).ready(function () {
 					action: action,
 					ingredient_name: $("#ingredient_name").val(),
 					ingredient_amount: $("#ingredient_amount").val(),
+					ingredient_unit: $("#ingredient_unit").text(),
 					energy_amount: $("#energy_amount").val(),
 					carbohydrate_amount: $("#carbohydrate_amount").val(),
 					fats_amount: $("#fats_amount").val(),
@@ -396,8 +440,8 @@ $(document).ready(function () {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
-		let unit = $("#ingredient_units option:selected").text();
-		if (value.length > 0 && (amount.length > 0) & (unit.length > 0)) {
+		let unit = $("#ingredient_unit option:selected").text(); //xxx
+		if (value.length > 0 && amount.length > 0 && unit.length > 0) {
 			if (matchedIngredient) {
 				addIngredientToRecipe(value, amount, unit);
 			} else {
@@ -421,6 +465,27 @@ $(document).ready(function () {
 			addStepToRecipe(step_number, step_description);
 		} else {
 			Materialize.toast("Please fill out all step fields", 4000); // 4000 is the duration of the toast
+		}
+	});
+
+	$("#add-to-meal-plan").on("click", function (event) {
+		event.preventDefault();
+		let name = $("#recipe_name").val();
+		let type = $("#meal_type option:selected").text(); //xxx
+		if (name.length > 0) {
+			if (matchedRecipe) {
+				console.log("NAME, TYPE >>> ", name, type);
+				addRecipeToMealPlan(name, type);
+			} else {
+				let $toastContent = $("<span>Recipe not found</span>").add(
+					$(
+						'<button class="btn-flat toast-action">CREATE RECIPE</button>'
+					)
+				);
+				Materialize.toast($toastContent, 10000);
+			}
+		} else {
+			Materialize.toast("Please fill out recipe name", 4000); // 4000 is the duration of the toast
 		}
 	});
 
@@ -474,5 +539,22 @@ $(document).ready(function () {
 		$("#ingredient_name").val(""); //reset ingredient name
 		$("#ingredient_amount").val(""); //reset ingredient amount
 		Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
+	}
+
+	function addRecipeToMealPlan(name, type) {
+		event.preventDefault();
+		//add recipe and meal type
+		$("#meals-list").append(
+			`<li class='row list-item'>
+                <div class='col s6'>
+                    <i class='material-icons prefix'>navigate_next</i>${name}
+                </div>
+                <div class='col s1'>
+                    ${type}
+                </div>
+            </li>`
+		);
+		$("#recipe_name").val(""); //reset recipe name
+		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
 	}
 });
