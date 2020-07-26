@@ -89,7 +89,7 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-                matchedIngredient = true;
+                matchedRecipe = true;
                 getRecipeData();
 				console.log("MATCHED RECIPE: ", matchedRecipe, matchedIngredient);
 			},
