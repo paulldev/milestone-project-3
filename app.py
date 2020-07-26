@@ -150,7 +150,7 @@ def get_recipe_data():
     recipe_name = request.form['recipe_name']
     results = []
     sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
-    sql_ingredient_list = f"SELECT recipe.name, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
+    sql_ingredient_list = f"SELECT recipe.name, ingredient.ingredient_amount, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
     sql_step_list = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
 
     try:
