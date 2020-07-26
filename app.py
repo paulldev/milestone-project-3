@@ -148,16 +148,10 @@ def get_ingredient_nutrition():
 def get_recipe_data():
     #get data from request object
     recipe_name = request.form['recipe_name']
-    ingredients = []
-    steps = []
-
-#get: servings
-#get: list of ingredients
-#get: list of steps
-
-
+    results = []
     sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
-    sql_ingredient_list = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
+    sql_ingredient_list = f"SELECT recipe.name, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
+    sql_step_list = f"SELECT recipe.name, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
 
     try:
         # Connect to the database
@@ -170,6 +164,7 @@ def get_recipe_data():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql_servings)
             servings = cursor.fetchall()  #returns a dictionary
+            results.append(servings) #add servings to our results array (to be read by jquery)
             print('--servings:')
             print(servings)
 
@@ -177,13 +172,22 @@ def get_recipe_data():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql_ingredient_list)
             ingredients = cursor.fetchall()  #returns a dictionary
+            results.append(ingredients) #add ingredients to our results array (to be read by jquery)
             print('--ingredient list:')
             print(ingredients)
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql_step_list)
+            steps = cursor.fetchall()  #returns a dictionary
+            results.append(steps) #add ingredients to our results array (to be read by jquery)
+            print('--step list:')
+            print(steps)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(servings)
+    return jsonify(results)
 
 
 @app.route('/delete_item', methods=['POST'])
