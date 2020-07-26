@@ -220,7 +220,7 @@ def save_ingredient_nutrition():
         sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, {ingredient_unit}, {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
         print("INSERT COMPLETE")
     elif action == "update":
-        sql = f"UPDATE ingredient SET ingredient_amount={energy_amount}, energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
+        sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit={ingredient_unit}, energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
         print("INSERT COMPLETE")
     try:
         # Connect to the database
