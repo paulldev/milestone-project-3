@@ -349,7 +349,7 @@ $(document).ready(function () {
 					action: action,
 					ingredient_name: $("#ingredient_name").val(),
 					ingredient_amount: $("#ingredient_amount").val(),
-					ingredient_unit: $("#ingredient_unit").text(),
+					ingredient_unit: $("#ingredient_unit").val(),
 					energy_amount: $("#energy_amount").val(),
 					carbohydrate_amount: $("#carbohydrate_amount").val(),
 					fats_amount: $("#fats_amount").val(),
