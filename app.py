@@ -63,8 +63,7 @@ def get_ingredients():
 
     ingredient = request.form['ingredient_name']
     #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
-    sql_read = "SELECT name, COUNT(*) FROM ingredient WHERE name = '"+ingredient+"'GROUP BY name;"
-#    sql = "SELECT EXISTS(SELECT * FROM ingredient WHERE name = '"+ingredient+"');"
+    sql = f"SELECT name, COUNT(*) FROM ingredient WHERE name='{ingredient}' GROUP BY name;"
 
     try:
         # Connect to the database
@@ -75,7 +74,7 @@ def get_ingredients():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_read)
+            cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
             #connection.commit();
             if result:
@@ -94,7 +93,8 @@ def recipe_exists():
     #get data from request object
 
     recipe = request.form['recipe_name']
-    sql = "SELECT name, COUNT(*) FROM ingredient WHERE name = '"+recipe+"'GROUP BY name;"
+    
+    sql = f"SELECT name, COUNT(*) FROM recipe WHERE name = '{recipe}' GROUP BY name;"
 
     try:
         # Connect to the database
@@ -207,6 +207,7 @@ def save_ingredient_nutrition():
     action = request.form['action']
     ingredient_name = request.form['ingredient_name']
     ingredient_amount = request.form['ingredient_amount']
+    ingredient_unit = request.form['ingredient_unit']
     energy_amount = request.form['energy_amount']
     carbohydrate_amount = request.form['carbohydrate_amount']
     fats_amount = request.form['fats_amount']
@@ -216,7 +217,7 @@ def save_ingredient_nutrition():
     zinc_amount = request.form['zinc_amount']
 
     if action == "save":
-        sql = f"INSERT INTO ingredient (name, ingredient_amount, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
+        sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, {ingredient_unit}, {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
         print("INSERT COMPLETE")
     elif action == "update":
         sql = f"UPDATE ingredient SET ingredient_amount={energy_amount}, energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
