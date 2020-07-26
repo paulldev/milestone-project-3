@@ -15,7 +15,7 @@
                 <label for="recipe_name">Recipe Name</label>
             </div>
             <div class="input-field col s4">
-                <select>
+                <select name="meal_type" id="meal_type">
                     {% for record in result %}
                     <option value="">{{record.mealName}}</option>
                     {% endfor %}
