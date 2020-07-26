@@ -148,13 +148,16 @@ def get_ingredient_nutrition():
 def get_recipe_data():
     #get data from request object
     recipe_name = request.form['recipe_name']
- 
+    ingredients = []
+    steps = []
+
 #get: servings
 #get: list of ingredients
 #get: list of steps
 
 
-    sql = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
+    sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
+    sql_ingredient_list = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
 
     try:
         # Connect to the database
@@ -165,10 +168,17 @@ def get_recipe_data():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql_servings)
             servings = cursor.fetchall()  #returns a dictionary
             print('--servings:')
             print(servings)
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql_ingredient_list)
+            ingredients = cursor.fetchall()  #returns a dictionary
+            print('--ingredient list:')
+            print(ingredients)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
