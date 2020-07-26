@@ -88,9 +88,9 @@ def get_ingredients():
     #  return jsonify({'found': result}) #dictionary -> json
     return jsonify(result)
 
-
+#xxx
 @app.route('/recipe_exists', methods=['POST'])
-def get_recipes():
+def recipe_exists():
     #get data from request object
 
     recipe = request.form['recipe_name']
@@ -116,7 +116,7 @@ def get_recipes():
 
     return jsonify(result)
 
-get_recipe_data
+
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
     #get data from request object
