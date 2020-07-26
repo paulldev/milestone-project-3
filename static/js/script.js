@@ -126,7 +126,7 @@ $(document).ready(function () {
 		console.log("Page not found");
 	}
 
-	$("#recipe_name").on("keyup", function (event) {
+	$("#recipe_name").on("keyup", function (event) {//rrr
 		event.preventDefault();
 		//check if recipe exists
 		$.ajax({
@@ -243,16 +243,16 @@ $(document).ready(function () {
 	}
 
 	$("#save-nutrition-data").on("click", function (event) {
-		//yyy
+		//sss
 		event.preventDefault();
 		saveIngredientNutrition();
 	});
 
-	$("#delete-nutrition-data").on("click", function (event) {
-		//yyy
+	$("#delete-nutrition-data").on("click", function (event) {//ddd
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
-		deleteItem("ingredient", "name", value);
+        deleteItem("ingredient", "name", value);
+        clearIngredientInputs();
 	});
 
 	$("#delete-recipe").on("click", function (event) {
@@ -261,7 +261,7 @@ $(document).ready(function () {
 		deleteItem("recipe", "name", value);
 	});
 
-	function deleteItem(table, column, value) {
+	function deleteItem(table, column, value) {//ddd
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to delete_item
@@ -276,7 +276,8 @@ $(document).ready(function () {
 			url: "/delete_item",
 			success: function (result, status, xhr) {
 				if (result) {
-					console.log("Deleted: ", result);
+                    console.log("Deleted: ", result);
+              		getNames("/get_names", "ingredient", "name");
 				} else {
 					console.log("ELSE Deleted: ", result);
 				}
@@ -292,7 +293,7 @@ $(document).ready(function () {
 	}
 
 
-	function getRecipeData() {
+	function getRecipeData() {//rrr
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to get_recipe_data
@@ -318,7 +319,7 @@ $(document).ready(function () {
 	}
 
 	function saveIngredientNutrition() {
-		//yyy
+		//sss
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
 		if (matchedIngredient) {
