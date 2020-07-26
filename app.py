@@ -135,7 +135,7 @@ def get_ingredient_nutrition():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
-            print('get_ingredient_nutrition:')
+            print('--get_ingredient_nutrition:')
             print(result)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
@@ -149,7 +149,12 @@ def get_recipe_data():
     #get data from request object
     recipe_name = request.form['recipe_name']
  
-    sql = f"SELECT * FROM recipe WHERE name='{recipe_name}';"
+#get: servings
+#get: list of ingredients
+#get: list of steps
+
+
+    sql = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
 
     try:
         # Connect to the database
@@ -161,14 +166,14 @@ def get_recipe_data():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
-            print('get_recipe_data:')
-            print(result)
+            servings = cursor.fetchall()  #returns a dictionary
+            print('--servings:')
+            print(servings)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(result)
+    return jsonify(servings)
 
 
 @app.route('/delete_item', methods=['POST'])
@@ -217,10 +222,10 @@ def save_ingredient_nutrition():
     zinc_amount = request.form['zinc_amount']
 
     if action == "save":
-        sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, {ingredient_unit}, {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
+        sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, '{ingredient_unit}', {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
         print("INSERT COMPLETE")
     elif action == "update":
-        sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit={ingredient_unit}, energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
+        sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit='{ingredient_unit}', energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
         print("INSERT COMPLETE")
     try:
         # Connect to the database
