@@ -77,9 +77,9 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-				matchedIngredient = true;
-				console.log("MATCHED INGREDIENT: ", matchedIngredient);
-				console.log("MATCHED RECIPE: ", matchedRecipe);
+                matchedIngredient = true;
+                getIngredientNutrition();
+				console.log("MATCHED INGREDIENT: ", matchedRecipe, matchedIngredient);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -89,9 +89,9 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-				matchedIngredient = true;
-				console.log("MATCHED INGREDIENT: ", matchedIngredient);
-				console.log("MATCHED RECIPE: ", matchedRecipe);
+                matchedIngredient = true;
+                getRecipeData();
+				console.log("MATCHED RECIPE: ", matchedRecipe, matchedIngredient);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -104,9 +104,9 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
-				matchedRecipe = true;
-				console.log("MATCHED INGREDIENT: ", matchedIngredient);
-				console.log("MATCHED RECIPE: ", matchedRecipe);
+                matchedRecipe = true;
+                getRecipeData();
+				console.log("MATCHED RECIPE: ", matchedRecipe, matchedIngredient);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -125,21 +125,17 @@ $(document).ready(function () {
 			},
 			type: "POST",
 			dataType: "json",
-			url: "/recipe_exists",
+			url: "/recipe_exists",//xxx
 			success: function (result, status, xhr) {
 				if (result[0]) {
 					//found recipe in database
-					console.log("Found " + result[0].name);
+					console.log("FOUND RECIPE >>>> ", result);
                     matchedRecipe = true;
                     getRecipeData();
-					console.log("MATCHED INGREDIENT: ", matchedIngredient);
-					console.log("MATCHED RECIPE: ", matchedRecipe);
+					console.log("Found Recipe. keyup MATCHES: ", matchedRecipe , matchedIngredient);
 				} else {
 					matchedRecipe = false;
-
-					console.log("Couldn't find recipe");
-					console.log("MATCHED INGREDIENT: ", matchedIngredient);
-					console.log("MATCHED RECIPE: ", matchedRecipe);
+					console.log("Didn't find Recipe. keyup MATCHES: ", matchedRecipe , matchedIngredient);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -164,17 +160,14 @@ $(document).ready(function () {
 				//                console.log('returned data: ', result);
 				if (result[0]) {
 					//found ingredient in database
-					console.log("Found " + result[0].name);
+					console.log("Found ingredient >>> " + result[0].name);
 					matchedIngredient = true;
 					getIngredientNutrition();
-					console.log("MATCHED INGREDIENT: ", matchedIngredient);
-					console.log("MATCHED RECIPE: ", matchedRecipe);
+					console.log("Found Ingredient. keyup MATCHES: ", matchedRecipe , matchedIngredient);
 				} else {
 					matchedIngredient = false;
 
-					console.log("Couldn't find ingredient");
-					console.log("MATCHED INGREDIENT: ", matchedIngredient);
-					console.log("MATCHED RECIPE: ", matchedRecipe);
+					console.log("Didn't find Ingredient. keyup MATCHES: ", matchedRecipe , matchedIngredient);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -276,8 +269,8 @@ $(document).ready(function () {
 			url: "/get_recipe_data",
 			success: function (result, status, xhr) {
 				if (result[0]) {
-//					console.log("NUTRITION: ", result);
-					$("#servings").val(result[0].servings);
+					console.log("RECIPE DATA >>>>>>>>>>>>>: ", result);
+					//$("#servings").val(result[0].servings);
 					Materialize.toast("Loaded recipe data", 4000); // 4000 is the duration of the toast
 				} else {
 				}
