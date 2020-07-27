@@ -142,19 +142,14 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/delete_item",
 			success: function (result, status, xhr) {
-				if (result) {
-					console.log("Deleted: ", result);
-					getNames("/get_names", "ingredient", "name");
-				} else {
-					console.log("ELSE Deleted: ", result);
-				}
-			},
-			complete: function () {
+                console.log("DELETE ITEM RETURNED: ", result);
+				console.log("************************Deleted: ", result);
 				if (table == "ingredient") {
 					Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
 				} else if (table == "recipe") {
 					Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
 				}
+				getNames("/get_names", "ingredient", "name");
 			},
 		});
 	}
