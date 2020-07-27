@@ -216,16 +216,16 @@ $(document).ready(function () {
     //cii
 	function clearIngredientInputs() {
         //$("ingredient_name").val("");
-        $("ingredient_amount").val("");
-        $("ingredient_unit").val("");
+        $("#ingredient_amount").val("");
+        $("#ingredient_unit").val("item");
         $("#ingredient_unit").material_select(); //needs to be re-initialized
-        $("energy_amount").val("");
-        $("carbohydrate_amount").val("");
-        $("fats_amount").val("");
-        $("protein_amount").val("");
-        $("calcium_amount").val("");
-        $("iron_amount").val("");
-        $("zinc_amount").val("");
+        $("#energy_amount").val("");
+        $("#carbohydrate_amount").val("");
+        $("#fats_amount").val("");
+        $("#protein_amount").val("");
+        $("#calcium_amount").val("");
+        $("#iron_amount").val("");
+        $("#zinc_amount").val("");
 		$(window).scrollTop(0); //scroll window to top
 	}
     //cri
@@ -572,8 +572,9 @@ $(document).ready(function () {
 				console.log(
 					"--Successfully received data from server: ",
 					result
-				);
-				if (result[0]) {
+				);//array
+				if (result.length > 0) {
+                    console.log("result.length > 0: ", result.length);
 					//found ingredient in database
 					matchedIngredient = true;
 					getIngredientNutrition();
@@ -582,8 +583,11 @@ $(document).ready(function () {
 						matchedRecipe,
 						matchedIngredient
 					);
-				} else {
-					matchedIngredient = false;
+				} else if (result == 0) {
+                    console.log("result.length == 0: ", result.length);
+                    matchedIngredient = false;
+                    console.log("CLEARING INGREDIENT INPUTS.....");
+                    clearIngredientInputs();
 					console.log(
 						"--Didn't find Ingredient. Matched (recipe, ingredient): ",
 						matchedRecipe,
