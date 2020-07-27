@@ -215,7 +215,7 @@ $(document).ready(function () {
 	}
     //cii
 	function clearIngredientInputs() {
-        //$("ingredient_name").val("");
+        //$("#ingredient_name").val("");
         $("#ingredient_amount").val("");
         $("#ingredient_unit").val("item");
         $("#ingredient_unit").material_select(); //needs to be re-initialized
@@ -226,7 +226,7 @@ $(document).ready(function () {
         $("#calcium_amount").val("");
         $("#iron_amount").val("");
         $("#zinc_amount").val("");
-		$(window).scrollTop(0); //scroll window to top
+		//$(window).scrollTop(0); //scroll window to top
 	}
     //cri
     function clearRecipeInputs() {
@@ -368,7 +368,6 @@ $(document).ready(function () {
 		$("input[required]").each(function () {
 			if ($.trim($(this).val()).length == 0) {
 				isFormValid = false;
-			} else {
 			}
 		});
 
@@ -402,11 +401,15 @@ $(document).ready(function () {
 				success: function (result, status, xhr) {
 					if (action == "save") {
 						Materialize.toast("Saved nutritional data", 4000); // 4000 is the duration of the toast
-						clearIngredientInputs();
-						getNames("/get_names", "ingredient", "name");
+                        $("#ingredient_name").val(""); //clear ingredient name
+                        clearIngredientInputs();
+                        $(window).scrollTop(0); //scroll window to top
+                        $("#ingredient_name").focus(); //position cursor for next ingredient entry
+                        getNames("/get_names", "ingredient", "name");
 					} else if (action == "update") {
 						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
+                        $("#ingredient_name").focus(); //position cursor for further editing
 					}
 				},
 				error: function (xhr, status, error) {
@@ -424,7 +427,9 @@ $(document).ready(function () {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		deleteItem("ingredient", "name", value);
-		clearIngredientInputs();
+        $("#ingredient_name").val(""); //clear ingredient name
+        clearIngredientInputs();
+        $(window).scrollTop(0); //scroll window to top
 	});
     //drec
 	$("#delete-recipe").on("click", function (event) {
