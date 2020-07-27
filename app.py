@@ -150,7 +150,7 @@ def get_recipe_data():
     recipe_name = request.form['recipe_name']
     results = []
     sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
-    sql_ingredient_list = f"SELECT recipe.name, ingredient.ingredient_amount, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
+    sql_ingredient_list = f"SELECT recipe.name, ingredient.ingredient_amount, ingredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
     sql_step_list = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
 
     try:
@@ -209,7 +209,7 @@ def delete_item():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
-            #result = cursor.fetchall()  #returns a dictionary
+            result = cursor.fetchall()  #returns a dictionary
             connection.commit()
             print("DELETE COMPLETE")
     finally:
@@ -217,7 +217,7 @@ def delete_item():
         connection.close()
 
 #    return redirect(url_for('ingredients'))
-    return render_template("ingredients.html")
+    return jsonify(result)
 
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
