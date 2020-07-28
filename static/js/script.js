@@ -464,13 +464,14 @@ $(document).ready(function () {
 		$("#step_number").val(parseInt(step_number) + 1); //increment step number
 		$("#step_description").val(""); //reset step description
 		$("#step_description").focus(); //position cursor for next step description
-		Materialize.toast("Added to steps list", 3000); // 4000 is the duration of the toast
+		Materialize.toast("Added to step list", 3000); // 4000 is the duration of the toast
 	}
     //atmp
 	$("#add-to-meal-plan").on("click", function (event) {
-		event.preventDefault();
+        event.preventDefault();
 		let name = $("#recipe_name").val();
 		let type = $("#meal_type option:selected").text(); //xxx
+        console.log("*****ADD TO MEAL PLAN:", name, type);
 		if (name.length > 0) {
 			if (matchedRecipe) {
 				console.log("NAME, TYPE >>> ", name, type);
@@ -509,8 +510,8 @@ $(document).ready(function () {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
-        let unit = $('#ingredient-row .select-dropdown').val(); //xxx
-        console.log("--Ingredient unit: ", $("#ingredient_unit option:selected").val());
+        let unit = $('#ingredient-row .select-dropdown').val();
+        //console.log("ADD INGREDIENT TO RECIPE: ", value, amount, unit);
 		if (value.length > 0 && amount.length > 0) {
 			if (matchedIngredient) {
 				addIngredientToRecipe(value, amount, unit);
@@ -547,7 +548,9 @@ $(document).ready(function () {
             </li>`
 		);
 		$("#ingredient_name").val(""); //reset ingredient name
-		$("#ingredient_amount").val(""); //reset ingredient amount
+        $("#ingredient_amount").val(""); //reset ingredient amount
+        $("#ingredient_units").val("item"); //reset ingredient unit
+        $("#ingredient_units").material_select(); //needs to be re-initialized
 		Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
 	}
     //inkup
