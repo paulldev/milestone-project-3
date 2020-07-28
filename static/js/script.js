@@ -163,39 +163,35 @@ $(document).ready(function () {
 
 		var isFormValid = true;
 
-		$("input[required]").each(function () {
-			if ($.trim($(this).val()).length == 0) {
+        if ($("#recipe_name").val().length == 0 ||
+            $("#servings").val().length == 0) {
 				isFormValid = false;
 			} else {
 			}
 		});
 
 		if (isFormValid) {
-			//checks if all required inputs have a value
+			//checks if required inputs have a value
 			$.ajax({
-				//create an ajax request to save_ingredient_nutrition
+				//create an ajax request to save_recipe
 				data: {
 					//data that gets sent to python
 					action: action,
-					ingredient_name: $("#ingredient_name").val(),
-					ingredient_amount: $("#ingredient_amount").val(),
-					energy_amount: $("#energy_amount").val(),
-					carbohydrate_amount: $("#carbohydrate_amount").val(),
-					fats_amount: $("#fats_amount").val(),
-					protein_amount: $("#protein_amount").val(),
-					calcium_amount: $("#calcium_amount").val(),
-					iron_amount: $("#iron_amount").val(),
-					zinc_amount: $("#zinc_amount").val(),
+					recipe_name: $("#recipe_name").val(),
+					servings: $("#servings").val(),
+                    //ingredients
+                    //steps
 				},
 				type: "POST",
-				//dataType: "json",
-				url: "/save_ingredient_nutrition",
+				dataType: "json",
+				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-						Materialize.toast("Saved nutritional data", 4000); // 4000 is the duration of the toast
-						clearIngredientInputs();
+						Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
+						clearRecipeInputs();
+						$(window).scrollTop(0); //scroll window to top
 					} else if (action == "update") {
-						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
+						Materialize.toast("Updated recipe", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
 					}
 				},
@@ -227,7 +223,13 @@ $(document).ready(function () {
     function clearRecipeInputs() {
         $("#recipe_name").val(""); //reset inputs
         $("#servings").val("");
+        $("#ingredient_name").val("");
+        $("#ingredient_amount").val("");
+        $("#ingredient_units").val("item"); //reset ingredient unit
+        $("#ingredient_units").material_select(); //needs to be re-initialized
         $("#ingredient-list").empty();
+        $("#step_number").val("");
+        $("#step_description").val("");
         $("#step-list").empty();
         $(window).scrollTop(0); //scroll window to top
 	}
@@ -288,8 +290,8 @@ $(document).ready(function () {
 			url: "/get_recipe_data",
 			success: function (result, status, xhr) {
 				if (result[0]) {
-					console.log("--MATCHED RECIPE DATA: ", result);
-					$("#servings").val(result[0][0].servings); //buggy
+                    console.log("--MATCHED RECIPE DATA: ", result[0][0].servings);
+					$("#servings").val(`${result[0][0].servings}`); //buggy
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) { //stops ingredients being added every keystroke
 						result[1].forEach(function (element) {
@@ -336,6 +338,7 @@ $(document).ready(function () {
 					}
 					Materialize.toast("Loaded recipe data", 4000); // 4000 is the duration of the toast
 				} else {
+                    console.log("Error");
 				}
 			},
 			error: function (xhr, status, error) {
@@ -551,6 +554,7 @@ $(document).ready(function () {
         $("#ingredient_amount").val(""); //reset ingredient amount
         $("#ingredient_units").val("item"); //reset ingredient unit
         $("#ingredient_units").material_select(); //needs to be re-initialized
+        $("#ingredient_name").focus(); //position cursor for next ingredient entry
 		Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
 	}
     //inkup
