@@ -1,6 +1,7 @@
 import os
 import pymysql
 import json
+import pprint
 from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
@@ -263,43 +264,51 @@ def save_ingredient_nutrition():
     return redirect(url_for('ingredients'))
 
 
+#pluc
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
     #get data from request object
-    #action = request.form['action']
-    #recipe_name = request.form['recipe_name']
-    #servings = request.form['servings']
-    jsondata = request.form['recipe']
-    print("JSON received is: ")
-    print(jsondata)
+    json_as_dict = request.form
+    print("*************MY DICT**********************")
+    # Prints the nicely formatted dictionary
+    pprint.pprint(json_as_dict)
+    print("*****ACTION:")
+    print(json_as_dict['action'])
+    action = json_as_dict['action']
+    print("*****SERVINGS:")
+    print(json_as_dict['servings'])
+    servings = json_as_dict['servings']
+    print("*****RECIPE NAME:")
+    print(json_as_dict['recipe_name'])
+    recipe_name = json_as_dict['recipe_name']
 
-    #if action == "save":
-    #    sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
-    #    print("INSERT COMPLETE")
-    #elif action == "update":
-    #    sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
-    #    print("INSERT COMPLETE")
-    #try:
+    if action == "save":
+        sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
+        print("INSERT COMPLETE")
+    elif action == "update":
+        sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
+        print("INSERT COMPLETE")
+    try:
         # Connect to the database
-    #    connection = pymysql.connect(host='localhost',
-    #                                 user=username,
-    #                                 password=password,
-    #                                 db='vmpdb')
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
 
         # Run a query
-    #    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-    #        cursor.execute(sql)
-    #        result = cursor.fetchall()  #returns a dictionary
-    #        connection.commit()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()  #returns a dictionary
+            connection.commit()
     #        if result:
     #            print('result is:')
     #            print(result)
-    #finally:
+    finally:
         #  Close the connection, regardless of whether or not the above was successful
-    #    connection.close()
+        connection.close()
 
     #return jsonify(result)
-    return "COMPLETED"
+    return jsonify("fdfd")
 
 
 @app.route('/get_names', methods=['POST'])
