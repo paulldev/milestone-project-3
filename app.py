@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Get the username from the Gitpod workspace
 username = os.getenv('mysqluser')
 password = os.getenv('vmpdbpw')
-
+global connection
 
 @app.route('/')
 def index():
