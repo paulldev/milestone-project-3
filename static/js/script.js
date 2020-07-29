@@ -171,21 +171,21 @@ $(document).ready(function () {
         let recipe = {
 			action: action,
 			recipe_name: $("#recipe_name").val(),
-			servings: $("#servings").val(),
-
+			servings: parseInt($("#servings").val()),
             ingredient: [],
             step: []
         };
 
         $("#ingredient-list li").each(function() {
-            recipe.ingredient.push(`{ ingredient_name: "${$(this).find('span').text().trim()}", ingredient_amount: ${$(this).find('div:eq(1)').text().trim()}, ingredient_unit: "${$(this).find('div:eq(2)').text().trim()}"}`);
-            console.log("RECIPE OBJECT: ", recipe);
+//            recipe.ingredient.push(`{ ingredient_name:'${$(this).find("span").text().trim()}', ingredient_amount:${$(this).find("div:eq(1)").text().trim()}, ingredient_unit:'${$(this).find("div:eq(2)").text().trim()}'}`);
+            recipe.ingredient.push({ ingredient_name: $(this).find("span").text().trim(), ingredient_amount: parseInt($(this).find("div:eq(1)").text().trim()), ingredient_unit: $(this).find("div:eq(2)").text().trim()} );
+//            recipe.ingredient.push({ ingredient_name: '"+$(this).find("span").text().trim()+"' });
         });
         $("#step-list li").each(function() {
-            recipe.step.push(`{ step_number: ${$(this).find('div:eq(0)').text().trim()}, step_description: "${$(this).find('div:eq(1)').text().trim()}"}`);
-            console.log("RECIPE OBJECT: ", recipe);
+            //recipe.step.push(`{ step_number: ${$(this).find("div:eq(0)").text().trim()}, step_description: '${$(this).find("div:eq(1)").text().trim()}'}`);
+            recipe.step.push({ step_number: parseInt($(this).find("div:eq(0)").text().trim()), step_description: $(this).find("div:eq(1)").text().trim()});
+            //console.log("RECIPE OBJECT: ", recipe);
         });
-
 
         if ($("#recipe_name").val().length == 0 || $("#servings").val().length == 0) {
 			isFormValid = false;
@@ -194,11 +194,14 @@ $(document).ready(function () {
 
 		if (isFormValid) {
 			//checks if required inputs have a value
+            console.log("READY TO SEND RECIPE OBJECT: ", recipe, typeof(recipe));
+            let jsonrecipe=JSON.stringify(recipe);
+            console.log("READY TO SEND JSONIFIED RECIPE OBJECT: ", JSON.stringify(recipe), typeof(JSON.stringify(recipe)));
 			$.ajax({
 				//create an ajax request to save_recipe
 				data: recipe, //data that gets sent to python
 			    type: "POST",
-				dataType: "json",
+				//dataType: "json",
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
