@@ -78,7 +78,7 @@ $(document).ready(function () {
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
 				matchedIngredient = true;
-				getIngredientNutrition(); //??? maybe not needed
+				//getredientNutrition(); //??? maybe not needed
 				console.log(
 					"MATCHED INGREDIENT: ",
 					matchedRecipe,
@@ -94,7 +94,7 @@ $(document).ready(function () {
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
 				matchedRecipe = true;
-                getRecipeData();
+                getRecipeData();//pluc
                 //???put matchedRecipe = false; here?
 				console.log(
 					"MATCHED RECIPE: ",
@@ -152,7 +152,12 @@ $(document).ready(function () {
 				getNames("/get_names", "ingredient", "name");
 			},
 		});
-	}
+    }
+    //srec
+    $("#save-recipe").on("click", function (event) {
+		event.preventDefault();
+		saveRecipe();
+	});
     //srec
 	function saveRecipe() {
 		event.preventDefault();
@@ -163,26 +168,36 @@ $(document).ready(function () {
 
 		var isFormValid = true;
 
-        if ($("#recipe_name").val().length == 0 ||
-            $("#servings").val().length == 0) {
-				isFormValid = false;
-			} else {
-			}
-		});
+        let recipe = {
+			action: action,
+			recipe_name: $("#recipe_name").val(),
+			servings: $("#servings").val(),
+
+            ingredient: [],
+            step: []
+        };
+
+        $("#ingredient-list li").each(function() {
+            recipe.ingredient.push(`{ ingredient_name: "${$(this).find('span').text().trim()}", ingredient_amount: ${$(this).find('div:eq(1)').text().trim()}, ingredient_unit: "${$(this).find('div:eq(2)').text().trim()}"}`);
+            console.log("RECIPE OBJECT: ", recipe);
+        });
+        $("#step-list li").each(function() {
+            recipe.step.push(`{ step_number: ${$(this).find('div:eq(0)').text().trim()}, step_description: "${$(this).find('div:eq(1)').text().trim()}"}`);
+            console.log("RECIPE OBJECT: ", recipe);
+        });
+
+
+        if ($("#recipe_name").val().length == 0 || $("#servings").val().length == 0) {
+			isFormValid = false;
+		} else {
+		}
 
 		if (isFormValid) {
 			//checks if required inputs have a value
 			$.ajax({
 				//create an ajax request to save_recipe
-				data: {
-					//data that gets sent to python
-					action: action,
-					recipe_name: $("#recipe_name").val(),
-					servings: $("#servings").val(),
-                    //ingredients
-                    //steps
-				},
-				type: "POST",
+				data: recipe, //data that gets sent to python
+			    type: "POST",
 				dataType: "json",
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
@@ -301,7 +316,7 @@ $(document).ready(function () {
 							$("#ingredient-list").append(
 								`<li class='row list-item'>
                                 <div class='col s6'>
-                                    <i class='material-icons prefix'>navigate_next</i>${ingredient_name}
+                                    <i class='material-icons prefix'>navigate_next</i><span>${ingredient_name}</span>
                                 </div>
                                 <div class='col s1'>
                                     ${ingredient_amount}
