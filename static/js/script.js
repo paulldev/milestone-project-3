@@ -214,7 +214,7 @@ $(document).ready(function () {
 					}
 				},
 				error: function (xhr, status, error) {
-					console.log("Error:(", error);
+					console.log("Error:((", error);//pluc
 				},
 			});
 		} else {
@@ -239,7 +239,7 @@ $(document).ready(function () {
 	}
     //cri
     function clearRecipeInputs() {
-        $("#recipe_name").val(""); //reset inputs
+        //$("#recipe_name").val(""); //reset inputs
         $("#servings").val("");
         $("#ingredient_name").val("");
         $("#ingredient_amount").val("");
@@ -266,7 +266,7 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/recipe_exists",
 			success: function (result, status, xhr) {
-				if (result[0]) {
+				if (result.length > 0) {
 					//found recipe in database
 					console.log("--Recipe exists: ", result);
 					matchedRecipe = true;
@@ -276,8 +276,9 @@ $(document).ready(function () {
 						matchedRecipe,
 						matchedIngredient
 					);
-				} else {
+				} else if (result.length == 0) {
 					matchedRecipe = false;
+                    clearRecipeInputs();
 					console.log(
 						"Didn't find Recipe. keyup MATCHES: ",
 						matchedRecipe,
