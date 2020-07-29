@@ -194,18 +194,19 @@ $(document).ready(function () {
 
 		if (isFormValid) {
 			//checks if required inputs have a value
-            console.log("READY TO SEND RECIPE OBJECT: ", recipe, typeof(recipe));
-            let jsonrecipe=JSON.stringify(recipe);
+            //console.log("READY TO SEND RECIPE OBJECT: ", recipe, typeof(recipe));
+            //let jsonrecipe=JSON.stringify(recipe);
             console.log("READY TO SEND JSONIFIED RECIPE OBJECT: ", JSON.stringify(recipe), typeof(JSON.stringify(recipe)));
 			$.ajax({
 				//create an ajax request to save_recipe
 				data: recipe, //data that gets sent to python
 			    type: "POST",
-				//dataType: "json",
+				dataType: "json",
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
 						Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
+                        $("#recipe_name").val("");//reset recipe name
 						clearRecipeInputs();
 						$(window).scrollTop(0); //scroll window to top
 					} else if (action == "update") {
@@ -214,7 +215,7 @@ $(document).ready(function () {
 					}
 				},
 				error: function (xhr, status, error) {
-					console.log("Error:((", error);//pluc
+					console.log("Error oh no", error);//pluc
 				},
 			});
 		} else {
@@ -453,6 +454,7 @@ $(document).ready(function () {
 		event.preventDefault();
 		let value = $("#recipe_name").val();
         deleteItem("recipe", "name", value);
+        $("#recipe_name").val("");//reset recipe name
         clearRecipeInputs();
 	});
     //astr
