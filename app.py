@@ -266,36 +266,40 @@ def save_ingredient_nutrition():
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
     #get data from request object
-    action = request.form['action']
-    recipe_name = request.form['recipe_name']
-    servings = request.form['servings']
+    #action = request.form['action']
+    #recipe_name = request.form['recipe_name']
+    #servings = request.form['servings']
+    jsondata = request.form['recipe']
+    print("JSON received is: ")
+    print(jsondata)
 
-    if action == "save":
-        sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
-        print("INSERT COMPLETE")
-    elif action == "update":
-        sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
-        print("INSERT COMPLETE")
-    try:
+    #if action == "save":
+    #    sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
+    #    print("INSERT COMPLETE")
+    #elif action == "update":
+    #    sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
+    #    print("INSERT COMPLETE")
+    #try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+    #    connection = pymysql.connect(host='localhost',
+    #                                 user=username,
+    #                                 password=password,
+    #                                 db='vmpdb')
 
         # Run a query
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
-            connection.commit()
-            if result:
-                print('result is:')
-                print(result)
-    finally:
+    #    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+    #        cursor.execute(sql)
+    #        result = cursor.fetchall()  #returns a dictionary
+    #        connection.commit()
+    #        if result:
+    #            print('result is:')
+    #            print(result)
+    #finally:
         #  Close the connection, regardless of whether or not the above was successful
-        connection.close()
+    #    connection.close()
 
-    return jsonify(result)
+    #return jsonify(result)
+    return "COMPLETED"
 
 
 @app.route('/get_names', methods=['POST'])
