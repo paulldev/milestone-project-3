@@ -175,7 +175,8 @@ $(document).ready(function () {
             ingredient_name: [],
             ingredient_amount: [],
             ingredient_unit: [],
-            step: []
+            step_number: [],
+            step_description: []
         };
 
         $("#ingredient-list li").each(function() {
@@ -185,7 +186,8 @@ $(document).ready(function () {
             recipe.ingredient_unit.push($(this).find("div:eq(2)").text().trim());
         });
         $("#step-list li").each(function() {
-            recipe.step.push({ step_number: parseInt($(this).find("div:eq(0)").text().trim()), step_description: $(this).find("div:eq(1)").text().trim()});
+            recipe.step_number.push(parseInt($(this).find("div:eq(0)").text().trim()));
+            recipe.step_description.push($(this).find("div:eq(1)").text().trim());
         });
 
         if ($("#recipe_name").val().length == 0 || $("#servings").val().length == 0) {
