@@ -197,12 +197,12 @@ $(document).ready(function () {
 
 		if (isFormValid) {
 			//checks if required inputs have a value
-            //console.log("READY TO SEND RECIPE OBJECT: ", recipe, typeof(recipe));
+            console.log("READY TO SEND RECIPE OBJECT: ", recipe/*, typeof(recipe)*/);
             //let jsonrecipe=JSON.stringify(recipe);
-            console.log("READY TO SEND JSONIFIED RECIPE OBJECT: ", JSON.stringify(recipe), typeof(JSON.stringify(recipe)));
+            console.log("READY TO SEND JSONIFIED RECIPE OBJECT: ", JSON.stringify(recipe)/*, typeof(JSON.stringify(recipe))*/);
 			$.ajax({
 				//create an ajax request to save_recipe
-				data: recipe, //data that gets sent to python
+				data: JSON.stringify(recipe), //data that gets sent to python
 			    type: "POST",
 				dataType: "json",
 				url: "/save_recipe",
