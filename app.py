@@ -264,23 +264,33 @@ def save_ingredient_nutrition():
     return redirect(url_for('ingredients'))
 
 
-#pluc
+#plucey
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
-    #get data from request object
-    json_as_dict = request.form
+    print("TESTING SAVE_RECIPE====================================>")
+    received_data = request.form
+    print("received_data:")
+    print(received_data)
+    #https://www.youtube.com/watch?v=2OYkhatUZmQ
+    for key in received_data.keys():
+        data=key
+    print(f"data: {data}")
+    data_dict=json.loads(data)
+#    print(data_dict.keys())
+    print(f"ACTION: {data_dict['action']}")
+    action = data_dict['action']
+    print(f"RECIPE NAME: {data_dict['recipe_name']}")
+    recipe_name = data_dict['recipe_name']
+    print(f"SERVINGS: {data_dict['servings']}")
+    servings = data_dict['servings']
+    print(f"INGREDIENT NAMES: {data_dict['ingredient_name']}")
+    print(f"INGREDIENT AMOUNTS: {data_dict['ingredient_amount']}")
+    print(f"INGREDIENT UNITS: {data_dict['ingredient_unit']}")
+    print(f"STEP NUMBERS: {data_dict['step_number']}")
+    print(f"STEP DESCRIPTIONS: {data_dict['step_description']}")
     print("*************MY DICT**********************")
     # Prints the nicely formatted dictionary
-    pprint.pprint(json_as_dict)
-    print("*****ACTION:")
-    print(json_as_dict['action'])
-    action = json_as_dict['action']
-    print("*****SERVINGS:")
-    print(json_as_dict['servings'])
-    servings = json_as_dict['servings']
-    print("*****RECIPE NAME:")
-    print(json_as_dict['recipe_name'])
-    recipe_name = json_as_dict['recipe_name']
+#    pprint.pprint(data_dict)
 
     if action == "save":
         sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
@@ -298,17 +308,14 @@ def save_recipe():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
             connection.commit()
-    #        if result:
-    #            print('result is:')
-    #            print(result)
+
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     #return jsonify(result)
-    return jsonify("fdfd")
+    return jsonify("saved recipe")
 
 
 @app.route('/get_names', methods=['POST'])
