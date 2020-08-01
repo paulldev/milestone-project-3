@@ -62,7 +62,6 @@ def ingredient_exists():
     #get data from request object
 
     ingredient = request.form['ingredient_name']
-    #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
 
     try:
         # Connect to the database
@@ -73,6 +72,7 @@ def ingredient_exists():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
             sql = f"SELECT name, COUNT(*) FROM ingredient WHERE name='{ingredient}' GROUP BY name;"
             cursor.execute(sql)
             result = cursor.fetchone()
@@ -86,15 +86,12 @@ def ingredient_exists():
     else:
         return jsonify('no match')
 
-#xxx
 @app.route('/recipe_exists', methods=['POST'])
 def recipe_exists():
     #get data from request object
 
     recipe = request.form['recipe_name']
     
-    sql = f"SELECT name, COUNT(*) FROM recipe WHERE name = '{recipe}' GROUP BY name;"
-
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -104,16 +101,18 @@ def recipe_exists():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT name, COUNT(*) FROM recipe WHERE name = '{recipe}' GROUP BY name;"
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
-            if result:
-                print('result is:')
-                print(result)
+            result = cursor.fetchone()
+
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(result)
+    if result:
+        return jsonify('match')
+    else:
+        return jsonify('no match')
 
 
 @app.route('/get_ingredient_nutrition', methods=['POST'])
