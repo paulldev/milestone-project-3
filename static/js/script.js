@@ -293,19 +293,9 @@ $(document).ready(function () {
 						matchedIngredient
 					);
 				}
-
-/*				if (result.length > 0) {//plucey
-					//found recipe in database
-					console.log("--Recipe exists: ", result);
-					matchedRecipe = true;
-					getRecipeData();
-				} else if (result.length == 0) {
-					matchedRecipe = false;
-					clearRecipeInputs();
-				}*/
 			},
 			error: function (xhr, status, error) {
-				console.log("Error getting data");
+				console.log("Database error");
 			},
 		});
 	});
@@ -325,20 +315,18 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/get_recipe_data",
 			success: function (result, status, xhr) {
-				if (result[0]) {
-					console.log(
-						"--MATCHED RECIPE DATA: ",
-						result[0][0].servings
-					);
-					$("#servings").val(`${result[0][0].servings}`); //buggy
+                console.log(":::::::RESULT getRecipeData(): ", result);
+				if (result) {
+                    $("#servings").val(`${result[0].servings}`); //???buggy
+                    $("#servings").focus();//bug fix???
 					//get ingredients
-					if ($("#ingredient-list li").length == 0) {
+					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list
 						//stops ingredients being added every keystroke
 						result[1].forEach(function (element) {
 							ingredient_name = element["ingredient.name"];
 							ingredient_amount = element["ingredient_amount"];
 							ingredient_unit = element["ingredient_unit"];
-							//???
+							//plucey
 							$("#ingredient-list").append(
 								`<li class='row list-item'>
                                 <div class='col s6 myclass'>
@@ -380,11 +368,10 @@ $(document).ready(function () {
 					}
 					Materialize.toast("Loaded recipe data", 4000); // 4000 is the duration of the toast
 				} else {
-					console.log("Error");
 				}
 			},
 			error: function (xhr, status, error) {
-				console.log("Error:(");
+				console.log("Database error");
 			},
 		});
 	}
