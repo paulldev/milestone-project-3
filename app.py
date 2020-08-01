@@ -238,7 +238,6 @@ def delete_item():
     column = request.form['column']
     value = request.form['value']
 
-    sql = f"DELETE FROM {table} WHERE {column} = '{value}';"
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -248,16 +247,14 @@ def delete_item():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM {table} WHERE {column} = '{value}';"
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
             connection.commit()
-            print("DELETE COMPLETE")
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-#    return redirect(url_for('ingredients'))
-    return jsonify(result)
+    return jsonify("deleted")
 
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
