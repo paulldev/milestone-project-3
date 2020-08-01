@@ -151,6 +151,7 @@ def get_recipe_data():
     recipe_name = request.form['recipe_name']
     results = []
     sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
+    # CHECK AGAIN!!!!
     sql_ingredient_list = f"SELECT recipe.name, ingredient.ingredient_amount, ingredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
     sql_step_list = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
 
@@ -269,35 +270,32 @@ def save_ingredient_nutrition():
 def save_recipe():
     print("TESTING SAVE_RECIPE====================================>")
     received_data = request.form
-    print("received_data:")
-    print(received_data)
     #https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
         data=key
     print(f"data: {data}")
     data_dict=json.loads(data)
-#    print(data_dict.keys())
+
     print(f"ACTION: {data_dict['action']}")
     action = data_dict['action']
     print(f"RECIPE NAME: {data_dict['recipe_name']}")
     recipe_name = data_dict['recipe_name']
     print(f"SERVINGS: {data_dict['servings']}")
     servings = data_dict['servings']
-    print(f"INGREDIENT NAMES: {data_dict['ingredient_name']}")
-    print(f"INGREDIENT AMOUNTS: {data_dict['ingredient_amount']}")
-    print(f"INGREDIENT UNITS: {data_dict['ingredient_unit']}")
-    print(f"STEP NUMBERS: {data_dict['step_number']}")
-    print(f"STEP DESCRIPTIONS: {data_dict['step_description']}")
-    print("*************MY DICT**********************")
+    ingredient_name = data_dict['ingredient_name']
+    print(f"INGREDIENT NAMES: {ingredient_name}")
+    ingredient_amount = data_dict['ingredient_amount']
+    print(f"INGREDIENT AMOUNTS: {ingredient_amount}")
+    ingredient_unit = data_dict['ingredient_unit']
+    print(f"INGREDIENT UNITS: {ingredient_unit}")
+    step_number = data_dict['step_number']
+    print(f"STEP NUMBERS: {step_number}")
+    step_description = data_dict['step_description']
+    print(f"STEP DESCRIPTIONS: {step_description}")
+    #print("*************MY DICT**********************")
     # Prints the nicely formatted dictionary
-#    pprint.pprint(data_dict)
+    #pprint.pprint(data_dict)
 
-    if action == "save":
-        sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
-        print("INSERT COMPLETE")
-    elif action == "update":
-        sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
-        print("INSERT COMPLETE")
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -305,10 +303,49 @@ def save_recipe():
                                      password=password,
                                      db='vmpdb')
 
-        # Run a query
+        # Run a query (save/update recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            if action == "save":
+                sql = f"INSERT INTO recipe (name, servings) VALUES ('{recipe_name}', {servings});"
+            elif action == "update":
+                sql = f"UPDATE recipe SET servings={servings} WHERE name='{recipe_name}';"
             cursor.execute(sql)
             connection.commit()
+
+        # Run a query (get recipeID)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
+            cursor.execute(sql)
+            result = cursor.fetchone()#returns a dictionary
+            recipe_id = result['ID']
+            print(f"RECIPE ID = {recipe_id}")
+
+        # Run a query (save/update step table)
+        for index in range(len(step_number)):
+            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                #https://chartio.com/resources/tutorials/how-to-insert-if-row-does-not-exist-upsert-in-mysql/
+                sql = f"INSERT IGNORE INTO step (recipeID, stepNumber, stepDescription) VALUES ('{recipe_id}', {step_number[index]}, '{step_description[index]}');"
+                cursor.execute(sql)
+                connection.commit()
+
+        # Run a query (save/update recipeIngredient table)
+        for index in range(len(ingredient_name)):
+            # Run a query (get ingredient id)
+            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                sql = f"SELECT ID FROM ingredient WHERE name='{ingredient_name[index]}';"
+                print(f"SQL: {sql}")
+                cursor.execute(sql)#plucey
+                result = cursor.fetchone()  #returns a dictionary
+                print(f"RESULT: {result}")
+                ingredient_id = result['ID']
+                print(f"INGREDIENT ID = {ingredient_id}")
+
+
+#            print(index, ",", ingredient_name[index])
+            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                sql = f"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID) VALUES ({recipe_id}, {ingredient_id});"
+                cursor.execute(sql)
+                connection.commit()
 
     finally:
         #  Close the connection, regardless of whether or not the above was successful
@@ -353,6 +390,35 @@ def get_names():
 
 
 def name_exists(table, column_name, name):
+    sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()  #returns a dictionary
+            #connection.commit();
+            if result:
+                print('result is:')
+                print(result)
+    finally:
+        # Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    print("*** 3. result from python:")
+    print(result)
+    print("*** 4. jsonify(result):")
+    print(jsonify(result))
+    return jsonify(result)
+
+
+def get_value(table, column, name):
     sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
