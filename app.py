@@ -144,10 +144,6 @@ def get_recipe_data():
     #get data from request object
     recipe_name = request.form['recipe_name']
     results = []
-    sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
-    # CHECK AGAIN!!!!
-    sql_ingredient_list = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
-    sql_step_list = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
 
     try:
         # Connect to the database
@@ -158,7 +154,8 @@ def get_recipe_data():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_servings)
+            sql = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
+            cursor.execute(sql)
             servings = cursor.fetchall()  #returns a dictionary
             results.append(servings) #add servings to our results array (to be read by jquery)
             print('--servings:')
@@ -166,7 +163,8 @@ def get_recipe_data():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_ingredient_list)
+            sql = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
+            cursor.execute(sql)
             ingredients = cursor.fetchall()  #returns a dictionary
             results.append(ingredients) #add ingredients to our results array (to be read by jquery)
             print('--ingredient list:')
@@ -174,7 +172,8 @@ def get_recipe_data():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_step_list)
+            sql = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
+            cursor.execute(sql)
             steps = cursor.fetchall()  #returns a dictionary
             results.append(steps) #add ingredients to our results array (to be read by jquery)
             print('--step list:')
