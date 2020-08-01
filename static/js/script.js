@@ -484,9 +484,10 @@ $(document).ready(function () {
 		deleteRecipe(recipe_name);//plucey
 		$("#recipe_name").val(""); //reset recipe name
 		clearRecipeInputs();
+		$(window).scrollTop(0); //scroll window to top
     });
+
 	function deleteRecipe(recipe_name) {
-		//ddd
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to delete_item
@@ -498,10 +499,14 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/delete_recipe",
 			success: function (result, status, xhr) {
-				console.log("DELETE ITEM RETURNED: ", result);
-				console.log("************************Deleted: ", result);
-				Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
-        		getNames("/get_names", "recipe", "name");
+                if (matchedRecipe) {
+                    console.log("DELETE ITEM RETURNED: ", result);
+                    console.log("************************Deleted: ", result);
+                    Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
+            		getNames("/get_names", "recipe", "name");
+                } else {
+                    Materialize.toast("Recipe doesn't exists", 4000);
+                }
 			},
 		});
 	}
