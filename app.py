@@ -143,7 +143,7 @@ def get_ingredient_nutrition():
 def get_recipe_data():
     #get data from request object
     recipe_name = request.form['recipe_name']
-    results = []
+    results = []#results list will contain the results from our queries
 
     try:
         # Connect to the database
@@ -152,23 +152,19 @@ def get_recipe_data():
                                      password=password,
                                      db='vmpdb')
 
-        # Run a query
+        # Run a query (get servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
-            servings = cursor.fetchall()  #returns a dictionary
+            servings = cursor.fetchone()  #returns a dictionary
             results.append(servings) #add servings to our results array (to be read by jquery)
-            print('--servings:')
-            print(servings)
 
-        # Run a query
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+        # Run a query (get list of ingredients)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:#plucey do I need so many columns returned?
             sql = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             ingredients = cursor.fetchall()  #returns a dictionary
             results.append(ingredients) #add ingredients to our results array (to be read by jquery)
-            print('--ingredient list:')
-            print(ingredients)
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
