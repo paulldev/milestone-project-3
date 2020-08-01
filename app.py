@@ -121,8 +121,6 @@ def get_ingredient_nutrition():
     #get data from request object
     ingredient_name = request.form['ingredient_name']
  
-    sql = f"SELECT ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
-
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -132,10 +130,9 @@ def get_ingredient_nutrition():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc FROM ingredient WHERE name='{ingredient_name}';"
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
-            print('--get_ingredient_nutrition:')
-            print(result)
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -278,12 +275,6 @@ def save_ingredient_nutrition():
     iron_amount = request.form['iron_amount']
     zinc_amount = request.form['zinc_amount']
 
-    if action == "save":
-        sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, '{ingredient_unit}', {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
-        print("INSERT COMPLETE")
-    elif action == "update":
-        sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit='{ingredient_unit}', energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
-        print("INSERT COMPLETE")
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -293,17 +284,19 @@ def save_ingredient_nutrition():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            if action == "save":
+                sql = f"INSERT INTO ingredient (name, ingredient_amount, ingredient_unit, energy, carbohydrate, fats, protein, calcium, iron, zinc) VALUES ('{ingredient_name}', {ingredient_amount}, '{ingredient_unit}', {energy_amount}, {carbohydrate_amount}, {fats_amount}, {protein_amount}, {calcium_amount}, {iron_amount}, {zinc_amount});"
+            elif action == "update":
+                sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit='{ingredient_unit}', energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
             connection.commit()
-            if result:
-                print('result is:')
-                print(result)
+
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return redirect(url_for('ingredients'))
+    return jsonify('success')
 
 
 #plucey
