@@ -62,8 +62,6 @@ $(document).ready(function () {
 				// Callback function when value is autcompleted.
 				matchedIngredient = true;
 				getIngredientNutrition();
-				console.log("MATCHED INGREDIENT: ", matchedIngredient);
-				console.log("MATCHED RECIPE: ", matchedRecipe);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -79,11 +77,6 @@ $(document).ready(function () {
 				// Callback function when value is autcompleted.
 				matchedIngredient = true;
 				//getredientNutrition(); //??? maybe not needed
-				console.log(
-					"MATCHED INGREDIENT: ",
-					matchedRecipe,
-					matchedIngredient
-				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -96,11 +89,6 @@ $(document).ready(function () {
 				matchedRecipe = true;
 				getRecipeData(); //pluc
 				//???put matchedRecipe = false; here?
-				console.log(
-					"MATCHED RECIPE: ",
-					matchedRecipe,
-					matchedIngredient
-				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -115,11 +103,6 @@ $(document).ready(function () {
 				// Callback function when value is autcompleted.
 				matchedRecipe = true;
 				getRecipeData();
-				console.log(
-					"MATCHED RECIPE: ",
-					matchedRecipe,
-					matchedIngredient
-				);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -142,14 +125,13 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/delete_item",
 			success: function (result, status, xhr) {
-				console.log("DELETE ITEM RETURNED: ", result);
-				console.log("************************Deleted: ", result);
 				if (table == "ingredient") {
-					Materialize.toast("Deleted ingredient", 4000); // 4000 is the duration of the toast
+					Materialize.toast("Deleted ingredient", 4000);
+    				getNames("/get_names", "ingredient", "name");
 				} else if (table == "recipe") {
-					Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
+					Materialize.toast("Deleted recipe", 4000);
+    				getNames("/get_names", "recipe", "name");
 				}
-				getNames("/get_names", "ingredient", "name");
 			},
 		});
 	}
@@ -295,19 +277,9 @@ $(document).ready(function () {
 					console.log("--Recipe exists: ", result);
 					matchedRecipe = true;
 					getRecipeData();
-					console.log(
-						"Found Recipe. keyup MATCHES: ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				} else if (result.length == 0) {
 					matchedRecipe = false;
 					clearRecipeInputs();
-					console.log(
-						"Didn't find Recipe. keyup MATCHES: ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -396,13 +368,11 @@ $(document).ready(function () {
 	}
 	//snd
 	$("#save-nutrition-data").on("click", function (event) {
-		//sss
 		event.preventDefault();
 		saveIngredientNutrition();
 	});
 	//sin
 	function saveIngredientNutrition() {
-		//sss
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
 		if (matchedIngredient) {
@@ -411,20 +381,13 @@ $(document).ready(function () {
 		//https://stackoverflow.com/questions/18465508/check-if-inputs-form-are-empty-jquery
 		var isFormValid = true;
 
+        //checks if all required inputs have a value
 		$("input[required]").each(function () {
 			if ($.trim($(this).val()).length == 0) {
 				isFormValid = false;
 			}
 		});
-
 		if (isFormValid) {
-			console.log(
-				"TEST INGREDIENT UNIT: ",
-				$("#ingredient_unit").val(),
-				matchedRecipe,
-				matchedIngredient
-			);
-			//checks if all required inputs have a value
 			$.ajax({
 				//create an ajax request to save_ingredient_nutrition
 				data: {
@@ -442,7 +405,7 @@ $(document).ready(function () {
 					zinc_amount: $("#zinc_amount").val(),
 				},
 				type: "POST",
-				//dataType: "json",
+				dataType: "json",
 				url: "/save_ingredient_nutrition",
 				success: function (result, status, xhr) {
 					if (action == "save") {
@@ -469,13 +432,18 @@ $(document).ready(function () {
 	}
 	//dnd
 	$("#delete-nutrition-data").on("click", function (event) {
-		//ddd
-		event.preventDefault();
-		let value = $("#ingredient_name").val();
-		deleteItem("ingredient", "name", value);
-		$("#ingredient_name").val(""); //clear ingredient name
-		clearIngredientInputs();
-		$(window).scrollTop(0); //scroll window to top
+		event.preventDefault();//plucey
+		if (matchedIngredient) {
+            let value = $("#ingredient_name").val();
+            deleteItem("ingredient", "name", value);
+            $("#ingredient_name").val(""); //clear ingredient name
+            clearIngredientInputs();
+            $(window).scrollTop(0); //scroll window to top
+		} else {
+            Materialize.toast("Ingredient doesn't exist", 4000);
+            $(window).scrollTop(0); //scroll window to top
+        }
+        
 	});
 	//drec
 	$("#delete-recipe").on("click", function (event) {
@@ -634,12 +602,7 @@ $(document).ready(function () {
 	}
 	//inkup
 	$("#ingredient_name").on("keyup", function (event) {
-		//yyy
 		event.preventDefault();
-		console.log(
-			"--ONKEYUP. Sending ingredient name to python (/ingredient_exists): ",
-			$("#ingredient_name").val()
-		);
 		//check if ingredient exists
 		$.ajax({
 			//create an ajax request to ingredient_exists
@@ -660,7 +623,7 @@ $(document).ready(function () {
 					matchedIngredient = true;
 					getIngredientNutrition();
 					console.log(
-						"--Found Ingredient. Matched (recipe, ingredient): ",
+						"--Matched (recipe, ingredient): ",
 						matchedRecipe,
 						matchedIngredient
 					);
@@ -668,20 +631,19 @@ $(document).ready(function () {
 					matchedIngredient = false;
 					clearIngredientInputs();
 					console.log(
-						"--Didn't find Ingredient. Matched (recipe, ingredient): ",
+						"--Matched (recipe, ingredient): ",
 						matchedRecipe,
 						matchedIngredient
 					);
 				}
 			},
 			error: function (xhr, status, error) {
-				console.log("Error");
+				console.log("Database error");
 			},
 		});
 	});
 	//gin
 	function getIngredientNutrition() {
-		//yyy
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to get_ingredient_nutrition
@@ -693,14 +655,9 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/get_ingredient_nutrition",
 			success: function (result, status, xhr) {
-				if (result[0]) {
-					console.log(
-						"--ingredient_unit: ",
-						result[0].ingredient_unit
-					); //zzz
-
+				if (result) {
 					$("#ingredient_amount").val(result[0].ingredient_amount);
-					$("#ingredient_unit").val(result[0].ingredient_unit); //xxx
+					$("#ingredient_unit").val(result[0].ingredient_unit);
 					//https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
 					$("#ingredient_unit").material_select(); //needs to be re-initialized
 					$("#energy_amount").val(result[0].energy);
@@ -715,7 +672,7 @@ $(document).ready(function () {
 				}
 			},
 			error: function (xhr, status, error) {
-				console.log("Error:(");
+				console.log("Database error");
 			},
 		});
 	}
