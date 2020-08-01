@@ -87,8 +87,7 @@ $(document).ready(function () {
 			onAutocomplete: function (val) {
 				// Callback function when value is autcompleted.
 				matchedRecipe = true;
-				getRecipeData(); //pluc
-				//???put matchedRecipe = false; here?
+				getRecipeData();
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -272,7 +271,30 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/recipe_exists",
 			success: function (result, status, xhr) {
-				if (result.length > 0) {
+				console.log(
+					"--Server reponse: ",
+					result
+				);
+				if (result == 'match') {
+					//found recipe in database
+					matchedRecipe = true;
+					getRecipeData();
+					console.log(
+						"--Matched (recipe, ingredient): ",
+						matchedRecipe,
+						matchedIngredient
+					);
+				} else if (result == "no match") {
+					matchedRecipe = false;
+					clearRecipeInputs();
+					console.log(
+						"--Matched (recipe, ingredient): ",
+						matchedRecipe,
+						matchedIngredient
+					);
+				}
+
+/*				if (result.length > 0) {//plucey
 					//found recipe in database
 					console.log("--Recipe exists: ", result);
 					matchedRecipe = true;
@@ -280,7 +302,7 @@ $(document).ready(function () {
 				} else if (result.length == 0) {
 					matchedRecipe = false;
 					clearRecipeInputs();
-				}
+				}*/
 			},
 			error: function (xhr, status, error) {
 				console.log("Error getting data");
