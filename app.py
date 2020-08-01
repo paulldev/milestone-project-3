@@ -166,19 +166,18 @@ def get_recipe_data():
             ingredients = cursor.fetchall()  #returns a dictionary
             results.append(ingredients) #add ingredients to our results array (to be read by jquery)
 
-        # Run a query
+        # Run a query (get list of steps)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             steps = cursor.fetchall()  #returns a dictionary
-            results.append(steps) #add ingredients to our results array (to be read by jquery)
-            print('--step list:')
-            print(steps)
+            results.append(steps) #add steps to our results array (to be read by jquery)
+
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(results)
+    return jsonify(results) #returns list: servings (value), ingredients (list), steps (list)
 
 
 @app.route('/delete_recipe', methods=['POST'])
@@ -197,21 +196,19 @@ def delete_recipe():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
-            result = cursor.fetchone()#returns a dictionary
-            recipe_id = result['ID']
-            print(f"RECIPE ID = {recipe_id}")
+            recipe_id = cursor.fetchone()
 
-        # Run a query
+        # Run a query (delete from recipeIngredient table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
             cursor.execute(sql)
             connection.commit()
-        # Run a query
+        # Run a query (delete from step table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM step WHERE recipeID = {recipe_id};"
             cursor.execute(sql)
             connection.commit()
-        # Run a query
+        # Run a query (delete from recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM recipe WHERE ID = {recipe_id};"
             cursor.execute(sql)
@@ -221,7 +218,7 @@ def delete_recipe():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify(results)
+    return jsonify("deleted")
 
 
 @app.route('/delete_item', methods=['POST'])
