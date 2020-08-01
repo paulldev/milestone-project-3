@@ -480,11 +480,32 @@ $(document).ready(function () {
 	//drec
 	$("#delete-recipe").on("click", function (event) {
 		event.preventDefault();
-		let value = $("#recipe_name").val();
-		deleteItem("recipe", "name", value);
+		let recipe_name = $("#recipe_name").val();
+		deleteRecipe(recipe_name);//plucey
 		$("#recipe_name").val(""); //reset recipe name
 		clearRecipeInputs();
-	});
+    });
+	function deleteRecipe(recipe_name) {
+		//ddd
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to delete_item
+			data: {
+				//data that gets sent to python
+                recipe_name: recipe_name
+            },
+			type: "POST",
+			dataType: "json",
+			url: "/delete_recipe",
+			success: function (result, status, xhr) {
+				console.log("DELETE ITEM RETURNED: ", result);
+				console.log("************************Deleted: ", result);
+				Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
+        		getNames("/get_names", "recipe", "name");
+			},
+		});
+	}
+
 	//astr
 	$("#add-step-to-recipe").on("click", function (event) {
 		event.preventDefault();
