@@ -192,6 +192,49 @@ def get_recipe_data():
     return jsonify(results)
 
 
+@app.route('/delete_recipe', methods=['POST'])
+def delete_recipe():
+    #get data from request object
+    recipe_name = request.form['recipe_name']
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query (get recipeID)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
+            cursor.execute(sql)
+            result = cursor.fetchone()#returns a dictionary
+            recipe_id = result['ID']
+            print(f"RECIPE ID = {recipe_id}")
+
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
+            cursor.execute(sql)
+            connection.commit()
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM step WHERE recipeID = {recipe_id};"
+            cursor.execute(sql)
+            connection.commit()
+        # Run a query
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM recipe WHERE ID = {recipe_id};"
+            cursor.execute(sql)
+            connection.commit()
+
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify(results)
+
+
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
     #get data from request object
