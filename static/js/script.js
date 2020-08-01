@@ -642,7 +642,7 @@ $(document).ready(function () {
 		);
 		//check if ingredient exists
 		$.ajax({
-			//create an ajax request to get_ingredients
+			//create an ajax request to ingredient_exists
 			data: {
 				//data that gets sent to python
 				ingredient_name: $("#ingredient_name").val(),
@@ -652,11 +652,10 @@ $(document).ready(function () {
 			url: "/ingredient_exists",
 			success: function (result, status, xhr) {
 				console.log(
-					"--Successfully received data from server: ",
+					"--Server reponse: ",
 					result
 				); //array
-				if (result.length > 0) {
-					console.log("result.length > 0: ", result.length);
+				if (result == 'match') {
 					//found ingredient in database
 					matchedIngredient = true;
 					getIngredientNutrition();
@@ -665,10 +664,8 @@ $(document).ready(function () {
 						matchedRecipe,
 						matchedIngredient
 					);
-				} else if (result == 0) {
-					console.log("result.length == 0: ", result.length);
+				} else if (result == "no match") {
 					matchedIngredient = false;
-					console.log("CLEARING INGREDIENT INPUTS.....");
 					clearIngredientInputs();
 					console.log(
 						"--Didn't find Ingredient. Matched (recipe, ingredient): ",
@@ -697,7 +694,6 @@ $(document).ready(function () {
 			url: "/get_ingredient_nutrition",
 			success: function (result, status, xhr) {
 				if (result[0]) {
-					console.log("--getIngredientNutrition returns: ", result);
 					console.log(
 						"--ingredient_unit: ",
 						result[0].ingredient_unit
