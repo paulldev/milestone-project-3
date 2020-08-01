@@ -152,7 +152,7 @@ def get_recipe_data():
     results = []
     sql_servings = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
     # CHECK AGAIN!!!!
-    sql_ingredient_list = f"SELECT recipe.name, ingredient.ingredient_amount, ingredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
+    sql_ingredient_list = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
     sql_step_list = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
 
     try:
@@ -343,7 +343,7 @@ def save_recipe():
 
 #            print(index, ",", ingredient_name[index])
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                sql = f"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID) VALUES ({recipe_id}, {ingredient_id});"
+                sql = f"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
                 cursor.execute(sql)
                 connection.commit()
 
