@@ -196,8 +196,9 @@ def delete_recipe():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
-            recipe_id = cursor.fetchone()
-
+            result = cursor.fetchone()
+            recipe_id=result['ID']
+            print(f"Recipe ID : {recipe_id}")
         # Run a query (delete from recipeIngredient table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
