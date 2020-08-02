@@ -220,7 +220,7 @@ $(document).ready(function () {
 	function clearIngredientInputs() {
 		//$("#ingredient_name").val("");
 		$("#ingredient_amount").val("");
-		$("#ingredient_unit").val("item");
+		$("#ingredient_unit").val("gram (g)");
 		$("#ingredient_unit").material_select(); //needs to be re-initialized
 		$("#energy_amount").val("");
 		$("#carbohydrate_amount").val("");
@@ -237,7 +237,7 @@ $(document).ready(function () {
 		$("#servings").val("");
 		$("#ingredient_name").val("");
 		$("#ingredient_amount").val("");
-		$("#ingredient_units").val("item"); //reset ingredient unit
+		$("#ingredient_units").val("gram (g)"); //reset ingredient unit
 		$("#ingredient_units").material_select(); //needs to be re-initialized
 		$("#ingredient-list").empty();
 		$("#step_number").val("");
@@ -549,14 +549,15 @@ $(document).ready(function () {
         updateRecipeNutritionValues(name);
 		$("#recipe_name").val(""); //reset recipe name
 		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
-	}//plucey
-    function updateRecipeNutritionValues(recipe_name)
+	}
+    function updateRecipeNutritionValues(recipe_name) {
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to update_recipe_nutrition_values
 			data: {
 				//data that gets sent to python
                 recipe_name: recipe_name
+                //plucey
             },
 			type: "POST",
 			dataType: "json",
@@ -565,7 +566,7 @@ $(document).ready(function () {
 
             },
 		});
-    )
+    }
 	//aitr
 	$("#add-ingredient-to-recipe").on("click", function (event) {
 		event.preventDefault();
@@ -610,7 +611,7 @@ $(document).ready(function () {
 		);
 		$("#ingredient_name").val(""); //reset ingredient name
 		$("#ingredient_amount").val(""); //reset ingredient amount
-		$("#ingredient_units").val("item"); //reset ingredient unit
+		$("#ingredient_units").val("gram (g)"); //reset ingredient unit
 		$("#ingredient_units").material_select(); //needs to be re-initialized
 		$("#ingredient_name").focus(); //position cursor for next ingredient entry
 		Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
