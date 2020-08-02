@@ -516,11 +516,9 @@ $(document).ready(function () {
 	$("#add-to-meal-plan").on("click", function (event) {
 		event.preventDefault();
 		let name = $("#recipe_name").val();
-		let type = $("#meal_type option:selected").text(); //xxx
-		console.log("*****ADD TO MEAL PLAN:", name, type);
+		let type = $("#meal_type option:selected").text();
 		if (name.length > 0) {
 			if (matchedRecipe) {
-				console.log("NAME, TYPE >>> ", name, type);
 				addRecipeToMealPlan(name, type);
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
@@ -547,10 +545,27 @@ $(document).ready(function () {
                     ${type}
                 </div>
             </li>`
-		);
+        );
+        updateRecipeNutritionValues(name);
 		$("#recipe_name").val(""); //reset recipe name
 		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
-	}
+	}//plucey
+    function updateRecipeNutritionValues(recipe_name)
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to update_recipe_nutrition_values
+			data: {
+				//data that gets sent to python
+                recipe_name: recipe_name
+            },
+			type: "POST",
+			dataType: "json",
+			url: "/update_recipe_nutrition_values",
+			success: function (result, status, xhr) {
+
+            },
+		});
+    )
 	//aitr
 	$("#add-ingredient-to-recipe").on("click", function (event) {
 		event.preventDefault();
