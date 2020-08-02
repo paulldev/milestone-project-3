@@ -289,7 +289,6 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
-#    number_of_ingredients = 0
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -308,20 +307,34 @@ def update_recipe_nutrition_values():
             recipe_id = result['ID']
             servings = result['servings']
 
-        # Run a query (get ingredient ids)
+        # Run a query (get RECIPE ingredient ids, ingredient names, ingredient amounts, ingredient units)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"SELECT ingredientID FROM recipeIngredient WHERE recipeID = '{recipe_id}';"
+            sql = f"SELECT ingredientID, ingredient_name, ingredient_amount, ingredient_unit FROM recipeIngredient WHERE recipeID = '{recipe_id}';"
             cursor.execute(sql)
             result = cursor.fetchall()
-            ingredient_ids = result
-#            print(f"Ingredient ids: {ingredient_ids}")
-#plucey
-        # Process each ingredient in current recipe
-        for index in range(len(ingredient_ids)):
-            print(f"Process ingredient: {index}")
-            print(f"ingredient id: {ingredient_ids[index]['ingredientID']}")
-            # Run a query (get ingredient data)
+            print(f"RECIPE INGREDIENT AMOUNT: {result[0]['ingredient_amount']}")
+            recipe_ingredient_amount = result[0]['ingredient_amount']
+            print(f"RECIPE INGREDIENT UNIT: {result[0]['ingredient_unit']}")
+            recipe_ingredient_unit = result[0]['ingredient_unit']
 
+        # Process each ingredient in current recipe
+        print(f"FOR LOOP RUNS: {len(result)}")
+        for index in range(len(result)):
+            print(f"[{index}] : {result[index]['ingredientID']}")
+            ingredient_id = result[index]['ingredientID']
+#            print(f"[{index}] : {result[index]['ingredient_amount']}")
+#            print(f"[{index}] : {result[index]['ingredient_unit']}")
+            #here is where we access the proper ingredient data (not from the recipe page)
+            # Run a query (get all ingredient data, including nutritional data)
+            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                sql = f"SELECT * FROM ingredient WHERE ID = '{ingredient_id}';"
+                cursor.execute(sql)
+                data = cursor.fetchall()#plucey
+                print(f"INGREDIENT NAME: {data[0]['name']}")
+                print(f"INGREDIENT AMOUNT: {data[0]['ingredient_amount']}")
+                ingredient_amount = data[0]['ingredient_amount']
+                print(f"INGREDIENT UNIT: {data[0]['ingredient_unit']}")
+                
 #"INSERT IGNORE INTO step (recipeID, stepNumber, stepDescription) VALUES ('{recipe_id}', {step_number[index]}, '{step_description[index]}');"
 #"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
 
@@ -442,19 +455,11 @@ def get_names():
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(sql)
-            print('Running SQL query...')
             result = cursor.fetchall()  #returns a dictionary
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-        print(f'RAW query result: {result}')
-        if type(result) is dict:
-            print(f'RESULT is a dictionary: {result}')
-        else:
-            print(f'RESULT is NOT a dictionary: {result}')
-        print(f'jsonify query result. return this > {jsonify(result)}')
     return jsonify(result)
-    #return json.dumps(result)
 
 
 def name_exists(table, column_name, name):
