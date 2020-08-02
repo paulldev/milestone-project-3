@@ -33,17 +33,12 @@ $(document).ready(function () {
 							console.log("Iteration (" + i + ") ", recipes);
 						}
 					}
-					/*            if (table == 'ingredient') {
-                matchedIngredient = true;
-            } else if (table == 'recipe') {
-                matchedRecipe = true;
-            }*/
 				} else {
 					console.log("5. Couldn't find");
 				}
 			},
 			error: function (xhr, status, error) {
-				console.log("4. [Error:] Error??", xhr);
+				console.log("Database error", error);
 			},
 			complete: function (result) {
 				console.log("AJAX call complete, check NAMES ", ingredients);
@@ -161,8 +156,6 @@ $(document).ready(function () {
 		};
 
 		$("#ingredient-list li").each(function () {
-			//recipe.ingredient.push({ ingredient_name: $(this).find("span").text().trim(), ingredient_amount: parseInt($(this).find("div:eq(1)").text().trim()), ingredient_unit: $(this).find("div:eq(2)").text().trim()} );
-			//???
 			recipe.ingredient_name.push(
 				$(this).find("span").text().trim()
 			);
@@ -193,13 +186,8 @@ $(document).ready(function () {
 		if (isFormValid) {
 			//checks if required inputs have a value
 			console.log(
-				"READY TO SEND RECIPE OBJECT: ",
-				recipe /*, typeof(recipe)*/
-			);
-			//let jsonrecipe=JSON.stringify(recipe);
-			console.log(
 				"READY TO SEND JSONIFIED RECIPE OBJECT: ",
-				JSON.stringify(recipe) /*, typeof(JSON.stringify(recipe))*/
+				JSON.stringify(recipe)
 			);
 			$.ajax({
 				//create an ajax request to save_recipe
@@ -216,10 +204,11 @@ $(document).ready(function () {
 					} else if (action == "update") {
 						Materialize.toast("Updated recipe", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
-					}
+                    }
+                    getNames("/get_names", "recipe", "name");
 				},
 				error: function (xhr, status, error) {
-					console.log("Error oh no", error); //pluc
+					console.log("Database error", error);
 				},
 			});
 		} else {
@@ -319,14 +308,13 @@ $(document).ready(function () {
 				if (result) {
                     $("#servings").val(`${result[0].servings}`); //???buggy
                     $("#servings").focus();//bug fix???
+                    $("#recipe_name").focus();
 					//get ingredients
-					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list
-						//stops ingredients being added every keystroke
+					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
 						result[1].forEach(function (element) {
 							ingredient_name = element["ingredient.name"];
 							ingredient_amount = element["ingredient_amount"];
 							ingredient_unit = element["ingredient_unit"];
-							//plucey
 							$("#ingredient-list").append(
 								`<li class='row list-item'>
                                 <div class='col s6 myclass'>
@@ -346,8 +334,7 @@ $(document).ready(function () {
 						});
 					}
 					//get steps
-					if ($("#step-list li").length == 0) {
-						//stops ingredients being added every keystroke
+					if ($("#step-list li").length == 0) {//if zero steps in list (stops steps being added every keystroke)
 						result[2].forEach(function (element) {
 							step_number = element["stepNumber"];
 							step_description = element["stepDescription"];
@@ -428,7 +415,8 @@ $(document).ready(function () {
 						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
 						$("#ingredient_name").focus(); //position cursor for further editing
-					}
+                    }
+                    getNames("/get_names", "ingredient", "name");
 				},
 				error: function (xhr, status, error) {
 					console.log("Error:(", error);
@@ -441,7 +429,7 @@ $(document).ready(function () {
 	}
 	//dnd
 	$("#delete-nutrition-data").on("click", function (event) {
-		event.preventDefault();//plucey
+		event.preventDefault();
 		if (matchedIngredient) {
             let value = $("#ingredient_name").val();
             deleteItem("ingredient", "name", value);
@@ -457,11 +445,16 @@ $(document).ready(function () {
 	//drec
 	$("#delete-recipe").on("click", function (event) {
 		event.preventDefault();
-		let recipe_name = $("#recipe_name").val();
-		deleteRecipe(recipe_name);//plucey
-		$("#recipe_name").val(""); //reset recipe name
-		clearRecipeInputs();
-		$(window).scrollTop(0); //scroll window to top
+		if (matchedRecipe) {
+            let recipe_name = $("#recipe_name").val();
+            deleteRecipe(recipe_name);
+            $("#recipe_name").val(""); //reset recipe name
+            clearRecipeInputs();
+            $(window).scrollTop(0); //scroll window to top
+        } else {
+            Materialize.toast("Recipe doesn't exist", 4000);
+            $(window).scrollTop(0); //scroll window to top
+        }
     });
 
 	function deleteRecipe(recipe_name) {
@@ -477,12 +470,10 @@ $(document).ready(function () {
 			url: "/delete_recipe",
 			success: function (result, status, xhr) {
                 if (matchedRecipe) {
-                    console.log("DELETE ITEM RETURNED: ", result);
-                    console.log("************************Deleted: ", result);
                     Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
             		getNames("/get_names", "recipe", "name");
                 } else {
-                    Materialize.toast("Recipe doesn't exists", 4000);
+                    Materialize.toast("Recipe doesn't exist", 4000);
                 }
 			},
 		});
@@ -493,10 +484,10 @@ $(document).ready(function () {
 		event.preventDefault();
 		let step_number = $("#step_number").val();
 		let step_description = $("#step_description").val();
-		if ((step_number.length > 0) & (step_description.length > 0)) {
+		if ((step_number.length > 0) & (step_description.length > 0)) {//if step number and description exist
 			addStepToRecipe(step_number, step_description);
 		} else {
-			Materialize.toast("Please fill out all step fields", 4000); // 4000 is the duration of the toast
+			Materialize.toast("Please fill out all step fields", 4000);
 		}
 	});
 	//astr
@@ -566,8 +557,8 @@ $(document).ready(function () {
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
 		let unit = $("#ingredient-row .select-dropdown").val();
-		//console.log("ADD INGREDIENT TO RECIPE: ", value, amount, unit);
-		if (value.length > 0 && amount.length > 0) {
+
+        if (value.length > 0 && amount.length > 0) {//if ingredient name and amount exist
 			if (matchedIngredient) {
 				addIngredientToRecipe(value, amount, unit);
 			} else {
