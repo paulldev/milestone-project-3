@@ -24,7 +24,7 @@ def index():
                                      password=password,
                                      db='vmpdb')
 
-        # Run a query
+        # Run a query (get meal)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
             cursor.execute(sql)
@@ -32,7 +32,7 @@ def index():
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("index.html", result=result)
+    return render_template("index.html", mealType=result)
 
 
 @app.route('/recipes')
@@ -198,7 +198,6 @@ def delete_recipe():
             cursor.execute(sql)
             result = cursor.fetchone()
             recipe_id=result['ID']
-            print(f"Recipe ID : {recipe_id}")
         # Run a query (delete from recipeIngredient table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
