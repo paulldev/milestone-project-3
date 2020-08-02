@@ -32,7 +32,7 @@ def index():
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("index.html", mealType=result)
+    return render_template("index.html", meal_type=result)
 
 
 @app.route('/recipes')
