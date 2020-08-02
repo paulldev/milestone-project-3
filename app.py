@@ -289,6 +289,7 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
+#    number_of_ingredients = 0
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -307,14 +308,24 @@ def update_recipe_nutrition_values():
             recipe_id = result['ID']
             servings = result['servings']
 
-        # Run a query (get number of ingredients)
+        # Run a query (get ingredient ids)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"SELECT COUNT(*) FROM recipe WHERE ID = '{recipe_id}';"
+            sql = f"SELECT ingredientID FROM recipeIngredient WHERE recipeID = '{recipe_id}';"
             cursor.execute(sql)
-            result = cursor.fetchone()
-            number_of_ingredients = result['COUNT(*)']
-            print(f"NUMBER OF INGREDIENTS: {number_of_ingredients}")
+            result = cursor.fetchall()
+            ingredient_ids = result
+#            print(f"Ingredient ids: {ingredient_ids}")
 #plucey
+        # Process each ingredient in current recipe
+        for index in range(len(ingredient_ids)):
+            print(f"Process ingredient: {index}")
+            print(f"ingredient id: {ingredient_ids[index]['ingredientID']}")
+            # Run a query (get ingredient data)
+
+#"INSERT IGNORE INTO step (recipeID, stepNumber, stepDescription) VALUES ('{recipe_id}', {step_number[index]}, '{step_description[index]}');"
+#"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
+
+            
 
     finally:
         #  Close the connection, regardless of whether or not the above was successful
