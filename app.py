@@ -287,7 +287,42 @@ def save_ingredient_nutrition():
     return jsonify('success')
 
 
+@app.route('/update_recipe_nutrition_values', methods=['POST'])
+def update_recipe_nutrition_values():
+    #get data from request object
+    recipe_name = request.form['recipe_name']
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query (get recipe_id, servings)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT ID, servings FROM recipe WHERE name='{recipe_name}';"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            recipe_id = result['ID']
+            servings = result['servings']
+
+        # Run a query (get number of ingredients)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT COUNT(*) FROM recipe WHERE ID = '{recipe_id}';"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            number_of_ingredients = result['COUNT(*)']
+            print(f"NUMBER OF INGREDIENTS: {number_of_ingredients}")
 #plucey
+
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify('success')
+
+
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
     print("TESTING SAVE_RECIPE====================================>")
@@ -356,7 +391,7 @@ def save_recipe():
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"SELECT ID FROM ingredient WHERE name='{ingredient_name[index]}';"
                 print(f"SQL: {sql}")
-                cursor.execute(sql)#plucey
+                cursor.execute(sql)
                 result = cursor.fetchone()  #returns a dictionary
                 print(f"RESULT: {result}")
                 ingredient_id = result['ID']
