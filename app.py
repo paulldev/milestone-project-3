@@ -347,6 +347,15 @@ def update_recipe_nutrition_values():
                         converted_values.append(round(converted_result))
                         print(f"*********** CONVERTED LIST:")
                         print(converted_values)
+                        if nutrient_index == len(names_to_convert)-1:
+                            print("**********************TIME TO WRITE TO DATABASE**********************")
+                            # Run a query
+                            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                                #https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
+                                sql = f"INSERT INTO recipe ({names_to_convert[0]}, {names_to_convert[1]}, {names_to_convert[2]}, {names_to_convert[3]}, {names_to_convert[4]}, {names_to_convert[5]}, {names_to_convert[6]}) VALUES ({converted_values[0]}, {converted_values[1]}, {converted_values[2]}, {converted_values[3]}, {converted_values[4]}, {converted_values[5]}, {converted_values[6]}) ON DUPLICATE KEY UPDATE {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]};"
+                                cursor.execute(sql)
+                                connection.commit()
+
 
     finally:
         #  Close the connection, regardless of whether or not the above was successful
