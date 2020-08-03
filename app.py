@@ -13,10 +13,10 @@ app = Flask(__name__)
 # Get the username from the Gitpod workspace
 username = os.getenv('mysqluser')
 password = os.getenv('vmpdbpw')
-global connection
 
 @app.route('/')
 def index():
+    global connection
     try:
         # Connect to the database
         connection = pymysql.connect(host='localhost',
@@ -59,6 +59,7 @@ def ingredients():
 
 @app.route('/ingredient_exists', methods=['POST'])
 def ingredient_exists():
+    global connection
     #get data from request object
 
     ingredient = request.form['ingredient_name']
@@ -88,6 +89,7 @@ def ingredient_exists():
 
 @app.route('/recipe_exists', methods=['POST'])
 def recipe_exists():
+    global connection
     #get data from request object
 
     recipe = request.form['recipe_name']
@@ -117,6 +119,7 @@ def recipe_exists():
 
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
+    global connection
     #get data from request object
     ingredient_name = request.form['ingredient_name']
  
@@ -141,6 +144,7 @@ def get_ingredient_nutrition():
 
 @app.route('/get_recipe_data', methods=['POST'])
 def get_recipe_data():
+    global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
     results = []#results list will contain the results from our queries
@@ -182,6 +186,7 @@ def get_recipe_data():
 
 @app.route('/delete_recipe', methods=['POST'])
 def delete_recipe():
+    global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -223,6 +228,7 @@ def delete_recipe():
 
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
+    global connection
     #get data from request object
      
     table = request.form['table']
@@ -250,6 +256,7 @@ def delete_item():
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
+    global connection
     #get data from request object
     action = request.form['action']
     ingredient_name = request.form['ingredient_name']
@@ -289,6 +296,7 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
+    global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -395,6 +403,7 @@ def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
+    global connection
     print("TESTING SAVE_RECIPE====================================>")
     received_data = request.form
     #https://www.youtube.com/watch?v=2OYkhatUZmQ
@@ -484,6 +493,7 @@ def save_recipe():
 
 @app.route('/get_names', methods=['POST'])
 def get_names():
+    global connection
     table = request.form['table']
     column = request.form['column']
     print('----------jQuery: page has loaded-----------')
@@ -509,6 +519,7 @@ def get_names():
 
 
 def name_exists(table, column_name, name):
+    global connection
     sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
@@ -538,6 +549,7 @@ def name_exists(table, column_name, name):
 
 
 def get_value(table, column, name):
+    global connection
     sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
