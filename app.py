@@ -316,15 +316,15 @@ def update_recipe_nutrition_values():
                 print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
 
                 # process each nutrient to be converted
-                for item in range(len(names_to_convert)):
-                    print(f"Current nutrition item. ROW {item} -> {names_to_convert[item]}")
+                for nutrient_index in range(len(names_to_convert)):
+                    print(f"Current nutrition item. ROW {nutrient_index} -> {names_to_convert[nutrient_index]}")
                     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                        sql = f"SELECT {names_to_convert[item]} FROM ingredient WHERE ID={recipe_data[recipe_index]['ingredientID']};"
+                        sql = f"SELECT {names_to_convert[nutrient_index]} FROM ingredient WHERE ID={recipe_data[recipe_index]['ingredientID']};"
                         cursor.execute(sql)
                         nutrient_data = cursor.fetchall()
 
-                        nutrition_name = names_to_convert[item]
-                        nutrition_value = nutrient_data[0][names_to_convert[item]]
+                        nutrition_name = names_to_convert[nutrient_index]
+                        nutrition_value = nutrient_data[0][names_to_convert[nutrient_index]]
 
                         recipe_ingredient_amount = recipe_data[recipe_index]['ingredient_amount']
                         print(f"*** recipe_ingredient_amount: {recipe_ingredient_amount}")
