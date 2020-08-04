@@ -312,6 +312,7 @@ def update_recipe_nutrition_values():
             sql = f"SELECT recipe.ID, recipe.servings, recipeIngredient.ingredientID, recipeIngredient.ingredient_name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, ingredient.ingredient_amount, ingredient.ingredient_unit FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             recipe_data = cursor.fetchall()
+            
             print("===got all the data from the big query.")
             names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']            
             print("===(loop) start processing each individual ingredient from big query")
@@ -319,6 +320,10 @@ def update_recipe_nutrition_values():
             # process each ingredient in recipe
             for recipe_index in range(len(recipe_data)):
                 converted_values = []
+                servings = recipe_data[recipe_index]['servings']
+                print(f"**** SERVINGS: {servings}")
+                recipe_id = recipe_data[recipe_index]['ID']
+                print(f"**** SERVINGS: {servings}")
 
                 print(f"Current ingredient name. ROW {recipe_index} -> {recipe_data[recipe_index]['ingredient_name']}")
                 print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
@@ -350,7 +355,7 @@ def update_recipe_nutrition_values():
                         #print(f"SUM = {1 + nutrition_value}")
                         conversion_value = get_conversion_value(recipe_ingredient_unit, ingredient_unit)
                         print(f"CONVERSION VALUE: {conversion_value}")
-                        converted_result = nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount)
+                        converted_result = (nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
                         print(f"******* converted amount: {converted_result}")
                         converted_values.append(round(converted_result))
                         print(f"*********** CONVERTED LIST:")
@@ -360,7 +365,7 @@ def update_recipe_nutrition_values():
                             # Run a query
                             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                                 #https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
-                                sql = f"INSERT INTO recipe ({names_to_convert[0]}, {names_to_convert[1]}, {names_to_convert[2]}, {names_to_convert[3]}, {names_to_convert[4]}, {names_to_convert[5]}, {names_to_convert[6]}) VALUES ({converted_values[0]}, {converted_values[1]}, {converted_values[2]}, {converted_values[3]}, {converted_values[4]}, {converted_values[5]}, {converted_values[6]}) ON DUPLICATE KEY UPDATE {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]};"
+                                sql = f"INSERT INTO recipe (ID, name, servings, {names_to_convert[0]}, {names_to_convert[1]}, {names_to_convert[2]}, {names_to_convert[3]}, {names_to_convert[4]}, {names_to_convert[5]}, {names_to_convert[6]}) VALUES ({recipe_id}, '{recipe_name}', {servings}, {converted_values[0]}, {converted_values[1]}, {converted_values[2]}, {converted_values[3]}, {converted_values[4]}, {converted_values[5]}, {converted_values[6]}) ON DUPLICATE KEY UPDATE {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]};"
                                 cursor.execute(sql)
                                 connection.commit()
 
