@@ -135,7 +135,7 @@ $(document).ready(function () {
 		saveRecipe();
 	});
 	//srec
-	function saveRecipe() {
+	function saveRecipe() {//plucey
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
 		if (matchedRecipe) {
@@ -197,7 +197,8 @@ $(document).ready(function () {
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-						Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
+                        updateRecipeNutritionValues(name);//update nutrition data for this recipe
+    					Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
 						$("#recipe_name").val(""); //reset recipe name
 						clearRecipeInputs();
 						$(window).scrollTop(0); //scroll window to top
@@ -546,7 +547,6 @@ $(document).ready(function () {
                 </div>
             </li>`
         );
-        updateRecipeNutritionValues(name);
 		$("#recipe_name").val(""); //reset recipe name
 		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
 	}
@@ -557,7 +557,7 @@ $(document).ready(function () {
 			data: {
 				//data that gets sent to python
                 recipe_name: recipe_name
-                //plucey
+
             },
 			type: "POST",
 			dataType: "json",
