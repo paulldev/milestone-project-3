@@ -314,19 +314,20 @@ def update_recipe_nutrition_values():
             recipe_data = cursor.fetchall()
             
             print("===got all the data from the big query.")
-            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']            
+            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']
+            converted_values = []#xxx
+
             print("===(loop) start processing each individual ingredient from big query")
             
             # process each ingredient in recipe
             for recipe_index in range(len(recipe_data)):
-                converted_values = []
                 servings = recipe_data[recipe_index]['servings']
-                print(f"**** SERVINGS: {servings}")
+                #print(f"**** SERVINGS: {servings}")
                 recipe_id = recipe_data[recipe_index]['ID']
-                print(f"**** SERVINGS: {servings}")
+                #print(f"**** SERVINGS: {servings}")
 
                 print(f"Current ingredient name. ROW {recipe_index} -> {recipe_data[recipe_index]['ingredient_name']}")
-                print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
+                #print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
 
                 # process each nutrient to be converted
                 for nutrient_index in range(len(names_to_convert)):
@@ -340,24 +341,30 @@ def update_recipe_nutrition_values():
                         nutrition_value = nutrient_data[0][names_to_convert[nutrient_index]]
 
                         recipe_ingredient_amount = recipe_data[recipe_index]['ingredient_amount']
-                        print(f"*** recipe_ingredient_amount: {recipe_ingredient_amount}")
+                        #print(f"*** recipe_ingredient_amount: {recipe_ingredient_amount}")
                         
                         ingredient_amount = recipe_data[recipe_index]['ingredient.ingredient_amount']
-                        print(f"*** ingredient_amount: {ingredient_amount}")
+                        #print(f"*** ingredient_amount: {ingredient_amount}")
 
                         recipe_ingredient_unit = recipe_data[recipe_index]['ingredient_unit']
-                        print(f"*** recipe_ingredient_unit: {recipe_ingredient_unit}")
+                        #print(f"*** recipe_ingredient_unit: {recipe_ingredient_unit}")
                         
                         ingredient_unit = recipe_data[recipe_index]['ingredient.ingredient_unit']
-                        print(f"*** ingredient_unit: {ingredient_unit}")
+                        #print(f"*** ingredient_unit: {ingredient_unit}")
                         
-                        print(f"{nutrition_name} nutrition value [{nutrition_value}] for [{nutrient_data[0]}]")
-                        #print(f"SUM = {1 + nutrition_value}")
+                        #print(f"{nutrition_name} nutrition value [{nutrition_value}] for [{nutrient_data[0]}]")
                         conversion_value = get_conversion_value(recipe_ingredient_unit, ingredient_unit)
-                        print(f"CONVERSION VALUE: {conversion_value}")
+                        #print(f"CONVERSION VALUE: {conversion_value}")
                         converted_result = (nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
                         print(f"******* converted amount: {converted_result}")
-                        converted_values.append(round(converted_result))
+                        if recipe_index == 0:
+                            print(f"********** (IF) RECIPE INDEX *********** {recipe_index}")
+                            converted_total = converted_result
+                        else:
+                            print(f"********** (ELSE) RECIPE INDEX *********** {recipe_index}")
+                            converted_total = converted_result + converted_values[nutrient_index]
+#xxx
+                        converted_values.append(round(converted_total))
                         print(f"*********** CONVERTED LIST:")
                         print(converted_values)
                         if nutrient_index == len(names_to_convert)-1:
@@ -368,8 +375,6 @@ def update_recipe_nutrition_values():
                                 sql = f"INSERT INTO recipe (ID, name, servings, {names_to_convert[0]}, {names_to_convert[1]}, {names_to_convert[2]}, {names_to_convert[3]}, {names_to_convert[4]}, {names_to_convert[5]}, {names_to_convert[6]}) VALUES ({recipe_id}, '{recipe_name}', {servings}, {converted_values[0]}, {converted_values[1]}, {converted_values[2]}, {converted_values[3]}, {converted_values[4]}, {converted_values[5]}, {converted_values[6]}) ON DUPLICATE KEY UPDATE {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]};"
                                 cursor.execute(sql)
                                 connection.commit()
-
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -417,12 +422,12 @@ def save_recipe():
     print(f"data: {data}")
     data_dict=json.loads(data)
 
-    print(f"ACTION: {data_dict['action']}")
     action = data_dict['action']
-    print(f"RECIPE NAME: {data_dict['recipe_name']}")
+    print(f"ACTION: {action}")
     recipe_name = data_dict['recipe_name']
-    print(f"SERVINGS: {data_dict['servings']}")
+    print(f"RECIPE NAME: {recipe_name}")
     servings = data_dict['servings']
+    print(f"SERVINGS: {servings}")
     ingredient_name = data_dict['ingredient_name']
     print(f"INGREDIENT NAMES: {ingredient_name}")
     ingredient_amount = data_dict['ingredient_amount']
@@ -459,13 +464,17 @@ def save_recipe():
             cursor.execute(sql)
             result = cursor.fetchone()#returns a dictionary
             recipe_id = result['ID']
-            print(f"RECIPE ID = {recipe_id}")
+
+        # Run a query (delete current recipe steps)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM step WHERE recipeID = {recipe_id};"
+            cursor.execute(sql)
+            connection.commit()
 
         # Run a query (save/update step table)
         for index in range(len(step_number)):
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                #https://chartio.com/resources/tutorials/how-to-insert-if-row-does-not-exist-upsert-in-mysql/
-                sql = f"INSERT IGNORE INTO step (recipeID, stepNumber, stepDescription) VALUES ('{recipe_id}', {step_number[index]}, '{step_description[index]}');"
+                sql = f"INSERT INTO step (recipeID, stepNumber, stepDescription) VALUES ({recipe_id}, {step_number[index]}, '{step_description[index]}');"
                 cursor.execute(sql)
                 connection.commit()
 
@@ -474,15 +483,10 @@ def save_recipe():
             # Run a query (get ingredient id)
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"SELECT ID FROM ingredient WHERE name='{ingredient_name[index]}';"
-                print(f"SQL: {sql}")
                 cursor.execute(sql)
                 result = cursor.fetchone()  #returns a dictionary
-                print(f"RESULT: {result}")
                 ingredient_id = result['ID']
-                print(f"INGREDIENT ID = {ingredient_id}")
 
-
-#            print(index, ",", ingredient_name[index])
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
                 cursor.execute(sql)
@@ -492,7 +496,6 @@ def save_recipe():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    #return jsonify(result)
     return jsonify("saved recipe")
 
 
