@@ -306,32 +306,36 @@ def update_recipe_nutrition_values():
                                      user=username,
                                      password=password,
                                      db='vmpdb')
-        print("=================================================================================================")
         # Run a query (get recipe_id, servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.ID, recipe.servings, recipeIngredient.ingredientID, recipeIngredient.ingredient_name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, ingredient.ingredient_amount, ingredient.ingredient_unit FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             recipe_data = cursor.fetchall()
             
-            print("===got all the data from the big query.")
             names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']
             converted_values = []#xxx
-
-            print("===(loop) start processing each individual ingredient from big query")
+            print("========================================================================================================")
+            print("=================================== START ==============================================================")
+            print("========================================================================================================")
             
             # process each ingredient in recipe
             for recipe_index in range(len(recipe_data)):
+                print(f"=== FOR EACH INGREDIENT (Processing ingredient {recipe_index}) =========================================")
+                print(f"Converted_values[] : {converted_values}")
+
                 servings = recipe_data[recipe_index]['servings']
                 #print(f"**** SERVINGS: {servings}")
                 recipe_id = recipe_data[recipe_index]['ID']
-                #print(f"**** SERVINGS: {servings}")
+                #print(f"**** RECIPE ID: {recipe_id}")
 
-                print(f"Current ingredient name. ROW {recipe_index} -> {recipe_data[recipe_index]['ingredient_name']}")
+                #print(f"Current ingredient name. ROW {recipe_index} -> {recipe_data[recipe_index]['ingredient_name']}")
                 #print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
 
                 # process each nutrient to be converted
                 for nutrient_index in range(len(names_to_convert)):
-                    print(f"Current nutrition item. ROW {nutrient_index} -> {names_to_convert[nutrient_index]}")
+                    print(f"\tConverted_values[] : {converted_values}")
+                    print(f"\t=== FOR EACH NUTRIENT (Processing {names_to_convert[nutrient_index]}) =========================================")
+                    #print(f"Current nutrition item. ROW {nutrient_index} -> {names_to_convert[nutrient_index]}")
                     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                         sql = f"SELECT {names_to_convert[nutrient_index]} FROM ingredient WHERE ID={recipe_data[recipe_index]['ingredientID']};"
                         cursor.execute(sql)
@@ -352,27 +356,38 @@ def update_recipe_nutrition_values():
                         ingredient_unit = recipe_data[recipe_index]['ingredient.ingredient_unit']
                         #print(f"*** ingredient_unit: {ingredient_unit}")
                         
-                        #print(f"{nutrition_name} nutrition value [{nutrition_value}] for [{nutrient_data[0]}]")
+                        print(f"\t\t{nutrition_name} > {nutrition_value}")
                         conversion_value = get_conversion_value(recipe_ingredient_unit, ingredient_unit)
                         #print(f"CONVERSION VALUE: {conversion_value}")
                         converted_result = (nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
-                        print(f"******* converted amount: {converted_result}")
+                        print(f"\t\t{nutrition_name} > {converted_result} (converted)")
+                        #print(f"******* converted amount: {converted_result}")
+                        #print(f"Recipe index - {recipe_index}")
+                        #print(f"Nutrient index - {nutrient_index}")
+                        print(f"\t\tConverted_values[] : {converted_values}")
+                        print(f"??? nutruent index : {nutrient_index}")
                         if recipe_index == 0:
-                            print(f"********** (IF) RECIPE INDEX *********** {recipe_index}")
+                            print(f"\t\t(IF)")
                             converted_total = converted_result
+                            converted_values.append(round(converted_total))
+                            print(f"\t\tConverted_values[] : {converted_values}")
                         else:
-                            print(f"********** (ELSE) RECIPE INDEX *********** {recipe_index}")
+                            print(f"\t\t(ELSE)")
+                            print(f"\t\tConverted_values[] : {converted_values}")
+
                             converted_total = converted_result + converted_values[nutrient_index]
-#xxx
-                        converted_values.append(round(converted_total))
-                        print(f"*********** CONVERTED LIST:")
-                        print(converted_values)
+                            print(f"??? nutrient index : {nutrient_index}")
+                            print(f"??? converted total : {converted_total}")
+                            print(f"??? lsit[] : {converted_values}")
+                            converted_values[nutrient_index] = round(converted_total)
+    
                         if nutrient_index == len(names_to_convert)-1:
                             print("**********************TIME TO WRITE TO DATABASE**********************")
                             # Run a query
                             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                                 #https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
-                                sql = f"INSERT INTO recipe (ID, name, servings, {names_to_convert[0]}, {names_to_convert[1]}, {names_to_convert[2]}, {names_to_convert[3]}, {names_to_convert[4]}, {names_to_convert[5]}, {names_to_convert[6]}) VALUES ({recipe_id}, '{recipe_name}', {servings}, {converted_values[0]}, {converted_values[1]}, {converted_values[2]}, {converted_values[3]}, {converted_values[4]}, {converted_values[5]}, {converted_values[6]}) ON DUPLICATE KEY UPDATE {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]};"
+                                print(f"?????? RECIPE ID : {recipe_id}")
+                                sql = f"UPDATE recipe SET {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]} WHERE ID = {recipe_id};"
                                 cursor.execute(sql)
                                 connection.commit()
     finally:
@@ -384,29 +399,40 @@ def update_recipe_nutrition_values():
 
 def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
     if recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'teaspoon (tsp.)':
+        print(f"found conversion unit for (1)")
         return 0.24
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'tablespoon (tbsp.)':
+        print(f"found conversion unit for (2)")
         return 0.07
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'millilitre (ml)':
+        print(f"found conversion unit for (3)")
         return 1
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'gram (g)':
+        print(f"found conversion unit for (4)")
         return 4.18
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'tablespoon (tbsp.)':
+        print(f"found conversion unit for (5)")
         return 0.33
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'millilitre (ml)':
+        print(f"found conversion unit for (6)")
         return 4.92
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'gram (g)':
+        print(f"found conversion unit for (7)")
         return 17.07
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'teaspoon (tsp.)':
+        print(f"found conversion unit for (8)")
         return 3
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'millilitre (ml)':
+        print(f"found conversion unit for (9)")
         return 14.78
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'gram (g)':
-        return 
+        print(f"found conversion unit for (9)")
+        return 1
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'teaspoon (tsp.)':
-        return 
+        print(f"found conversion unit for (10)")
+        return 0.2
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'tablespoon (tbsp.)':
-        return 
+        return 0.067
     else:
         return 1
 
@@ -471,12 +497,18 @@ def save_recipe():
             cursor.execute(sql)
             connection.commit()
 
-        # Run a query (save/update step table)
+        # Run a query (save steps)
         for index in range(len(step_number)):
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"INSERT INTO step (recipeID, stepNumber, stepDescription) VALUES ({recipe_id}, {step_number[index]}, '{step_description[index]}');"
                 cursor.execute(sql)
                 connection.commit()
+
+        # Run a query (delete current ingredients)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
+            cursor.execute(sql)
+            connection.commit()
 
         # Run a query (save/update recipeIngredient table)
         for index in range(len(ingredient_name)):
@@ -484,11 +516,11 @@ def save_recipe():
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"SELECT ID FROM ingredient WHERE name='{ingredient_name[index]}';"
                 cursor.execute(sql)
-                result = cursor.fetchone()  #returns a dictionary
+                result = cursor.fetchone()
                 ingredient_id = result['ID']
 
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                sql = f"INSERT IGNORE INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
+                sql = f"INSERT INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
                 cursor.execute(sql)
                 connection.commit()
 
