@@ -184,11 +184,8 @@ $(document).ready(function () {
 		}
 
 		if (isFormValid) {
+            console.log("(1) Save Recipe(). Form is valid. Recipe oject state: ", recipe);
 			//checks if required inputs have a value
-			console.log(
-				"READY TO SEND JSONIFIED RECIPE OBJECT: ",
-				JSON.stringify(recipe)
-			);
 			$.ajax({
 				//create an ajax request to save_recipe
 				data: JSON.stringify(recipe), //data that gets sent to python
@@ -197,7 +194,6 @@ $(document).ready(function () {
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-                        updateRecipeNutritionValues(name);//update nutrition data for this recipe
     					Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
 						$("#recipe_name").val(""); //reset recipe name
 						clearRecipeInputs();
@@ -205,12 +201,17 @@ $(document).ready(function () {
 					} else if (action == "update") {
 						Materialize.toast("Updated recipe", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
-                    }
-                    getNames("/get_names", "recipe", "name");
+                    }//xxxxx
+
 				},
 				error: function (xhr, status, error) {
 					console.log("Database error", error);
 				},
+      			complete: function (result) {
+                    getNames("/get_names", "recipe", "name");
+                    console.log("***** RECIPE NAME YO: ", recipe.recipe_name)
+                    updateRecipeNutritionValues(recipe.recipe_name);//plucey update nutrition data for this recipe
+	          	},
 			});
 		} else {
 			Materialize.toast("All fields must be filled out", 4000); // 4000 is the duration of the toast
@@ -291,7 +292,7 @@ $(document).ready(function () {
 	});
 	//grd
 	function getRecipeData() {
-		let ingredient_namme = "";
+		let ingredient_name = "";
 		let ingredient_amount = "";
 		let ingredient_unit = "";
 		event.preventDefault();
@@ -307,9 +308,9 @@ $(document).ready(function () {
 			success: function (result, status, xhr) {
                 console.log(":::::::RESULT getRecipeData(): ", result);
 				if (result) {
-                    $("#servings").val(`${result[0].servings}`); //???buggy
+                    $("#servings").val(result[0].servings); //???buggy
                     $("#servings").focus();//bug fix???
-                    $("#recipe_name").focus();
+                    //$("#recipe_name").focus();
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
 						result[1].forEach(function (element) {
@@ -551,17 +552,33 @@ $(document).ready(function () {
 		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
 	}
     function updateRecipeNutritionValues(recipe_name) {
+        console.log("Inside updateRecipeNutritionValues", recipe_name);
 		event.preventDefault();
 		$.ajax({
 			//create an ajax request to update_recipe_nutrition_values
 			data: {
 				//data that gets sent to python
                 recipe_name: recipe_name
-
             },
 			type: "POST",
 			dataType: "json",
 			url: "/update_recipe_nutrition_values",
+			success: function (result, status, xhr) {
+//plucey finish this?
+            },
+		});
+    }
+    function updateNutritionSummary(recipe_name) {
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to update_recipe_nutrition_values
+			data: {
+				//data that gets sent to python
+                recipe_name: recipe_name
+            },
+			type: "POST",
+			dataType: "json",
+			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
 
             },
