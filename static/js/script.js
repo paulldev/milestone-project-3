@@ -521,7 +521,8 @@ $(document).ready(function () {
 		let type = $("#meal_type option:selected").text();
 		if (name.length > 0) {
 			if (matchedRecipe) {
-				addRecipeToMealPlan(name, type);
+                addRecipeToMealPlan(name, type);
+                updateNutritionSummary(name);
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
 					$(
@@ -580,7 +581,8 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
-
+                console.log("xxxxx RESULT:", result)
+                
             },
 		});
     }
