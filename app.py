@@ -226,6 +226,32 @@ def delete_recipe():
     return jsonify("deleted")
 
 
+@app.route('/update_nutrition_summary', methods=['POST'])
+def update_nutrition_summary():
+    global connection
+    #get data from request object
+    recipe_name = request.form['recipe_name']
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host='localhost',
+                                     user=username,
+                                     password=password,
+                                     db='vmpdb')
+
+        # Run a query (get nutrition summary)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"select * from recipe where name='{recipe_name}';"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify(result)
+
+
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
     global connection
