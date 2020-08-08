@@ -582,7 +582,55 @@ $(document).ready(function () {
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
                 console.log("xxxxx RESULT:", result)
-                
+
+                rda = parseInt($("#energy_rda").text());
+                total = parseInt($("#energy").text()) + result.energy;
+                $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("energy_percent: ", percent);
+                $("#energy_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#carbohydrate_rda").text());
+                total = parseInt($("#carbohydrate").text()) + result.carbohydrate;
+                $("#carbohydrate").text(parseInt($("#carbohydrate").text()) + result.carbohydrate);//set total carbohydrate as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("carbohydrate_percent: ", percent);
+                $("#carbohydrate_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#fats_rda").text());
+                total = parseInt($("#fats").text()) + result.fats;
+                $("#fats").text(parseInt($("#fats").text()) + result.fats);//set total fats as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("fats_percent: ", percent);
+                $("#fats_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#protein_rda").text());
+                total = parseInt($("#protein").text()) + result.protein;
+                $("#protein").text(parseInt($("#protein").text()) + result.protein);//set total protein as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("protein_percent: ", percent);
+                $("#protein_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#calcium_rda").text());
+                total = parseInt($("#calcium").text()) + result.calcium;
+                $("#calcium").text(parseInt($("#calcium").text()) + result.calcium);//set total calcium as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("calcium_percent: ", percent);
+                $("#calcium_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#iron_rda").text());
+                total = parseInt($("#iron").text()) + result.iron;
+                $("#iron").text(parseInt($("#iron").text()) + result.iron);//set total iron as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("iron_percent: ", percent);
+                $("#iron_bar .determinate").css({"width": percent+'%'});
+
+                rda = parseInt($("#zinc_rda").text());
+                total = parseInt($("#zinc").text()) + result.zinc;
+                $("#zinc").text(parseInt($("#zinc").text()) + result.zinc);//set total zinc as current value + new added value
+                percent = Math.round((total / rda) * 100);
+                console.log("zinc_percent: ", percent);
+                $("#zinc_bar .determinate").css({"width": percent+'%'});
             },
 		});
     }
