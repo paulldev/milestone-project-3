@@ -14,6 +14,7 @@ app = Flask(__name__)
 username = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')
 
+print(f"Test <1>")
 print(f"DB_USER> {os.environ.get('DB_USER')}")
 print(f"DB_HOST> {os.environ.get('DB_HOST')}")
 print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
