@@ -1,5 +1,6 @@
 import os
 import pymysql
+import mysql.connector
 import json
 import pprint
 from flask import Flask, render_template, url_for, request, jsonify, redirect
@@ -23,7 +24,7 @@ try:
 #                                     user=username,
 #                                     password=password,
 #                                     db='vmpdb')
-    connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+    connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
     # Run a query (get meal)
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
