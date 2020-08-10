@@ -3,38 +3,27 @@ import pymysql
 import mysql.connector
 import json
 import pprint
+from os import environ
 from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
 
-#if os.path.exists("env.py"):
-#   import env
 # Get the username from the Gitpod workspace
-username = os.getenv('dbuser')
-password = os.getenv('dbpassword')
-print(f"username: {username}")
-#print(f"pw: {password}")
-print(f"IP: {os.environ.get('IP')}")
-print(f"IP: {int(os.environ.get('PORT'))}")
+#username = os.getenv('dbuser')
+#password = os.getenv('dbpassword')
+username = os.environ.get('DB_USER')
+password = os.environ.get('DB_PASSWORD')
 
-try:
-        # Connect to the database
-#        connection = pymysql.connect(host='localhost',
-#                                     user=username,
-#                                     password=password,
-#                                     db='vmpdb')
-    connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+print(f"DB_USER: {os.environ.get('DB_USER')}")
+print(f"DB_HOST: {os.environ.get('DB_HOST')}")
+print(f"ENVIRONMENT: {os.environ.get('ENVIRONMENT')}")
+print(f"PORT: {os.environ.get('PORT')}")
 
-    # Run a query (get meal)
-    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        sql = "SELECT * FROM recipe;"
-#        sql = "desc recipe;"
-        cursor.execute(sql)
-        result = cursor.fetchall()
-finally:
-    # Close the connection, regardless of whether or not the above was successful
-    connection.close()
-    print(f"RESULT (recipe): {result}")
+#print("User's Environment variable:") 
+#pprint.pprint(dict(env_var), width = 1)
+#print(f"IP: {os.environ.get('IP')}")
+#print(f"IP: {int(os.environ.get('PORT'))}")
+
 
 @app.route('/')
 def index():
