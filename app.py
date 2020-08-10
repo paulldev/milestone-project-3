@@ -16,7 +16,6 @@ print(f"username: {username}")
 #print(f"pw: {password}")
 print(f"IP: {os.environ.get('IP')}")
 print(f"IP: {int(os.environ.get('PORT'))}")
-#connection = ""
 
 try:
         # Connect to the database
