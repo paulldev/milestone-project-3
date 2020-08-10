@@ -619,5 +619,4 @@ def get_value(table, column, name):
 
 
 if __name__ == '__main__':
-    app.run(host=os.environ.get('IP'),
-            debug=True)
+    app.run(debug=True)
