@@ -14,14 +14,24 @@ app = Flask(__name__)
 username = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')
 
-print(f"Test <1>")
-print(f"DB_USER> {os.environ.get('DB_USER')}")
-print(f"DB_HOST> {os.environ.get('DB_HOST')}")
-print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
-print(f"PORT> {os.environ.get('PORT')}")
-
+print(f"Test <2>")
+if os.environ.get('ENVIRONMENT') == 'gitpod':
+    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
+    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
+    print(f"DB_USER> {os.environ.get('DB_USER')}")
+    print(f"PORT> {os.environ.get('PORT')}")
+    print(f"IP> {os.environ.get('IP')}")
+    app.debug = True
+else:
+    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
+    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
+    print(f"DB_USER> {os.environ.get('DB_USER')}")
+    print(f"PORT> {os.environ.get('PORT')}")
+    print(f"IP> {os.environ.get('IP')}")
+    app.degug = False
+print(os.environ)
 #print("User's Environment variable:") 
-#pprint.pprint(dict(env_var), width = 1)
+pprint.pprint(dict(os.environ), width = 1)
 #print(f"IP: {os.environ.get('IP')}")
 #print(f"IP: {int(os.environ.get('PORT'))}")
 
@@ -620,4 +630,4 @@ def get_value(table, column, name):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run()
