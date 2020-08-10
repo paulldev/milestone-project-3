@@ -6,23 +6,46 @@ from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
 
-# if os.path.exists("env.py"):
-#    import env
-
-# print(os.environ)
+#if os.path.exists("env.py"):
+#   import env
 # Get the username from the Gitpod workspace
-username = os.getenv('mysqluser')
-password = os.getenv('vmpdbpw')
-connection = ""
+username = os.getenv('dbuser')
+password = os.getenv('dbpassword')
+print(f"username: {username}")
+#print(f"pw: {password}")
+print(f"IP: {os.environ.get('IP')}")
+print(f"IP: {int(os.environ.get('PORT'))}")
+#connection = ""
+
+try:
+        # Connect to the database
+#        connection = pymysql.connect(host='localhost',
+#                                     user=username,
+#                                     password=password,
+#                                     db='vmpdb')
+    connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+
+    # Run a query (get meal)
+    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+        sql = "SELECT * FROM recipe;"
+#        sql = "desc recipe;"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+finally:
+    # Close the connection, regardless of whether or not the above was successful
+    connection.close()
+    print(f"RESULT (recipe): {result}")
+
 @app.route('/')
 def index():
-    global connection
+#    #global connection
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+#        connection = pymysql.connect(host='localhost',
+#                                     user=username,
+#                                     password=password,
+#                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query (get meal)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -59,17 +82,14 @@ def ingredients():
 
 @app.route('/ingredient_exists', methods=['POST'])
 def ingredient_exists():
-    global connection
+    #global connection
     #get data from request object
 
     ingredient = request.form['ingredient_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -89,17 +109,14 @@ def ingredient_exists():
 
 @app.route('/recipe_exists', methods=['POST'])
 def recipe_exists():
-    global connection
+    #global connection
     #get data from request object
 
     recipe = request.form['recipe_name']
     
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -119,16 +136,13 @@ def recipe_exists():
 
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
-    global connection
+    #global connection
     #get data from request object
     ingredient_name = request.form['ingredient_name']
  
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -144,17 +158,14 @@ def get_ingredient_nutrition():
 
 @app.route('/get_recipe_data', methods=['POST'])
 def get_recipe_data():
-    global connection
+    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
     results = []#results list will contain the results from our queries
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query (get servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -186,16 +197,13 @@ def get_recipe_data():
 
 @app.route('/delete_recipe', methods=['POST'])
 def delete_recipe():
-    global connection
+    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query (get recipeID)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -228,16 +236,13 @@ def delete_recipe():
 
 @app.route('/update_nutrition_summary', methods=['POST'])
 def update_nutrition_summary():
-    global connection
+    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query (get nutrition summary)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -254,7 +259,7 @@ def update_nutrition_summary():
 
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
-    global connection
+    #global connection
     #get data from request object
      
     table = request.form['table']
@@ -263,10 +268,7 @@ def delete_item():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -282,7 +284,7 @@ def delete_item():
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
-    global connection
+    #global connection
     #get data from request object
     action = request.form['action']
     ingredient_name = request.form['ingredient_name']
@@ -298,10 +300,7 @@ def save_ingredient_nutrition():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -322,16 +321,14 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
-    global connection
+    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+
         # Run a query (get recipe_id, servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.ID, recipe.servings, recipeIngredient.ingredientID, recipeIngredient.ingredient_name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, ingredient.ingredient_amount, ingredient.ingredient_unit FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
@@ -465,7 +462,7 @@ def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
-    global connection
+    #global connection
     print("TESTING SAVE_RECIPE====================================>")
     received_data = request.form
     #https://www.youtube.com/watch?v=2OYkhatUZmQ
@@ -496,10 +493,7 @@ def save_recipe():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query (save/update recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -559,7 +553,7 @@ def save_recipe():
 
 @app.route('/get_names', methods=['POST'])
 def get_names():
-    global connection
+    #global connection
     table = request.form['table']
     column = request.form['column']
     print('----------jQuery: page has loaded-----------')
@@ -569,10 +563,7 @@ def get_names():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -585,15 +576,12 @@ def get_names():
 
 
 def name_exists(table, column_name, name):
-    global connection
+    #global connection
     sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -615,15 +603,12 @@ def name_exists(table, column_name, name):
 
 
 def get_value(table, column, name):
-    global connection
+    #global connection
     sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host='localhost',
-                                     user=username,
-                                     password=password,
-                                     db='vmpdb')
+        connection = pymysql.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
