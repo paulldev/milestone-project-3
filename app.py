@@ -14,7 +14,7 @@ app = Flask(__name__)
 username = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')
 
-print(f"Test <2>")
+print(f"Test <3>")
 if os.environ.get('ENVIRONMENT') == 'gitpod':
     print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
     print(f"DB_HOST> {os.environ.get('DB_HOST')}")
