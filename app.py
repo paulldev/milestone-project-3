@@ -7,16 +7,26 @@ from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
 
-#if os.path.exists("env.py"):
-#   import env
 # Get the username from the Gitpod workspace
 username = os.getenv('dbuser')
 password = os.getenv('dbpassword')
-print(f"username: {username}")
-#print(f"pw: {password}")
-print(f"IP: {os.environ.get('IP')}")
-print(f"IP: {int(os.environ.get('PORT'))}")
-#connection = ""
+
+if os.environ.get('ENVIRONMENT') == 'gitpod':
+    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
+    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
+    print(f"DB_NAME> {os.environ.get('DB_NAME')}")
+    print(f"DB_USER> {os.environ.get('DB_USER')}")
+    print(f"PORT> {os.environ.get('PORT')}")
+    print(f"IP> {os.environ.get('IP')}")
+    app.debug = True
+else:
+    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
+    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
+    print(f"DB_NAME> {os.environ.get('DB_NAME')}")
+    print(f"DB_USER> {os.environ.get('DB_USER')}")
+    print(f"PORT> {os.environ.get('PORT')}")
+    print(f"IP> {os.environ.get('IP')}")
+    app.degug = False
 
 try:
         # Connect to the database
@@ -24,7 +34,7 @@ try:
 #                                     user=username,
 #                                     password=password,
 #                                     db='vmpdb')
-    connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+    connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
     # Run a query (get meal)
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -35,7 +45,7 @@ try:
 finally:
     # Close the connection, regardless of whether or not the above was successful
     connection.close()
-    print(f"RESULT (recipe): {result}")
+#    print(f"RESULT (recipe): {result}")
 
 @app.route('/')
 def index():
@@ -46,7 +56,7 @@ def index():
 #                                     user=username,
 #                                     password=password,
 #                                     db='vmpdb')
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get meal)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -90,7 +100,7 @@ def ingredient_exists():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -117,7 +127,7 @@ def recipe_exists():
     
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -143,7 +153,7 @@ def get_ingredient_nutrition():
  
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -166,7 +176,7 @@ def get_recipe_data():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -204,7 +214,7 @@ def delete_recipe():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipeID)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -243,7 +253,7 @@ def update_nutrition_summary():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get nutrition summary)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -269,7 +279,7 @@ def delete_item():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -301,7 +311,7 @@ def save_ingredient_nutrition():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -328,7 +338,7 @@ def update_recipe_nutrition_values():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipe_id, servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -494,7 +504,7 @@ def save_recipe():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (save/update recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -564,7 +574,7 @@ def get_names():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -582,7 +592,7 @@ def name_exists(table, column_name, name):
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -609,7 +619,7 @@ def get_value(table, column, name):
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host='eu-cdbr-west-03.cleardb.net', user=username, password=password, db='heroku_9e225f5dce339fd')
+        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
