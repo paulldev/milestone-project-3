@@ -7,10 +7,6 @@ from flask import Flask, render_template, url_for, request, jsonify, redirect
 
 app = Flask(__name__)
 
-# Get the username from the Gitpod workspace
-username = os.getenv('dbuser')
-password = os.getenv('dbpassword')
-
 if os.environ.get('ENVIRONMENT') == 'gitpod':
     print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
     print(f"DB_HOST> {os.environ.get('DB_HOST')}")
@@ -28,36 +24,11 @@ else:
     print(f"IP> {os.environ.get('IP')}")
     app.degug = False
 
-try:
-        # Connect to the database
-#        connection = pymysql.connect(host='localhost',
-#                                     user=username,
-#                                     password=password,
-#                                     db='vmpdb')
-    connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-
-    # Run a query (get meal)
-    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        sql = "SELECT * FROM recipe;"
-#        sql = "desc recipe;"
-        cursor.execute(sql)
-        result = cursor.fetchall()
-finally:
-    # Close the connection, regardless of whether or not the above was successful
-    connection.close()
-#    print(f"RESULT (recipe): {result}")
 
 @app.route('/')
 def index():
-#    #global connection
     try:
-        # Connect to the database
-#        connection = pymysql.connect(host='localhost',
-#                                     user=username,
-#                                     password=password,
-#                                     db='vmpdb')
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-
         # Run a query (get meal)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
@@ -78,37 +49,22 @@ def recipes():
 @app.route('/ingredients')
 def ingredients():
     print("******** Opening ingredients.html")
-    #get ingredient names for drop down list (return js object)
-    #ingredient_list = get_names('ingredient', 'name')
-    #print("INDREDIENT LIST (START)")
-    #print(ingredient_list)
-    #print("INDREDIENT LIST (END)")
-
-    #if ingredient name is defined, get nutritional data
-    #exists = name_exists('ingredient', 'name', 'apple')
-    #print("exists:")
-    #print(exists)
     return render_template("ingredients.html")
 
 
 @app.route('/ingredient_exists', methods=['POST'])
 def ingredient_exists():
-    #global connection
     #get data from request object
-
     ingredient = request.form['ingredient_name']
-
     try:
         # Connect to the database
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
             sql = f"SELECT name, COUNT(*) FROM ingredient WHERE name='{ingredient}' GROUP BY name;"
             cursor.execute(sql)
             result = cursor.fetchone()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -118,11 +74,10 @@ def ingredient_exists():
     else:
         return jsonify('no match')
 
+
 @app.route('/recipe_exists', methods=['POST'])
 def recipe_exists():
-    #global connection
     #get data from request object
-
     recipe = request.form['recipe_name']
     
     try:
@@ -134,7 +89,6 @@ def recipe_exists():
             sql = f"SELECT name, COUNT(*) FROM recipe WHERE name = '{recipe}' GROUP BY name;"
             cursor.execute(sql)
             result = cursor.fetchone()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -147,7 +101,6 @@ def recipe_exists():
 
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
-    #global connection
     #get data from request object
     ingredient_name = request.form['ingredient_name']
  
@@ -169,7 +122,6 @@ def get_ingredient_nutrition():
 
 @app.route('/get_recipe_data', methods=['POST'])
 def get_recipe_data():
-    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
     results = []#results list will contain the results from our queries
@@ -198,7 +150,6 @@ def get_recipe_data():
             cursor.execute(sql)
             steps = cursor.fetchall()  #returns a dictionary
             results.append(steps) #add steps to our results array (to be read by jquery)
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -208,7 +159,6 @@ def get_recipe_data():
 
 @app.route('/delete_recipe', methods=['POST'])
 def delete_recipe():
-    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -237,7 +187,6 @@ def delete_recipe():
             sql = f"DELETE FROM recipe WHERE ID = {recipe_id};"
             cursor.execute(sql)
             connection.commit()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -247,7 +196,6 @@ def delete_recipe():
 
 @app.route('/update_nutrition_summary', methods=['POST'])
 def update_nutrition_summary():
-    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -260,7 +208,6 @@ def update_nutrition_summary():
             sql = f"select * from recipe where name='{recipe_name}';"
             cursor.execute(sql)
             result = cursor.fetchone()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -270,9 +217,7 @@ def update_nutrition_summary():
 
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
-    #global connection
     #get data from request object
-     
     table = request.form['table']
     column = request.form['column']
     value = request.form['value']
@@ -295,7 +240,6 @@ def delete_item():
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
-    #global connection
     #get data from request object
     action = request.form['action']
     ingredient_name = request.form['ingredient_name']
@@ -322,7 +266,6 @@ def save_ingredient_nutrition():
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
             connection.commit()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -332,7 +275,6 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
-    #global connection
     #get data from request object
     recipe_name = request.form['recipe_name']
 
@@ -345,9 +287,9 @@ def update_recipe_nutrition_values():
             sql = f"SELECT recipe.ID, recipe.servings, recipeIngredient.ingredientID, recipeIngredient.ingredient_name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, ingredient.ingredient_amount, ingredient.ingredient_unit FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             recipe_data = cursor.fetchall()
-            
+
             names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']
-            converted_values = []#xxx
+            converted_values = []
             print("========================================================================================================")
             print("=================================== START ==============================================================")
             print("========================================================================================================")
@@ -362,7 +304,6 @@ def update_recipe_nutrition_values():
                 recipe_id = recipe_data[recipe_index]['ID']
                 #print(f"**** RECIPE ID: {recipe_id}")
 
-                #print(f"Current ingredient name. ROW {recipe_index} -> {recipe_data[recipe_index]['ingredient_name']}")
                 #print("===(loop) start processing each nutritional value: energy, carbohydrate, etc")
 
                 # process each nutrient to be converted
@@ -380,7 +321,7 @@ def update_recipe_nutrition_values():
 
                         recipe_ingredient_amount = recipe_data[recipe_index]['ingredient_amount']
                         #print(f"*** recipe_ingredient_amount: {recipe_ingredient_amount}")
-                        
+
                         ingredient_amount = recipe_data[recipe_index]['ingredient.ingredient_amount']
                         #print(f"*** ingredient_amount: {ingredient_amount}")
 
@@ -433,37 +374,26 @@ def update_recipe_nutrition_values():
 
 def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
     if recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'teaspoon (tsp.)':
-        print(f"found conversion unit for (1)")
         return 0.24
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'tablespoon (tbsp.)':
-        print(f"found conversion unit for (2)")
         return 0.07
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'millilitre (ml)':
-        print(f"found conversion unit for (3)")
         return 1
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'gram (g)':
-        print(f"found conversion unit for (4)")
         return 4.18
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'tablespoon (tbsp.)':
-        print(f"found conversion unit for (5)")
         return 0.33
     elif recipe_ingredient_unit == 'teaspoon (tsp.)' and ingredient_unit == 'millilitre (ml)':
-        print(f"found conversion unit for (6)")
         return 4.92
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'gram (g)':
-        print(f"found conversion unit for (7)")
         return 17.07
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'teaspoon (tsp.)':
-        print(f"found conversion unit for (8)")
         return 3
     elif recipe_ingredient_unit == 'tablespoon (tbsp.)' and ingredient_unit == 'millilitre (ml)':
-        print(f"found conversion unit for (9)")
         return 14.78
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'gram (g)':
-        print(f"found conversion unit for (9)")
         return 1
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'teaspoon (tsp.)':
-        print(f"found conversion unit for (10)")
         return 0.2
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'tablespoon (tbsp.)':
         return 0.067
@@ -473,8 +403,7 @@ def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
-    #global connection
-    print("TESTING SAVE_RECIPE====================================>")
+    #get data from request object
     received_data = request.form
     #https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
@@ -498,9 +427,6 @@ def save_recipe():
     print(f"STEP NUMBERS: {step_number}")
     step_description = data_dict['step_description']
     print(f"STEP DESCRIPTIONS: {step_description}")
-    #print("*************MY DICT**********************")
-    # Prints the nicely formatted dictionary
-    #pprint.pprint(data_dict)
 
     try:
         # Connect to the database
@@ -554,7 +480,6 @@ def save_recipe():
                 sql = f"INSERT INTO recipeIngredient (recipeID, ingredientID, ingredient_name, ingredient_amount,ingredient_unit) VALUES ({recipe_id}, {ingredient_id}, '{ingredient_name[index]}', {ingredient_amount[index]}, '{ingredient_unit[index]}');"
                 cursor.execute(sql)
                 connection.commit()
-
     finally:
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
@@ -564,13 +489,9 @@ def save_recipe():
 
 @app.route('/get_names', methods=['POST'])
 def get_names():
-    #global connection
+    #get data from request object
     table = request.form['table']
     column = request.form['column']
-    print('----------jQuery: page has loaded-----------')
-
-    sql = f"SELECT {column} FROM {table};"
-    print(f"MySQL query: {sql}")
 
     try:
         # Connect to the database
@@ -578,54 +499,43 @@ def get_names():
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT {column} FROM {table};"
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
+    
     return jsonify(result)
 
 
 def name_exists(table, column_name, name):
-    #global connection
-    sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
-
     try:
         # Connect to the database
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
-            #connection.commit();
-            if result:
-                print('result is:')
-                print(result)
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    print("*** 3. result from python:")
-    print(result)
-    print("*** 4. jsonify(result):")
-    print(jsonify(result))
     return jsonify(result)
 
-
+#xxxxx maybe unused?
 def get_value(table, column, name):
-    #global connection
-    sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
-
     try:
         # Connect to the database
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(sql_read)
+            sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
+            cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
-            #connection.commit();
             if result:
                 print('result is:')
                 print(result)
@@ -633,10 +543,6 @@ def get_value(table, column, name):
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    print("*** 3. result from python:")
-    print(result)
-    print("*** 4. jsonify(result):")
-    print(jsonify(result))
     return jsonify(result)
 
 
