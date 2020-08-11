@@ -70,8 +70,11 @@ def ingredients():
     return render_template("ingredients.html")
 
 
-
 if __name__ == '__main__':
+    app.run(host=os.environ.get('IP'),
+            port=int(os.environ.get('PORT')))
+
+#if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     #port = int(os.environ.get('PORT', 5005))
-    app.run(host='0.0.0.0', port=5005)
+ #   app.run(host='0.0.0.0', port=5005)
