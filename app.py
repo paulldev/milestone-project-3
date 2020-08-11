@@ -34,7 +34,7 @@ try:
 #                                     user=username,
 #                                     password=password,
 #                                     db='vmpdb')
-    connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+    connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
     # Run a query (get meal)
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -56,7 +56,7 @@ def index():
 #                                     user=username,
 #                                     password=password,
 #                                     db='vmpdb')
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get meal)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -100,7 +100,7 @@ def ingredient_exists():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -127,7 +127,7 @@ def recipe_exists():
     
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -153,7 +153,7 @@ def get_ingredient_nutrition():
  
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -176,7 +176,7 @@ def get_recipe_data():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -214,7 +214,7 @@ def delete_recipe():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipeID)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -253,7 +253,7 @@ def update_nutrition_summary():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get nutrition summary)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -279,7 +279,7 @@ def delete_item():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -311,7 +311,7 @@ def save_ingredient_nutrition():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -338,7 +338,7 @@ def update_recipe_nutrition_values():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipe_id, servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -504,7 +504,7 @@ def save_recipe():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (save/update recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -574,7 +574,7 @@ def get_names():
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -592,7 +592,7 @@ def name_exists(table, column_name, name):
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -619,7 +619,7 @@ def get_value(table, column, name):
 
     try:
         # Connect to the database
-        connection = mysql.connector.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
