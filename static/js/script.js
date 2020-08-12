@@ -319,16 +319,16 @@ $(document).ready(function () {
 							ingredient_unit = element["ingredient_unit"];
 							$("#ingredient-list").append(
 								`<li class='row list-item'>
-                                <div class='col s6'>
+                                <div class='col s6 valign-wrapper'>
                                     <i class='material-icons'>navigate_next</i><span>${ingredient_name}</span>
                                 </div>
-                                <div class='col s1'>
+                                <div class='col s1 valign-wrapper'>
                                     ${ingredient_amount}
                                 </div>
-                                <div class='col s2'>
+                                <div class='col s2 valign-wrapper'>
                                     ${ingredient_unit}
                                 </div>
-                                <div class='col s3'>
+                                <div class='col s3 valign-wrapper'>
                                     <i class='material-icons prefix'>delete_forever</i>
                                 </div>
                             </li>`
@@ -342,13 +342,13 @@ $(document).ready(function () {
 							step_description = element["stepDescription"];
 							$("#step-list").append(
 								`<li class='row list-item'>
-                                    <div class='col s2'>
+                                    <div class='col s2 valign-wrapper'>
                                         ${step_number}
                                     </div>
-                                    <div class='col s7'>
+                                    <div class='col s7 valign-wrapper'>
                                         ${step_description}
                                     </div>
-                                        <div class='col s3'>
+                                        <div class='col s3 valign-wrapper'>
                                         <i class='material-icons prefix'>delete_forever</i>
                                     </div>
                                 </li>`
@@ -498,13 +498,13 @@ $(document).ready(function () {
 		//add step details
 		$("#step-list").append(
 			`<li class='row list-item'>
-                  <div class='col s2'>
+                  <div class='col s2 valign-wrapper'>
                       ${step_number}
                   </div>
-                  <div class='col s7'>
+                  <div class='col s7 valign-wrapper'>
                       ${step_description}
                   </div>
-                      <div class='col s3'>
+                      <div class='col s3 valign-wrapper'>
                       <i class='material-icons'>delete_forever</i>
                   </div>
               </li>`
