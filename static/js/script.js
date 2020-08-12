@@ -120,10 +120,10 @@ $(document).ready(function () {
 			url: "/delete_item",
 			success: function (result, status, xhr) {
 				if (table == "ingredient") {
-					Materialize.toast("Deleted ingredient", 4000);
+					Materialize.toast("<i class='material-icons delete-item'>delete_forever</i>Deleted ingredient", 4000);
     				getNames("/get_names", "ingredient", "name");
 				} else if (table == "recipe") {
-					Materialize.toast("Deleted recipe", 4000);
+					Materialize.toast("<i class='material-icons delete-item'>delete_forever</i>Deleted recipe", 4000);
     				getNames("/get_names", "recipe", "name");
 				}
 			},
@@ -194,7 +194,7 @@ $(document).ready(function () {
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-    					Materialize.toast("Saved recipe", 4000); // 4000 is the duration of the toast
+    					Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000); // 4000 is the duration of the toast
 						$("#recipe_name").val(""); //reset recipe name
 						clearRecipeInputs();
 						$(window).scrollTop(0); //scroll window to top
@@ -541,16 +541,16 @@ $(document).ready(function () {
 		//add recipe and meal type
 		$("#meals-list").append(
 			`<li class='row list-item'>
-                <div class='col s6'>
+                <div class='col s6 valign-wrapper'>
                     <i class='material-icons prefix'>navigate_next</i>${name}
                 </div>
-                <div class='col s1'>
+                <div class='col s1 valign-wrapper'>
                     ${type}
                 </div>
             </li>`
         );
 		$("#recipe_name").val(""); //reset recipe name
-		Materialize.toast("Added to meal list", 3000); // 4000 is the duration of the toast
+		Materialize.toast("<i class='material-icons prefix check-mark'>check_circle</i>Added to meal list", 3000); // 4000 is the duration of the toast
 	}
     function updateRecipeNutritionValues(recipe_name) {
         console.log("Inside updateRecipeNutritionValues", recipe_name);
