@@ -1,0 +1,36 @@
+/* Materialize */
+.nav-wrapper {
+    background-color: #2ECC71;
+}
+.progress {
+    height: 2rem;
+}
+.determinate {
+	width: 0;
+	transition: width 1s ease-in-out;
+	padding: 8px;
+	position: relative;
+    color: #000000;
+	text-align: right;
+	white-space: nowrap;
+}
+/*<i class="material-icons check-mark">check_circle</i>*/
+.check-mark {
+    color: green;
+}
+/*<i class="material-icons delete-item">delete_forever</i>*/
+.warning {
+    color: orange;
+}
+.delete-item {
+    color: red;
+}
+.side-label {
+}
+#meals-list .list-item,
+#ingredient-list .list-item,
+#step-list .list-item {
+    background-color: rgb(234, 232, 236);
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
