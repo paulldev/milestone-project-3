@@ -33,11 +33,11 @@ def index():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
             cursor.execute(sql)
-            result = cursor.fetchall()
+            meal_type = cursor.fetchall()
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("index.html", meal_type=result)
+    return render_template("index.html", meal_type=meal_type)
 
 
 @app.route('/recipes')
