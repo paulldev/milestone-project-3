@@ -319,8 +319,8 @@ $(document).ready(function () {
 							ingredient_unit = element["ingredient_unit"];
 							$("#ingredient-list").append(
 								`<li class='row list-item'>
-                                <div class='col s6 myclass'>
-                                    <i class='material-icons prefix'>navigate_next</i><span>${ingredient_name}</span>
+                                <div class='col s6'>
+                                    <i class='material-icons'>navigate_next</i><span>${ingredient_name}</span>
                                 </div>
                                 <div class='col s1'>
                                     ${ingredient_amount}
@@ -505,7 +505,7 @@ $(document).ready(function () {
                       ${step_description}
                   </div>
                       <div class='col s3'>
-                      <i class='material-icons prefix'>delete_forever</i>
+                      <i class='material-icons'>delete_forever</i>
                   </div>
               </li>`
 		);
@@ -542,7 +542,7 @@ $(document).ready(function () {
 		$("#meals-list").append(
 			`<li class='row list-item'>
                 <div class='col s6 valign-wrapper'>
-                    <i class='material-icons prefix'>navigate_next</i>${name}
+                    <i class='material-icons'>navigate_next</i>${name}
                 </div>
                 <div class='col s1 valign-wrapper'>
                     ${type}
@@ -676,16 +676,16 @@ $(document).ready(function () {
 		//add ingredient details
 		$("#ingredient-list").append(
 			`<li class='row list-item'>
-                <div class='col s6 myclass'>
+                <div class='col s6 valign-wrapper'>
                     <i class='material-icons prefix'>navigate_next</i><span>${value}</span>
                 </div>
-                <div class='col s1'>
+                <div class='col s1 valign-wrapper'>
                     ${amount}
                 </div>
-                <div class='col s2'>
+                <div class='col s2 valign-wrapper'>
                     ${unit}
                 </div>
-                <div class='col s3'>
+                <div class='col s3 valign-wrapper'>
                     <i class='material-icons prefix'>delete_forever</i>
                 </div>
             </li>`
