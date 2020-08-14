@@ -11,13 +11,14 @@
         <div class="row">
             <div class="input-field col s5">
                 <i class="material-icons prefix">search</i>
-                <input id="recipe_name" name="recipe_name" type="text" class="validate autocomplete">
+                <input id="recipe_name" name="recipe_name" type="text" class="validate autocomplete"
+                value='{% if recipe_name %}{{recipe_name}}{% endif %}'>
                 <label for="recipe_name">Recipe Name</label>
             </div>
             <div class="input-field col s4">
                 <select name="meal_type" id="meal_type">
                     {% for record in meal_type %}
-                    <option value="">{{record.mealName}}</option>
+                        <option value="">{{record.mealName}}</option>
                     {% endfor %}
                 </select>
                 <label>Meal type</label>
@@ -27,6 +28,16 @@
             </div>
         </div>
         <ul id="meals-list">
+            {% for record in meal_list %}
+                <li class='row list-item'>
+                    <div class='col s6 valign-wrapper'>
+                        <i class='material-icons'>navigate_next</i>{{record.recipe_name}}
+                    </div>
+                    <div class='col s1 valign-wrapper'>
+                        {{record.meal_type}}
+                    </div>
+                </li>
+            {% endfor %}
         </ul>
     </form>
 </div>
