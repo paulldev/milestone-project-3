@@ -34,10 +34,22 @@ def index():
             sql = "SELECT * FROM mealType;"
             cursor.execute(sql)
             meal_type = cursor.fetchall()
+
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = "SELECT * FROM statusMealItem;"
+            cursor.execute(sql)
+            meal = cursor.fetchall()
+            recipe_name = meal[0]['recipe_name']
+
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = "SELECT * FROM statusMealItemList;"
+            cursor.execute(sql)
+            meal_list = cursor.fetchall()
+
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("index.html", meal_type=meal_type)
+    return render_template("index.html", meal_type=meal_type, recipe_name=recipe_name, meal_list=meal_list)
 
 
 @app.route('/recipes')
