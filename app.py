@@ -56,11 +56,17 @@ def recipes():
             ingredient_amount = recipe[0]['ingredient_amount']
             step_number = recipe[0]['step_number']
             step_description = recipe[0]['step_description']
-            print(f"STEP DESCRIPTION: {step_description}")
+
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = "SELECT * FROM statusRecipeIngredientList;"
+            cursor.execute(sql)
+            ingredient = cursor.fetchall()
+            print(f"Ingredients: {ingredient}")
+            #ingredient = recipe[0]['recipe_name']
     finally:
         # Close the connection, regardless of whether or not the above was successful
         connection.close()
-    return render_template("recipes.html", recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description)
+    return render_template("recipes.html", recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description, ingredient=ingredient)
 
 
 @app.route('/ingredients')
