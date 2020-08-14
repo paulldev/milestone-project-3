@@ -527,6 +527,68 @@ def save_recipe():
     return jsonify("saved recipe")
 
 
+
+@app.route('/save_recipe_status', methods=['POST'])
+def save_recipe_status():
+    #get data from request object
+    received_data = request.form
+    #https://www.youtube.com/watch?v=2OYkhatUZmQ
+    for key in received_data.keys():
+        data=key
+    print(f"data: {data}")
+    data_dict=json.loads(data)
+
+    recipe_name = data_dict['recipe_name']
+    servings = data_dict['servings']
+    ingredient_name_input = data_dict['ingredient_name_input']
+    ingredient_amount_input = data_dict['ingredient_amount_input']
+    
+    ingredient_name = data_dict['ingredient_name']
+    ingredient_amount = data_dict['ingredient_amount']
+    ingredient_unit = data_dict['ingredient_unit']
+    step_number_input = data_dict['step_number_input']
+    step_description_input = data_dict['step_description_input']
+    step_number = data_dict['step_number']
+    step_description = data_dict['step_description']
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+
+        # Run a query (clear table data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM statusRecipeItem;"
+            cursor.execute(sql)
+            connection.commit()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM statusRecipeItemList;"
+            cursor.execute(sql)
+            connection.commit()
+
+        # Run a query (save item data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"INSERT INTO statusRecipeItem (recipe_name, servings, ingredient_name, ingredient_amount, step_number, step_description) VALUES ('{recipe_name}', {servings}, '{ingredient_name}', {ingredient_amount}, {step_number}, '{step_description}');"
+            cursor.execute(sql)
+            connection.commit()
+
+        # Run a query (save ingredients list data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"INSERT INTO statusRecipeIngredientList (ingredient_name, ingredient_amount, ingredient_unit) VALUES ('{ingredient_name}', {ingredient_amount}, '{ingredient_unit}');"
+            cursor.execute(sql)
+            connection.commit()
+
+        # Run a query (save steps list data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"INSERT INTO statusRecipeStepList (step_number, step_description) VALUES ({step_number}, '{step_description}');"
+            cursor.execute(sql)
+            connection.commit()
+    finally:
+        #  Close the connection, regardless of whether or not the above was successful
+        connection.close()
+
+    return jsonify("saved recipe")
+
+
 @app.route('/get_names', methods=['POST'])
 def get_names():
     #get data from request object
