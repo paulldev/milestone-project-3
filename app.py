@@ -43,7 +43,19 @@ def index():
 @app.route('/recipes')
 def recipes():
     print("******** Opening recipes.html")
-    return render_template("recipes.html")
+    try:
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        # Run a query (get recipe)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = "SELECT * FROM statusRecipeItem;"
+            cursor.execute(sql)
+            recipe = cursor.fetchall()
+            recipe_name = recipe[0]['recipe_name']
+            servings = recipe[0]['servings']
+    finally:
+        # Close the connection, regardless of whether or not the above was successful
+        connection.close()
+    return render_template("recipes.html", recipe_name=recipe_name, servings=servings)
 
 
 @app.route('/ingredients')
