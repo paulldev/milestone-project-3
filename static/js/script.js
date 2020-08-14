@@ -87,7 +87,13 @@ $(document).ready(function () {
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
 	} else if (location.href.match(/\//)) {
-		console.log("Found index page");
+        console.log("Found index page");//xxxxx
+   		$("#meals-list li").each(function () {
+			recipe_name = $(this).find("span").text().trim();
+            console.log('recipe_name', recipe_name);
+            updateNutritionSummary(recipe_name)
+        });
+
 		getNames("/get_names", "recipe", "name");
 		//http://archives.materializecss.com/0.100.2/forms.html
 		$("input#recipe_name").autocomplete({
@@ -201,7 +207,7 @@ $(document).ready(function () {
 					} else if (action == "update") {
 						Materialize.toast("Updated recipe", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
-                    }//xxxxx
+                    }//xxx
 
 				},
 				error: function (xhr, status, error) {
@@ -216,6 +222,71 @@ $(document).ready(function () {
 		} else {
 			Materialize.toast("All fields must be filled out", 4000); // 4000 is the duration of the toast
 			$(window).scrollTop(0); //scroll window to top
+		}
+	}
+	function saveRecipeStatus() {//plucey
+		event.preventDefault();
+		var isFormValid = true;
+
+		let recipe = {
+			recipe_name: $("#recipe_name").val(),
+			servings: parseInt($("#servings").val()),
+			ingredient_name_input: $("#ingredient_name").val(),
+			ingredient_amount_input: $("#ingredient_amount").val(),
+			ingredient_name: [],
+			ingredient_amount: [],
+			ingredient_unit: [],
+			step_number_input: $("#step_number").val(),
+			step_description_input: $("#step_description").val(),
+			step_number: [],
+			step_description: [],
+		};
+
+		$("#ingredient-list li").each(function () {
+			recipe.ingredient_name.push(
+				$(this).find("span").text().trim()
+			);
+			recipe.ingredient_amount.push(
+				parseInt($(this).find("div:eq(1)").text().trim())
+			);
+			recipe.ingredient_unit.push(
+				$(this).find("div:eq(2)").text().trim()
+			);
+		});
+		$("#step-list li").each(function () {
+			recipe.step_number.push(
+				parseInt($(this).find("div:eq(0)").text().trim())
+			);
+			recipe.step_description.push(
+				$(this).find("div:eq(1)").text().trim()
+			);
+		});
+
+		if (
+			$("#recipe_name").val().length == 0 ||
+			$("#servings").val().length == 0
+		) {
+			isFormValid = false;
+		} else {
+		}
+
+		if (isFormValid) {
+			//checks if required inputs have a value
+			$.ajax({
+				//create an ajax request to save_recipe
+				data: JSON.stringify(recipe), //data that gets sent to python
+				type: "POST",
+				dataType: "json",
+				url: "/save_recipe_status",
+				success: function (result, status, xhr) {
+				},
+				error: function (xhr, status, error) {
+					console.log("Database error", error);
+				},
+      			complete: function (result) {
+	          	},
+			});
+		} else {
 		}
 	}
 	//cii
@@ -569,8 +640,7 @@ $(document).ready(function () {
             },
 		});
     }
-    function updateNutritionSummary(recipe_name) {
-		event.preventDefault();
+    function updateNutritionSummary(recipe_name) {//xxxxx
 		$.ajax({
 			//create an ajax request to update_recipe_nutrition_values
 			data: {
@@ -581,7 +651,7 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
-                console.log("xxxxx RESULT:", result)
+                console.log("RESULT:", result)
 
                 rda = parseInt($("#energy_rda").text());
                 total = parseInt($("#energy").text()) + result.energy;
