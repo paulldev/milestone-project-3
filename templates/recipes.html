@@ -49,6 +49,22 @@
             </div>
         </div>
         <ul id="ingredient-list">
+            {% for record in ingredient %}
+                <li class='row list-item'>
+                    <div class='col s6 valign-wrapper'>
+                        <i class='material-icons'>navigate_next</i><span>{{record.ingredient_name}}</span>
+                    </div>
+                    <div class='col s1 valign-wrapper'>
+                        {{record.ingredient_amount}}
+                    </div>
+                    <div class='col s2 valign-wrapper'>
+                        {{record.ingredient_unit}}
+                    </div>
+                    <div class='col s3 valign-wrapper'>
+                        <i class='material-icons prefix'>delete_forever</i>
+                    </div>
+                </li>
+            {% endfor %}
         </ul>
         <div class="row">
             <h5>Steps</h5>
