@@ -31,7 +31,8 @@
             {% for record in meal_list %}
                 <li class='row list-item'>
                     <div class='col s6 valign-wrapper'>
-                        <i class='material-icons'>navigate_next</i>{{record.recipe_name}}
+                        <i class='material-icons'>navigate_next</i>
+                        <span>{{record.recipe_name}}</span>
                     </div>
                     <div class='col s1 valign-wrapper'>
                         {{record.meal_type}}
