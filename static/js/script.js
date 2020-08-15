@@ -615,8 +615,11 @@ $(document).ready(function () {
                 <div class='col s6 valign-wrapper'>
                     <i class='material-icons'>navigate_next</i>${name}
                 </div>
-                <div class='col s1 valign-wrapper'>
+                <div class='col s2 valign-wrapper'>
                     ${type}
+                </div>
+                <div class='col s3 valign-wrapper'>
+                    <i class='material-icons prefix'>delete_forever</i>
                 </div>
             </li>`
         );
