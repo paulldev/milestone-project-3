@@ -55,6 +55,13 @@ def index():
 @app.route('/recipes')
 def recipes():
     print("******** Opening recipes.html")
+    recipe_name = ''
+    servings = ''
+    ingredient_name = ''
+    ingredient_amount = ''
+    step_number = ''
+    step_description = ''
+
     try:
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
         # Run a query (get recipe data)
@@ -62,12 +69,20 @@ def recipes():
             sql = "SELECT * FROM statusRecipeItem;"
             cursor.execute(sql)
             recipe = cursor.fetchall()
-            recipe_name = recipe[0]['recipe_name']
-            servings = recipe[0]['servings']
-            ingredient_name = recipe[0]['ingredient_name']
-            ingredient_amount = recipe[0]['ingredient_amount']
-            step_number = recipe[0]['step_number']
-            step_description = recipe[0]['step_description']
+            print(f"RECIPE = {recipe}")
+            if recipe:
+                if recipe[0]['recipe_name']:
+                    recipe_name = recipe[0]['recipe_name']
+                if recipe[0]['servings']:
+                    servings = recipe[0]['servings']
+                if recipe[0]['ingredient_name']:
+                    ingredient_name = recipe[0]['ingredient_name']
+                if recipe[0]['ingredient_amount']:
+                    ingredient_amount = recipe[0]['ingredient_amount']
+                if recipe[0]['step_number']:
+                    step_number = recipe[0]['step_number']
+                if recipe[0]['step_description']:
+                    step_description = recipe[0]['step_description']
 
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM statusRecipeIngredientList;"
