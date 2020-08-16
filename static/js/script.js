@@ -593,7 +593,7 @@ $(document).ready(function () {
 		if (recipe_name.length > 0) {
 			if (matchedRecipe) {
                 addRecipeToMealPlan(recipe_name, meal_type);
-                updateNutritionSummary(name);
+                updateNutritionSummary(recipe_name);
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
 					$(
@@ -607,16 +607,16 @@ $(document).ready(function () {
 		}
 	});
 	//artmp
-	function addRecipeToMealPlan(name, type) {
+	function addRecipeToMealPlan(recipe_name, meal_type) {
 		event.preventDefault();
 		//add recipe and meal type
 		$("#meals-list").append(
 			`<li class='row list-item'>
                 <div class='col s6 valign-wrapper'>
-                    <i class='material-icons'>navigate_next</i>${name}
+                    <i class='material-icons'>navigate_next</i>${recipe_name}
                 </div>
                 <div class='col s2 valign-wrapper'>
-                    ${type}
+                    ${meal_type}
                 </div>
                 <div class='col s3 valign-wrapper'>
                     <i class='material-icons delete_item'>delete_forever</i>
