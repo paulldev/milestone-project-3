@@ -400,7 +400,7 @@ $(document).ready(function () {
                                     ${ingredient_unit}
                                 </div>
                                 <div class='col s3 valign-wrapper'>
-                                    <i class='material-icons prefix'>delete_forever</i>
+                                    <i class='material-icons delete_item'>delete_forever</i>
                                 </div>
                             </li>`
 							);
@@ -420,7 +420,7 @@ $(document).ready(function () {
                                         ${step_description}
                                     </div>
                                         <div class='col s3 valign-wrapper'>
-                                        <i class='material-icons prefix'>delete_forever</i>
+                                        <i class='material-icons'>delete_forever</i>
                                     </div>
                                 </li>`
 							);
@@ -576,7 +576,7 @@ $(document).ready(function () {
                       ${step_description}
                   </div>
                       <div class='col s3 valign-wrapper'>
-                      <i class='material-icons'>delete_forever</i>
+                      <i class='material-icons delete_item'>delete_forever</i>
                   </div>
               </li>`
 		);
@@ -588,11 +588,11 @@ $(document).ready(function () {
 	//atmp
 	$("#add-to-meal-plan").on("click", function (event) {
 		event.preventDefault();
-		let name = $("#recipe_name").val();
-		let type = $("#meal_type option:selected").text();
-		if (name.length > 0) {
+		let recipe_name = $("#recipe_name").val();
+		let meal_type = $("#meal_type option:selected").text();
+		if (recipe_name.length > 0) {
 			if (matchedRecipe) {
-                addRecipeToMealPlan(name, type);
+                addRecipeToMealPlan(recipe_name, meal_type);
                 updateNutritionSummary(name);
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
@@ -619,12 +619,12 @@ $(document).ready(function () {
                     ${type}
                 </div>
                 <div class='col s3 valign-wrapper'>
-                    <i class='material-icons prefix'>delete_forever</i>
+                    <i class='material-icons delete_item'>delete_forever</i>
                 </div>
             </li>`
         );
 		$("#recipe_name").val(""); //reset recipe name
-		Materialize.toast("<i class='material-icons prefix check-mark'>check_circle</i>Added to meal list", 3000); // 4000 is the duration of the toast
+		Materialize.toast("<i class='material-icons check-mark'>check_circle</i>Added to meal list", 3000); // 4000 is the duration of the toast
 	}
     function updateRecipeNutritionValues(recipe_name) {
         console.log("Inside updateRecipeNutritionValues", recipe_name);
@@ -721,7 +721,54 @@ $(document).ready(function () {
             },
 		});
     }
-	//aitr
+	$("#meals-list").on("click", ".delete_item", function (event) {
+        $(this).parent().parent().fadeOut('slow', function (event) {
+            $(this).remove();
+        });
+    });
+	$("#ingredient-list").on("click", ".delete_item", function (event) {
+        $(this).parent().parent().fadeOut('slow', function (event) {
+            $(this).remove();
+        });
+    });
+	$("#step-list").on("click", ".delete_item", function (event) {
+        $(this).parent().parent().fadeOut('slow', function (event) {
+            $(this).remove();
+        });
+    });
+	function updateRecipeStatus() {//xxxxx
+		event.preventDefault();
+		$.ajax({
+			//create an ajax request to get_ingredient_nutrition
+			data: {
+				//data that gets sent to python
+
+            },
+			type: "POST",
+			dataType: "json",
+			url: "/update_recipe_status",
+			success: function (result, status, xhr) {
+				if (result) {
+					$("#ingredient_amount").val(result[0].ingredient_amount);
+					$("#ingredient_unit").val(result[0].ingredient_unit);
+					//https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
+					$("#ingredient_unit").material_select(); //needs to be re-initialized
+					$("#energy_amount").val(result[0].energy);
+					$("#carbohydrate_amount").val(result[0].carbohydrate);
+					$("#fats_amount").val(result[0].fats);
+					$("#protein_amount").val(result[0].protein);
+					$("#calcium_amount").val(result[0].calcium);
+					$("#iron_amount").val(result[0].iron);
+					$("#zinc_amount").val(result[0].zinc);
+					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
+				} else {
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log("Database error");
+			},
+		});
+	}
 	$("#add-ingredient-to-recipe").on("click", function (event) {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
@@ -730,7 +777,8 @@ $(document).ready(function () {
 
         if (value.length > 0 && amount.length > 0) {//if ingredient name and amount exist
 			if (matchedIngredient) {
-				addIngredientToRecipe(value, amount, unit);
+                addIngredientToRecipe(value, amount, unit);
+                updateRecipeStatus();//xxxxx
 			} else {
 				let $toastContent = $("<span>Ingredient not found</span>").add(
 					$(
@@ -750,7 +798,7 @@ $(document).ready(function () {
 		$("#ingredient-list").append(
 			`<li class='row list-item'>
                 <div class='col s6 valign-wrapper'>
-                    <i class='material-icons prefix'>navigate_next</i><span>${value}</span>
+                    <i class='material-icons'>navigate_next</i><span>${value}</span>
                 </div>
                 <div class='col s1 valign-wrapper'>
                     ${amount}
@@ -759,7 +807,7 @@ $(document).ready(function () {
                     ${unit}
                 </div>
                 <div class='col s3 valign-wrapper'>
-                    <i class='material-icons prefix'>delete_forever</i>
+                    <i class='material-icons delete_item'>delete_forever</i>
                 </div>
             </li>`
 		);
