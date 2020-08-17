@@ -217,12 +217,12 @@ def update_recipe_status():
 
         # Run a query (save item data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            print(f"Insert recipe_name: '{recipe_name}'")
-            print(f"Insert servings: {servings}")
-            print(f"Insert ingredient_name: '{ingredient_name}'")
-            print(f"Insert ingredient_amount: {ingredient_amount}")
-            print(f"Insert step_number: {step_number}")
-            print(f"Insert step_description: '{step_description}'")
+            #print(f"Insert recipe_name: '{recipe_name}'")
+            #print(f"Insert servings: {servings}")
+            #print(f"Insert ingredient_name: '{ingredient_name}'")
+            #print(f"Insert ingredient_amount: {ingredient_amount}")
+            #print(f"Insert step_number: {step_number}")
+            #print(f"Insert step_description: '{step_description}'")
             sql = f"INSERT INTO statusRecipeItem (recipe_name, servings, ingredient_name, ingredient_amount, step_number, step_description) VALUES ('{recipe_name}', {servings}, '{ingredient_name}', {ingredient_amount}, {step_number}, '{step_description}');"
             cursor.execute(sql)
             connection.commit()
@@ -238,13 +238,13 @@ def update_recipe_status():
                 connection.commit()
 
         # Run a query (save steps list data)
-        print(f"length = {len(step_number_list)}")
+        print(f"==> length = {len(step_number_list)}")
         for step_index in range(len(step_number_list)):
-            print(f"index = {step_index}")
-            print(f"(FOR) Insert step_number: '{step_number_list[step_index]}'")
-            print(f"(FOR) Insert step_description: '{step_description_list[step_index]}'")
+            print(f"==> step_index = {step_index}")
+            print(f"Insert step_number: {step_number_list[step_index]}")
+            print(f"Insert step_description: {step_description_list[step_index]}")
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                sql = f"INSERT INTO statusRecipeStepList (step_number, step_description) VALUES ({step_number_list[step_index]}, '{step_description[step_index]}');"
+                sql = f"INSERT INTO statusRecipeStepList (step_number, step_description) VALUES ({step_number_list[step_index]}, '{step_description_list[step_index]}');"
                 cursor.execute(sql)
                 connection.commit()
     finally:
