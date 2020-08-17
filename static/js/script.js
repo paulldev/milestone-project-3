@@ -527,7 +527,8 @@ $(document).ready(function () {
 		let step_number = $("#step_number").val();
 		let step_description = $("#step_description").val();
 		if ((step_number.length > 0) & (step_description.length > 0)) {//if step number and description exist
-			addStepToRecipe(step_number, step_description);
+            addStepToRecipe(step_number, step_description);
+            updateRecipeStatus();
 		} else {
 			Materialize.toast("Please fill out all step fields", 4000);
 		}
@@ -701,7 +702,7 @@ $(document).ready(function () {
             $(this).remove();
         });
     });
-    function updateRecipeStatus() {//xnow
+    function updateRecipeStatus() {//xurs
         console.log("==> starting updateRecipeStatus...");
 		event.preventDefault();
 		var isFormValid = true;
@@ -768,7 +769,6 @@ $(document).ready(function () {
         console.log("==> Testing if form is valid...");
 		if (isFormValid) {
             console.log("==> form is valid", recipe);
-			//checks if required inputs have a value
 			$.ajax({
 				//create an ajax request to update_recipe_status
 				data: JSON.stringify(recipe), //data that gets sent to python
@@ -795,8 +795,8 @@ $(document).ready(function () {
 
         if (value.length > 0 && amount.length > 0) {//if ingredient name and amount exist
 			if (matchedIngredient) {
-                updateRecipeStatus();//xxxxx
-                addIngredientToRecipe(value, amount, unit);
+                addIngredientToRecipe(value, amount, unit);//xaitr
+                updateRecipeStatus();//xursc1
 			} else {
 				let $toastContent = $("<span>Ingredient not found</span>").add(
 					$(
@@ -851,7 +851,8 @@ $(document).ready(function () {
 			success: function (result, status, xhr) {
 				if (result == 'match') {
 					//found ingredient in database
-					matchedIngredient = true;
+                    matchedIngredient = true;
+                    //updateRecipeStatus();//xaitr?
 					getIngredientNutrition();
 				} else if (result == "no match") {
 					matchedIngredient = false;
