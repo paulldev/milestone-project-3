@@ -80,8 +80,9 @@ $(document).ready(function () {
 			data: recipes,
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function (val) {
-				// Callback function when value is autcompleted.
+                // Callback function when value is autcompleted.
 				matchedRecipe = true;
+				clearRecipeInputs();
 				getRecipeData();
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
@@ -109,7 +110,6 @@ $(document).ready(function () {
 	} else {
 		console.log("Page not found");
 	}
-	//dit
 	function deleteItem(table, column, value) {
 		//ddd
 		event.preventDefault();
@@ -135,13 +135,11 @@ $(document).ready(function () {
 			},
 		});
 	}
-	//srec
 	$("#save-recipe").on("click", function (event) {
 		event.preventDefault();
 		saveRecipe();
 	});
-	//srec
-	function saveRecipe() {//plucey
+	function saveRecipe() {
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
 		if (matchedRecipe) {
@@ -181,16 +179,12 @@ $(document).ready(function () {
 			);
 		});
 
-		if (
-			$("#recipe_name").val().length == 0 ||
-			$("#servings").val().length == 0
-		) {
+		if ($("#recipe_name").val().length == 0 || $("#servings").val().length == 0) {
 			isFormValid = false;
 		} else {
 		}
 
 		if (isFormValid) {
-            console.log("(1) Save Recipe(). Form is valid. Recipe oject state: ", recipe);
 			//checks if required inputs have a value
 			$.ajax({
 				//create an ajax request to save_recipe
@@ -200,23 +194,21 @@ $(document).ready(function () {
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-    					Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000); // 4000 is the duration of the toast
+    					Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
 						$("#recipe_name").val(""); //reset recipe name
 						clearRecipeInputs();
 						$(window).scrollTop(0); //scroll window to top
 					} else if (action == "update") {
-						Materialize.toast("Updated recipe", 4000); // 4000 is the duration of the toast
+						Materialize.toast("Updated recipe", 4000);
 						$(window).scrollTop(0); //scroll window to top
-                    }//xxx
-
+                    }
 				},
 				error: function (xhr, status, error) {
 					console.log("Database error", error);
 				},
       			complete: function (result) {
                     getNames("/get_names", "recipe", "name");
-                    console.log("***** RECIPE NAME YO: ", recipe.recipe_name)
-                    updateRecipeNutritionValues(recipe.recipe_name);//plucey update nutrition data for this recipe
+                    updateRecipeNutritionValues(recipe.recipe_name);//update nutrition data for this recipe
 	          	},
 			});
 		} else {
@@ -224,7 +216,7 @@ $(document).ready(function () {
 			$(window).scrollTop(0); //scroll window to top
 		}
 	}
-	function saveRecipeStatus() {//plucey
+	function saveRecipeStatus() {//xnow probably delete
 		event.preventDefault();
 		var isFormValid = true;
 
@@ -289,7 +281,6 @@ $(document).ready(function () {
 		} else {
 		}
 	}
-	//cii
 	function clearIngredientInputs() {
 		//$("#ingredient_name").val("");
 		$("#ingredient_amount").val("");
@@ -304,7 +295,6 @@ $(document).ready(function () {
 		$("#zinc_amount").val("");
 		//$(window).scrollTop(0); //scroll window to top
 	}
-	//cri
 	function clearRecipeInputs() {
 		//$("#recipe_name").val(""); //reset inputs
 		$("#servings").val("");
@@ -318,9 +308,7 @@ $(document).ready(function () {
 		$("#step-list").empty();
 		$(window).scrollTop(0); //scroll window to top
 	}
-	//rn
 	$("#recipe_name").on("keyup", function (event) {
-		//rrr
 		event.preventDefault();
 		//check if recipe exists
 		$.ajax({
@@ -333,27 +321,13 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/recipe_exists",
 			success: function (result, status, xhr) {
-				console.log(
-					"--Server reponse: ",
-					result
-				);
 				if (result == 'match') {
 					//found recipe in database
 					matchedRecipe = true;
 					getRecipeData();
-					console.log(
-						"--Matched (recipe, ingredient): ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				} else if (result == "no match") {
 					matchedRecipe = false;
 					clearRecipeInputs();
-					console.log(
-						"--Matched (recipe, ingredient): ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				}
 			},
 			error: function (xhr, status, error) {
@@ -361,7 +335,6 @@ $(document).ready(function () {
 			},
 		});
 	});
-	//grd
 	function getRecipeData() {
 		let ingredient_name = "";
 		let ingredient_amount = "";
@@ -377,15 +350,15 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/get_recipe_data",
 			success: function (result, status, xhr) {
-                console.log(":::::::RESULT getRecipeData(): ", result);
 				if (result) {
-                    $("#servings").val(result[0].servings); //???buggy
-                    $("#servings").focus();//bug fix???
-                    //$("#recipe_name").focus();
+                    console.log("RESULT=====>>", result);
+                    $("#servings").val(result[0].servings); //xxx???buggy
+                    $("#servings").focus();//xxx bug fix???
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
-						result[1].forEach(function (element) {
-							ingredient_name = element["ingredient.name"];
+						result[1].forEach(function (element) {//process ingredients array
+                            console.log("Element: ", element);
+                            ingredient_name = element["ingredient.name"];//xxxxxx
 							ingredient_amount = element["ingredient_amount"];
 							ingredient_unit = element["ingredient_unit"];
 							$("#ingredient-list").append(
@@ -408,7 +381,7 @@ $(document).ready(function () {
 					}
 					//get steps
 					if ($("#step-list li").length == 0) {//if zero steps in list (stops steps being added every keystroke)
-						result[2].forEach(function (element) {
+						result[2].forEach(function (element) {//process steps array
 							step_number = element["stepNumber"];
 							step_description = element["stepDescription"];
 							$("#step-list").append(
@@ -428,6 +401,7 @@ $(document).ready(function () {
 					}
 					Materialize.toast("Loaded recipe data", 4000); // 4000 is the duration of the toast
 				} else {
+                    console.log("Nothing returned");
 				}
 			},
 			error: function (xhr, status, error) {
@@ -435,12 +409,10 @@ $(document).ready(function () {
 			},
 		});
 	}
-	//snd
 	$("#save-nutrition-data").on("click", function (event) {
 		event.preventDefault();
 		saveIngredientNutrition();
 	});
-	//sin
 	function saveIngredientNutrition() {
 		event.preventDefault();
 		let action = "save"; //action determines whether to use INSERT or UPDATE in our database
@@ -483,7 +455,7 @@ $(document).ready(function () {
 						clearIngredientInputs();
 						$(window).scrollTop(0); //scroll window to top
 						$("#ingredient_name").focus(); //position cursor for next ingredient entry
-						getNames("/get_names", "ingredient", "name");
+						//getNames("/get_names", "ingredient", "name");
 					} else if (action == "update") {
 						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
 						$(window).scrollTop(0); //scroll window to top
@@ -492,7 +464,7 @@ $(document).ready(function () {
                     getNames("/get_names", "ingredient", "name");
 				},
 				error: function (xhr, status, error) {
-					console.log("Error:(", error);
+					console.log("Database error", error);
 				},
 			});
 		} else {
@@ -500,7 +472,6 @@ $(document).ready(function () {
 			$(window).scrollTop(0); //scroll window to top
 		}
 	}
-	//dnd
 	$("#delete-nutrition-data").on("click", function (event) {
 		event.preventDefault();
 		if (matchedIngredient) {
@@ -515,7 +486,6 @@ $(document).ready(function () {
         }
         
 	});
-	//drec
 	$("#delete-recipe").on("click", function (event) {
 		event.preventDefault();
 		if (matchedRecipe) {
@@ -552,7 +522,6 @@ $(document).ready(function () {
 		});
 	}
 
-	//astr
 	$("#add-step-to-recipe").on("click", function (event) {
 		event.preventDefault();
 		let step_number = $("#step_number").val();
@@ -563,7 +532,6 @@ $(document).ready(function () {
 			Materialize.toast("Please fill out all step fields", 4000);
 		}
 	});
-	//astr
 	function addStepToRecipe(step_number, step_description) {
 		event.preventDefault();
 		//add step details
@@ -585,7 +553,6 @@ $(document).ready(function () {
 		$("#step_description").focus(); //position cursor for next step description
 		Materialize.toast("Added to step list", 3000); // 4000 is the duration of the toast
 	}
-	//atmp
 	$("#add-to-meal-plan").on("click", function (event) {
 		event.preventDefault();
 		let recipe_name = $("#recipe_name").val();
@@ -606,7 +573,6 @@ $(document).ready(function () {
 			Materialize.toast("Please fill out recipe name", 4000); // 4000 is the duration of the toast
 		}
 	});
-	//artmp
 	function addRecipeToMealPlan(recipe_name, meal_type) {
 		event.preventDefault();
 		//add recipe and meal type
@@ -639,11 +605,10 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/update_recipe_nutrition_values",
 			success: function (result, status, xhr) {
-//plucey finish this?
             },
 		});
     }
-    function updateNutritionSummary(recipe_name) {//xxxxx
+    function updateNutritionSummary(recipe_name) {
 		$.ajax({
 			//create an ajax request to update_recipe_nutrition_values
 			data: {
@@ -736,49 +701,102 @@ $(document).ready(function () {
             $(this).remove();
         });
     });
-	function updateRecipeStatus() {//xxxxx
+    function updateRecipeStatus() {//xnow
+        console.log("==> starting updateRecipeStatus...");
 		event.preventDefault();
-		$.ajax({
-			//create an ajax request to get_ingredient_nutrition
-			data: {
-				//data that gets sent to python
+		var isFormValid = true;
 
-            },
-			type: "POST",
-			dataType: "json",
-			url: "/update_recipe_status",
-			success: function (result, status, xhr) {
-				if (result) {
-					$("#ingredient_amount").val(result[0].ingredient_amount);
-					$("#ingredient_unit").val(result[0].ingredient_unit);
-					//https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
-					$("#ingredient_unit").material_select(); //needs to be re-initialized
-					$("#energy_amount").val(result[0].energy);
-					$("#carbohydrate_amount").val(result[0].carbohydrate);
-					$("#fats_amount").val(result[0].fats);
-					$("#protein_amount").val(result[0].protein);
-					$("#calcium_amount").val(result[0].calcium);
-					$("#iron_amount").val(result[0].iron);
-					$("#zinc_amount").val(result[0].zinc);
-					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
-				} else {
-				}
-			},
-			error: function (xhr, status, error) {
-				console.log("Database error");
-			},
+		let recipe = {
+			recipe_name: $("#recipe_name").val(),
+			servings: $("#servings").val(),
+			ingredient_name: $("#ingredient_name").val(),
+			ingredient_amount: $("#ingredient_amount").val(),
+			ingredient_name_list: [],
+			ingredient_amount_list: [],
+			ingredient_unit_list: [],
+			step_number: $("#step_number").val(),
+			step_description: $("#step_description").val(),
+			step_number_list: [],
+			step_description_list: [],
+        };
+        if (recipe.recipe_name.length == 0) {
+            recipe.recipe_name='';
+        }
+        if (typeof(recipe.servings) != 'number') {
+            recipe.servings='NULL';
+        }
+        if (recipe.ingredient_name.length == 0) {
+            recipe.ingredient_name='';
+        }
+        if (typeof(recipe.ingredient_amount) != 'number') {
+            recipe.ingredient_amount='NULL';
+        }
+        if (typeof(recipe.step_number) != 'number') {
+            recipe.step_number='NULL';
+        }
+        if (recipe.step_description.length == 0) {
+            recipe.step_description='';
+        }
+
+		$("#ingredient-list li").each(function () {
+			recipe.ingredient_name_list.push(
+				$(this).find("span").text().trim()
+			);
+			recipe.ingredient_amount_list.push(
+				parseInt($(this).find("div:eq(1)").text().trim())
+			);
+			recipe.ingredient_unit_list.push(
+				$(this).find("div:eq(2)").text().trim()
+			);
 		});
+		$("#step-list li").each(function () {
+			recipe.step_number_list.push(
+				parseInt($(this).find("div:eq(0)").text().trim())
+			);
+			recipe.step_description_list.push(
+				$(this).find("div:eq(1)").text().trim()
+			);
+		});
+
+		if (
+			$("#recipe_name").val().length == 0 ||
+			$("#servings").val().length == 0
+		) {
+			//isFormValid = false;
+		} else {
+		}
+        console.log("==> Testing if form is valid...");
+		if (isFormValid) {
+            console.log("==> form is valid", recipe);
+			//checks if required inputs have a value
+			$.ajax({
+				//create an ajax request to update_recipe_status
+				data: JSON.stringify(recipe), //data that gets sent to python
+				type: "POST",
+				dataType: "json",
+				url: "/update_recipe_status",
+				success: function (result, status, xhr) {
+				},
+				error: function (xhr, status, error) {
+					console.log("Database error", error);
+				},
+      			complete: function (result) {
+	          	},
+			});
+		} else {
+            console.log("Form missing fields");
+		}
 	}
 	$("#add-ingredient-to-recipe").on("click", function (event) {
 		event.preventDefault();
 		let value = $("#ingredient_name").val();
 		let amount = $("#ingredient_amount").val();
-		let unit = $("#ingredient-row .select-dropdown").val();
+		let unit = $("#ingredient-row .select-dropdown").val();//xxx is this correct?
 
         if (value.length > 0 && amount.length > 0) {//if ingredient name and amount exist
 			if (matchedIngredient) {
-                addIngredientToRecipe(value, amount, unit);
                 updateRecipeStatus();//xxxxx
+                addIngredientToRecipe(value, amount, unit);
 			} else {
 				let $toastContent = $("<span>Ingredient not found</span>").add(
 					$(
@@ -791,8 +809,8 @@ $(document).ready(function () {
 			Materialize.toast("Please fill out all ingredient fields", 4000); // 4000 is the duration of the toast
 		}
 	});
-	//aitr
-	function addIngredientToRecipe(value, amount, unit) {
+
+    function addIngredientToRecipe(value, amount, unit) {
 		event.preventDefault();
 		//add ingredient details
 		$("#ingredient-list").append(
@@ -818,7 +836,6 @@ $(document).ready(function () {
 		$("#ingredient_name").focus(); //position cursor for next ingredient entry
 		Materialize.toast("Added to ingredient list", 3000); // 4000 is the duration of the toast
 	}
-	//inkup
 	$("#ingredient_name").on("keyup", function (event) {
 		event.preventDefault();
 		//check if ingredient exists
@@ -832,27 +849,13 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/ingredient_exists",
 			success: function (result, status, xhr) {
-				console.log(
-					"--Server reponse: ",
-					result
-				); //array
 				if (result == 'match') {
 					//found ingredient in database
 					matchedIngredient = true;
 					getIngredientNutrition();
-					console.log(
-						"--Matched (recipe, ingredient): ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				} else if (result == "no match") {
 					matchedIngredient = false;
 					clearIngredientInputs();
-					console.log(
-						"--Matched (recipe, ingredient): ",
-						matchedRecipe,
-						matchedIngredient
-					);
 				}
 			},
 			error: function (xhr, status, error) {
