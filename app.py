@@ -31,7 +31,7 @@ def index():
 #    meal_list = ''
     try:
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-        # Run a query (get meal)
+        # Run a query (get meal types)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
             cursor.execute(sql)
@@ -41,7 +41,10 @@ def index():
             sql = "SELECT * FROM statusMealItem;"
             cursor.execute(sql)
             meal = cursor.fetchall()
-            recipe_name = meal[0]['recipe_name']
+            if meal:
+                recipe_name = meal[0]['recipe_name']
+            else:
+                recipe_name = ''
 
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM statusMealItemList;"
@@ -49,7 +52,6 @@ def index():
             meal_list = cursor.fetchall()
 
     finally:
-        # Close the connection, regardless of whether or not the above was successful
         connection.close()
     return render_template("index.html", meal_type=meal_type, recipe_name=recipe_name, meal_list=meal_list)
 
@@ -173,6 +175,63 @@ def get_ingredient_nutrition():
     return jsonify(result)
 
 
+@app.route('/update_home_status', methods=['POST'])
+def update_home_status():
+    #get data from request object
+    received_data = request.form
+    print(f"==> RECEIVED DATA: {received_data}")
+    #https://www.youtube.com/watch?v=2OYkhatUZmQ
+    for key in received_data.keys():
+        data=key
+    print(f"==> Data: {data}")
+    data_dict=json.loads(data)
+
+    recipe_name = data_dict['recipe_name']
+    
+    recipe_name_list = data_dict['recipe_name_list']
+    meal_type_list = data_dict['meal_type_list']
+
+    try:
+        # Connect to the database
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+
+        # Run a query (clear table data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM statusMealItem;"
+            cursor.execute(sql)
+            connection.commit()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            sql = f"DELETE FROM statusMealItemList;"
+            cursor.execute(sql)
+            connection.commit()
+
+        # Run a query (save item data)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            #print(f"Insert recipe_name: '{recipe_name}'")
+            #print(f"Insert ingredient_name: '{ingredient_name}'")
+            #print(f"Insert ingredient_amount: {ingredient_amount}")
+            #print(f"Insert step_number: {step_number}")
+            #print(f"Insert step_description: '{step_description}'")
+            sql = f"INSERT INTO statusRecipeItem (recipe_name) VALUES ('{recipe_name}');"
+            cursor.execute(sql)
+            connection.commit()
+
+        # Run a query (save ingredients list data)
+        for index in range(len(recipe_name_list)):
+#            print(f"(FOR) Insert ingredient_name: '{ingredient_name_list[index]}'")
+#            print(f"(FOR) Insert ingredient_amount: {ingredient_amount_list[index]}")
+#            print(f"(FOR) Insert ingredient_unit: '{ingredient_unit_list[index]}'")
+            with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                sql = f"INSERT INTO statusMealItemList (recipe_name, meal_type) VALUES ('{recipe_name_list[index]}', '{meal_type_list[index]}');"
+                cursor.execute(sql)
+                connection.commit()
+
+    finally:
+        connection.close()
+
+    return jsonify("updated home status")
+
+
 @app.route('/update_recipe_status', methods=['POST'])#xnow
 def update_recipe_status():
     #get data from request object
@@ -251,7 +310,7 @@ def update_recipe_status():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify("saved recipe")
+    return jsonify("updated recipe status")
 
 
 @app.route('/get_recipe_data', methods=['POST'])
@@ -325,7 +384,7 @@ def delete_recipe():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify("deleted")
+    return jsonify("deleted recipe")
 
 
 @app.route('/update_nutrition_summary', methods=['POST'])
@@ -339,7 +398,7 @@ def update_nutrition_summary():
 
         # Run a query (get nutrition summary)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"select * from recipe where name='{recipe_name}';"
+            sql = f"SELECT * FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
             result = cursor.fetchone()
     finally:
@@ -477,7 +536,7 @@ def update_recipe_nutrition_values():
         #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
-    return jsonify('success')
+    return jsonify('updated recipe nutrition values')
 
 
 def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
