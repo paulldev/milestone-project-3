@@ -193,16 +193,18 @@ $(document).ready(function () {
 				dataType: "json",
 				url: "/save_recipe",
 				success: function (result, status, xhr) {
-					if (action == "save") {
-    					Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
-						$(window).scrollTop(0); //scroll window to top
-					} else if (action == "update") {
-						Materialize.toast("Updated recipe", 4000);
-						$(window).scrollTop(0); //scroll window to top
+                    if (result == 'saved recipe') {
+                        if (action == "save") {
+                            Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
+                            $(window).scrollTop(0); //scroll window to top
+                        } else if (action == "update") {
+                            Materialize.toast("Updated recipe", 4000);
+                            $(window).scrollTop(0); //scroll window to top
+                        }
+                        $("#recipe_name").val(""); //reset recipe name
+                        clearRecipeInputs();
+                        updateRecipeStatus();
                     }
-    				$("#recipe_name").val(""); //reset recipe name
-                    clearRecipeInputs();
-                    updateRecipeStatus();
 				},
 				error: function (xhr, status, error) {
 					console.log("Database error", error);
