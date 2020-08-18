@@ -126,10 +126,10 @@ $(document).ready(function () {
 			url: "/delete_item",
 			success: function (result, status, xhr) {
 				if (table == "ingredient") {
-					Materialize.toast("<i class='material-icons delete-item'>delete_forever</i>Deleted ingredient", 4000);
+					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted ingredient", 4000);
     				getNames("/get_names", "ingredient", "name");
 				} else if (table == "recipe") {
-					Materialize.toast("<i class='material-icons delete-item'>delete_forever</i>Deleted recipe", 4000);
+					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 4000);
     				getNames("/get_names", "recipe", "name");
 				}
 			},
