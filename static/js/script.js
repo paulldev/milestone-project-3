@@ -196,13 +196,12 @@ $(document).ready(function () {
                     if (result == 'saved recipe') {
                         if (action == "save") {
                             Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
-                            $(window).scrollTop(0); //scroll window to top
                         } else if (action == "update") {
                             Materialize.toast("Updated recipe", 4000);
-                            $(window).scrollTop(0); //scroll window to top
                         }
                         $("#recipe_name").val(""); //reset recipe name
                         clearRecipeInputs();
+                        $(window).scrollTop(0); //scroll window to top
                         updateRecipeStatus();
                     }
 				},
@@ -354,14 +353,13 @@ $(document).ready(function () {
 			url: "/get_recipe_data",
 			success: function (result, status, xhr) {
 				if (result) {
-                    console.log("RESULT=====>>", result);
-                    $("#servings").val(result[0].servings); //xxx???buggy
-                    $("#servings").focus();//xxx bug fix???
+                    $("#servings").val(result[0].servings);
+                    //$("#servings").focus();//xxx bug fix???
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
 						result[1].forEach(function (element) {//process ingredients array
                             console.log("Element: ", element);
-                            ingredient_name = element["ingredient.name"];//xxxxxx
+                            ingredient_name = element["ingredient.name"];
 							ingredient_amount = element["ingredient_amount"];
 							ingredient_unit = element["ingredient_unit"];
 							$("#ingredient-list").append(
@@ -574,7 +572,7 @@ $(document).ready(function () {
 				Materialize.toast($toastContent, 10000);
 			}
 		} else {
-			Materialize.toast("Please fill out recipe name", 4000); // 4000 is the duration of the toast
+			Materialize.toast("Please fill out recipe name", 4000);
 		}
 	});
 	function addRecipeToMealPlan(recipe_name, meal_type) {
@@ -623,70 +621,72 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
-                console.log("RESULT:", result)
+                if (result) {
+                    console.log("RESULT:", result)
 
-                rda = parseInt($("#energy_rda").text());
-                total = parseInt($("#energy").text()) + result.energy;
-                $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#energy_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#energy_rda").text());
+                    total = parseInt($("#energy").text()) + result.energy;
+                    $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#energy_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#carbohydrate_rda").text());
-                total = parseInt($("#carbohydrate").text()) + result.carbohydrate;
-                $("#carbohydrate").text(parseInt($("#carbohydrate").text()) + result.carbohydrate);//set total carbohydrate as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#carbohydrate_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#carbohydrate_rda").text());
+                    total = parseInt($("#carbohydrate").text()) + result.carbohydrate;
+                    $("#carbohydrate").text(parseInt($("#carbohydrate").text()) + result.carbohydrate);//set total carbohydrate as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#carbohydrate_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#fats_rda").text());
-                total = parseInt($("#fats").text()) + result.fats;
-                $("#fats").text(parseInt($("#fats").text()) + result.fats);//set total fats as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#fats_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#fats_rda").text());
+                    total = parseInt($("#fats").text()) + result.fats;
+                    $("#fats").text(parseInt($("#fats").text()) + result.fats);//set total fats as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#fats_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#protein_rda").text());
-                total = parseInt($("#protein").text()) + result.protein;
-                $("#protein").text(parseInt($("#protein").text()) + result.protein);//set total protein as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#protein_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#protein_rda").text());
+                    total = parseInt($("#protein").text()) + result.protein;
+                    $("#protein").text(parseInt($("#protein").text()) + result.protein);//set total protein as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#protein_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#calcium_rda").text());
-                total = parseInt($("#calcium").text()) + result.calcium;
-                $("#calcium").text(parseInt($("#calcium").text()) + result.calcium);//set total calcium as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#calcium_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#calcium_rda").text());
+                    total = parseInt($("#calcium").text()) + result.calcium;
+                    $("#calcium").text(parseInt($("#calcium").text()) + result.calcium);//set total calcium as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#calcium_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#iron_rda").text());
-                total = parseInt($("#iron").text()) + result.iron;
-                $("#iron").text(parseInt($("#iron").text()) + result.iron);//set total iron as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#iron_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#iron_rda").text());
+                    total = parseInt($("#iron").text()) + result.iron;
+                    $("#iron").text(parseInt($("#iron").text()) + result.iron);//set total iron as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#iron_bar .determinate").css({"width": percent+'%'});
 
-                rda = parseInt($("#zinc_rda").text());
-                total = parseInt($("#zinc").text()) + result.zinc;
-                $("#zinc").text(parseInt($("#zinc").text()) + result.zinc);//set total zinc as current value + new added value
-                percent = Math.round((total / rda) * 100);
-                if (percent > 100) {
-                    percent = 100;
-                }
-                $("#zinc_bar .determinate").css({"width": percent+'%'});
+                    rda = parseInt($("#zinc_rda").text());
+                    total = parseInt($("#zinc").text()) + result.zinc;
+                    $("#zinc").text(parseInt($("#zinc").text()) + result.zinc);//set total zinc as current value + new added value
+                    percent = Math.round((total / rda) * 100);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
+                    $("#zinc_bar .determinate").css({"width": percent+'%'});
+                }//end of if(result){}
             },
 		});
     }
