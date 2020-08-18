@@ -88,7 +88,7 @@ $(document).ready(function () {
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
 	} else if (location.href.match(/\//)) {
-        console.log("Found index page");//xxxxx
+        console.log("Found index page");
    		$("#meals-list li").each(function () {
 			recipe_name = $(this).find("span").text().trim();
             console.log('recipe_name', recipe_name);
@@ -562,8 +562,8 @@ $(document).ready(function () {
 		if (recipe_name.length > 0) {
 			if (matchedRecipe) {
                 addRecipeToMealPlan(recipe_name, meal_type);
-                updateNutritionSummary(recipe_name);
-                updateHomeStatus();
+                updateNutritionSummary(recipe_name);//works
+                updateHomeStatus();//works
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
 					$(
@@ -590,12 +590,14 @@ $(document).ready(function () {
             meal.recipe_name='';
         }
 
-		$("#meals-list li").each(function () {
+		$("#meals-list li").each(function () {//xyz
+            console.log("==> RECIPE NAME IS: ", $(this).find('span').text().trim());
 			meal.recipe_name_list.push(
 				$(this).find("span").text().trim()
 			);
+            console.log("==> MEAL TYPE IS: ", $(this).find("div:eq(1)").text().trim());
 			meal.meal_type_list.push(
-				parseInt($(this).find("div:eq(1)").text().trim())
+				$(this).find("div:eq(1)").text().trim()
 			);
 		});
 
@@ -604,8 +606,8 @@ $(document).ready(function () {
 		} else {
 		}
         console.log("==> Testing if form is valid...");
-		if (isFormValid) {
-            console.log("==> form is valid", recipe);
+		if (isFormValid) {//xyz
+            console.log("==> form is valid", meal);
 			$.ajax({
 				//create an ajax request to update_recipe_status
 				data: JSON.stringify(meal), //data that gets sent to python
@@ -630,7 +632,7 @@ $(document).ready(function () {
 		$("#meals-list").append(
 			`<li class='row list-item'>
                 <div class='col s6 valign-wrapper'>
-                    <i class='material-icons'>navigate_next</i>${recipe_name}
+                    <i class='material-icons'>navigate_next</i><span>${recipe_name}</span>
                 </div>
                 <div class='col s2 valign-wrapper'>
                     ${meal_type}
@@ -671,8 +673,6 @@ $(document).ready(function () {
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
                 if (result) {
-                    console.log("RESULT:", result)
-
                     rda = parseInt($("#energy_rda").text());
                     total = parseInt($("#energy").text()) + result.energy;
                     $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
@@ -739,9 +739,16 @@ $(document).ready(function () {
             },
 		});
     }
-	$("#meals-list").on("click", ".delete_item", function (event) {//xxxxxxx
+	$("#meals-list").on("click", ".delete_item", function (event) {
+        //console.log("**********************RECIPE NAME: ", $(this).parent().parent().find('span').text());
         $(this).parent().parent().fadeOut('slow', function (event) {
             $(this).remove();
+            //updateNutritionSummary();
+        });
+   		$("#meals-list li").each(function () {
+			recipe_name = $(this).find("span").text().trim();
+            console.log('recipe_name--', recipe_name);
+            updateNutritionSummary(recipe_name)
         });
     });
 	$("#ingredient-list").on("click", ".delete_item", function (event) {
