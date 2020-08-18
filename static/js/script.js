@@ -20,17 +20,17 @@ $(document).ready(function () {
 			dataType: "json",
 			url: url,
 			success: function (result, status, xhr) {
-				console.log("4. [success:] successful ajax call", result); //this is a js object
+				//console.log("4. [success:] successful ajax call", result); //this is a js object
 				if (result) {
 					//found in database
 					//https://stackoverflow.com/questions/5223/length-of-a-javascript-object
 					for (var i = 0; i < Object.keys(result).length; i++) {
 						if (table == "ingredient") {
 							ingredients[result[i].name] = null;
-							console.log("Iteration (" + i + ") ", ingredients);
+							//console.log("Iteration (" + i + ") ", ingredients);
 						} else if (table == "recipe") {
 							recipes[result[i].name] = null;
-							console.log("Iteration (" + i + ") ", recipes);
+							//console.log("Iteration (" + i + ") ", recipes);
 						}
 					}
 				} else {
@@ -195,13 +195,14 @@ $(document).ready(function () {
 				success: function (result, status, xhr) {
 					if (action == "save") {
     					Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
-						$("#recipe_name").val(""); //reset recipe name
-						clearRecipeInputs();
 						$(window).scrollTop(0); //scroll window to top
 					} else if (action == "update") {
 						Materialize.toast("Updated recipe", 4000);
 						$(window).scrollTop(0); //scroll window to top
                     }
+    				$("#recipe_name").val(""); //reset recipe name
+                    clearRecipeInputs();
+                    updateRecipeStatus();
 				},
 				error: function (xhr, status, error) {
 					console.log("Database error", error);
@@ -212,7 +213,7 @@ $(document).ready(function () {
 	          	},
 			});
 		} else {
-			Materialize.toast("All fields must be filled out", 4000); // 4000 is the duration of the toast
+			Materialize.toast("All fields must be filled out", 4000);
 			$(window).scrollTop(0); //scroll window to top
 		}
 	}
@@ -493,6 +494,7 @@ $(document).ready(function () {
             deleteRecipe(recipe_name);
             $("#recipe_name").val(""); //reset recipe name
             clearRecipeInputs();
+            updateRecipeStatus();
             $(window).scrollTop(0); //scroll window to top
         } else {
             Materialize.toast("Recipe doesn't exist", 4000);
@@ -687,7 +689,7 @@ $(document).ready(function () {
             },
 		});
     }
-	$("#meals-list").on("click", ".delete_item", function (event) {
+	$("#meals-list").on("click", ".delete_item", function (event) {//xxxxxxx
         $(this).parent().parent().fadeOut('slow', function (event) {
             $(this).remove();
         });
@@ -695,21 +697,23 @@ $(document).ready(function () {
 	$("#ingredient-list").on("click", ".delete_item", function (event) {
         $(this).parent().parent().fadeOut('slow', function (event) {
             $(this).remove();
+            updateRecipeStatus();
         });
     });
 	$("#step-list").on("click", ".delete_item", function (event) {
         $(this).parent().parent().fadeOut('slow', function (event) {
             $(this).remove();
+            updateRecipeStatus();
         });
     });
     function updateRecipeStatus() {//xurs
         console.log("==> starting updateRecipeStatus...");
-		event.preventDefault();
+		//event.preventDefault();
 		var isFormValid = true;
 
 		let recipe = {
 			recipe_name: $("#recipe_name").val(),
-			servings: $("#servings").val(),
+			servings: parseInt($("#servings").val()),
 			ingredient_name: $("#ingredient_name").val(),
 			ingredient_amount: $("#ingredient_amount").val(),
 			ingredient_name_list: [],
