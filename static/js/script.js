@@ -511,11 +511,13 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/delete_recipe",
 			success: function (result, status, xhr) {
-                if (matchedRecipe) {
-                    Materialize.toast("Deleted recipe", 4000); // 4000 is the duration of the toast
-            		getNames("/get_names", "recipe", "name");
-                } else {
-                    Materialize.toast("Recipe doesn't exist", 4000);
+                if (result == 'deleted recipe') {
+                    if (matchedRecipe) {
+                        Materialize.toast("Deleted recipe", 4000);
+                        getNames("/get_names", "recipe", "name");
+                    } else {
+                        Materialize.toast("Recipe doesn't exist", 4000);
+                    }
                 }
 			},
 		});
@@ -853,7 +855,6 @@ $(document).ready(function () {
 				if (result == 'match') {
 					//found ingredient in database
                     matchedIngredient = true;
-                    //updateRecipeStatus();//xaitr?
 					getIngredientNutrition();
 				} else if (result == "no match") {
 					matchedIngredient = false;
@@ -865,7 +866,6 @@ $(document).ready(function () {
 			},
 		});
 	});
-	//gin
 	function getIngredientNutrition() {
 		event.preventDefault();
 		$.ajax({
@@ -890,8 +890,7 @@ $(document).ready(function () {
 					$("#calcium_amount").val(result[0].calcium);
 					$("#iron_amount").val(result[0].iron);
 					$("#zinc_amount").val(result[0].zinc);
-					Materialize.toast("Loaded nutritional data", 4000); // 4000 is the duration of the toast
-				} else {
+					Materialize.toast("Loaded nutritional data", 4000);
 				}
 			},
 			error: function (xhr, status, error) {
