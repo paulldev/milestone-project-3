@@ -92,7 +92,7 @@ $(document).ready(function () {
    		$("#meals-list li").each(function () {
 			recipe_name = $(this).find("span").text().trim();
             console.log('recipe_name', recipe_name);
-            updateNutritionSummary(recipe_name)
+            updateNutritionSummary(recipe_name, 'add')
         });
 
 		getNames("/get_names", "recipe", "name");
@@ -358,7 +358,7 @@ $(document).ready(function () {
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
 						result[1].forEach(function (element) {//process ingredients array
-                            console.log("Element: ", element);
+                            //console.log("Element: ", element);
                             ingredient_name = element["ingredient.name"];
 							ingredient_amount = element["ingredient_amount"];
 							ingredient_unit = element["ingredient_unit"];
@@ -562,7 +562,7 @@ $(document).ready(function () {
 		if (recipe_name.length > 0) {
 			if (matchedRecipe) {
                 addRecipeToMealPlan(recipe_name, meal_type);
-                updateNutritionSummary(recipe_name);//works
+                updateNutritionSummary(recipe_name, 'add');//works
                 updateHomeStatus();//works
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
@@ -577,7 +577,7 @@ $(document).ready(function () {
 		}
     });
     function updateHomeStatus() {
-        console.log("==> starting updateHomeStatus...");
+        //console.log("==> starting updateHomeStatus...");
 		//event.preventDefault();
 		var isFormValid = true;
 
@@ -591,11 +591,11 @@ $(document).ready(function () {
         }
 
 		$("#meals-list li").each(function () {//xyz
-            console.log("==> RECIPE NAME IS: ", $(this).find('span').text().trim());
+            //console.log("==> RECIPE NAME IS: ", $(this).find('span').text().trim());
 			meal.recipe_name_list.push(
 				$(this).find("span").text().trim()
 			);
-            console.log("==> MEAL TYPE IS: ", $(this).find("div:eq(1)").text().trim());
+            //console.log("==> MEAL TYPE IS: ", $(this).find("div:eq(1)").text().trim());
 			meal.meal_type_list.push(
 				$(this).find("div:eq(1)").text().trim()
 			);
@@ -605,9 +605,9 @@ $(document).ready(function () {
 			//isFormValid = false;
 		} else {
 		}
-        console.log("==> Testing if form is valid...");
+        //console.log("==> Testing if form is valid...");
 		if (isFormValid) {//xyz
-            console.log("==> form is valid", meal);
+            //console.log("==> form is valid", meal);
 			$.ajax({
 				//create an ajax request to update_recipe_status
 				data: JSON.stringify(meal), //data that gets sent to python
@@ -661,7 +661,8 @@ $(document).ready(function () {
             },
 		});
     }
-    function updateNutritionSummary(recipe_name) {
+    function updateNutritionSummary(recipe_name, operation) {
+        console.log(">>>>> Update nutrition summary...");
 		$.ajax({
 			//create an ajax request to update_recipe_nutrition_values
 			data: {
@@ -672,10 +673,18 @@ $(document).ready(function () {
 			dataType: "json",
 			url: "/update_nutrition_summary",
 			success: function (result, status, xhr) {
-                if (result) {
+                if (result) {//xyz
+                    console.log(">>>>> Process recipe...", recipe_name);
                     rda = parseInt($("#energy_rda").text());
-                    total = parseInt($("#energy").text()) + result.energy;
-                    $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#energy").text()) + result.energy;
+                        console.log("+++++ Energy + result.energy = total...", parseInt($("#energy").text()), result.energy, total);
+                        $("#energy").text(parseInt($("#energy").text()) + result.energy);//set total energy as current value + new added value
+                    } else {
+                        total = parseInt($("#energy").text()) - result.energy;
+                        console.log("----- Energy - result.energy = total...", parseInt($("#energy").text()), result.energy, total);
+                        $("#energy").text(parseInt($("#energy").text()) - result.energy);//set total energy as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -683,8 +692,13 @@ $(document).ready(function () {
                     $("#energy_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#carbohydrate_rda").text());
-                    total = parseInt($("#carbohydrate").text()) + result.carbohydrate;
-                    $("#carbohydrate").text(parseInt($("#carbohydrate").text()) + result.carbohydrate);//set total carbohydrate as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#carbohydrate").text()) + result.carbohydrate;
+                        $("#carbohydrate").text(parseInt($("#carbohydrate").text()) + result.carbohydrate);//set total carbohydrate as current value + new added value
+                    } else {
+                        total = parseInt($("#carbohydrate").text()) - result.carbohydrate;
+                        $("#carbohydrate").text(parseInt($("#carbohydrate").text()) - result.carbohydrate);//set total carbohydrate as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -692,8 +706,13 @@ $(document).ready(function () {
                     $("#carbohydrate_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#fats_rda").text());
-                    total = parseInt($("#fats").text()) + result.fats;
-                    $("#fats").text(parseInt($("#fats").text()) + result.fats);//set total fats as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#fats").text()) + result.fats;
+                        $("#fats").text(parseInt($("#fats").text()) + result.fats);//set total fats as current value + new added value
+                    } else {
+                        total = parseInt($("#fats").text()) - result.fats;
+                        $("#fats").text(parseInt($("#fats").text()) - result.fats);//set total fats as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -701,8 +720,13 @@ $(document).ready(function () {
                     $("#fats_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#protein_rda").text());
-                    total = parseInt($("#protein").text()) + result.protein;
-                    $("#protein").text(parseInt($("#protein").text()) + result.protein);//set total protein as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#protein").text()) + result.protein;
+                        $("#protein").text(parseInt($("#protein").text()) + result.protein);//set total protein as current value + new added value
+                    } else {
+                        total = parseInt($("#protein").text()) - result.protein;
+                        $("#protein").text(parseInt($("#protein").text()) - result.protein);//set total protein as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -710,8 +734,13 @@ $(document).ready(function () {
                     $("#protein_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#calcium_rda").text());
-                    total = parseInt($("#calcium").text()) + result.calcium;
-                    $("#calcium").text(parseInt($("#calcium").text()) + result.calcium);//set total calcium as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#calcium").text()) + result.calcium;
+                        $("#calcium").text(parseInt($("#calcium").text()) + result.calcium);//set total calcium as current value + new added value
+                    } else {
+                        total = parseInt($("#calcium").text()) - result.calcium;
+                        $("#calcium").text(parseInt($("#calcium").text()) - result.calcium);//set total calcium as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -719,8 +748,13 @@ $(document).ready(function () {
                     $("#calcium_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#iron_rda").text());
-                    total = parseInt($("#iron").text()) + result.iron;
-                    $("#iron").text(parseInt($("#iron").text()) + result.iron);//set total iron as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#iron").text()) + result.iron;
+                        $("#iron").text(parseInt($("#iron").text()) + result.iron);//set total iron as current value + new added value
+                    } else {
+                        total = parseInt($("#iron").text()) - result.iron;
+                        $("#iron").text(parseInt($("#iron").text()) - result.iron);//set total iron as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -728,8 +762,13 @@ $(document).ready(function () {
                     $("#iron_bar .determinate").css({"width": percent+'%'});
 
                     rda = parseInt($("#zinc_rda").text());
-                    total = parseInt($("#zinc").text()) + result.zinc;
-                    $("#zinc").text(parseInt($("#zinc").text()) + result.zinc);//set total zinc as current value + new added value
+                    if (operation == 'add') {
+                        total = parseInt($("#zinc").text()) + result.zinc;
+                        $("#zinc").text(parseInt($("#zinc").text()) + result.zinc);//set total zinc as current value + new added value
+                    } else {
+                        total = parseInt($("#zinc").text()) - result.zinc;
+                        $("#zinc").text(parseInt($("#zinc").text()) - result.zinc);//set total zinc as current value + new added value
+                    }
                     percent = Math.round((total / rda) * 100);
                     if (percent > 100) {
                         percent = 100;
@@ -740,15 +779,20 @@ $(document).ready(function () {
 		});
     }
 	$("#meals-list").on("click", ".delete_item", function (event) {
-        //console.log("**********************RECIPE NAME: ", $(this).parent().parent().find('span').text());
+        console.log("**********************RECIPE NAME: ", $(this).parent().parent().find('span').text());
+//   		$("#meals-list li").each(function () {
+
+            //recipe_name = $(this).find("span").text().trim();
+            
+            recipe_name = $(this).parent().parent().find('span').text();
+            
+            console.log('<<recipe_name>>', recipe_name);
+            updateNutritionSummary(recipe_name, 'subtract');
+//        });
         $(this).parent().parent().fadeOut('slow', function (event) {
             $(this).remove();
+            updateHomeStatus();//xyz
             //updateNutritionSummary();
-        });
-   		$("#meals-list li").each(function () {
-			recipe_name = $(this).find("span").text().trim();
-            console.log('recipe_name--', recipe_name);
-            updateNutritionSummary(recipe_name)
         });
     });
 	$("#ingredient-list").on("click", ".delete_item", function (event) {
@@ -764,7 +808,7 @@ $(document).ready(function () {
         });
     });
     function updateRecipeStatus() {
-        console.log("==> starting updateRecipeStatus...");
+        //console.log("==> starting updateRecipeStatus...");
 		//event.preventDefault();
 		var isFormValid = true;
 
@@ -827,9 +871,9 @@ $(document).ready(function () {
 			//isFormValid = false;
 		} else {
 		}
-        console.log("==> Testing if form is valid...");
+        //console.log("==> Testing if form is valid...");
 		if (isFormValid) {
-            console.log("==> form is valid", recipe);
+            //console.log("==> form is valid", recipe);
 			$.ajax({
 				//create an ajax request to update_recipe_status
 				data: JSON.stringify(recipe), //data that gets sent to python
