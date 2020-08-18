@@ -195,7 +195,7 @@ $(document).ready(function () {
 				success: function (result, status, xhr) {
                     if (result == 'saved recipe') {
                         if (action == "save") {
-                            Materialize.toast("<i class='material-icons check-mark'>cloud_done</i>Saved recipe", 4000);
+                            Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved recipe", 4000);
                         } else if (action == "update") {
                             Materialize.toast("Updated recipe", 4000);
                         }
@@ -643,7 +643,7 @@ $(document).ready(function () {
             </li>`
         );
 		$("#recipe_name").val(""); //reset recipe name
-		Materialize.toast("<i class='material-icons check-mark'>check_circle</i>Added to meal list", 3000); // 4000 is the duration of the toast
+		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to meal list", 3000); // 4000 is the duration of the toast
 	}
     function updateRecipeNutritionValues(recipe_name) {
         console.log("Inside updateRecipeNutritionValues", recipe_name);
