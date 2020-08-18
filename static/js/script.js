@@ -451,9 +451,9 @@ $(document).ready(function () {
 				url: "/save_ingredient_nutrition",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-						Materialize.toast("Saved nutritional data", 4000); // 4000 is the duration of the toast
+						Materialize.toast("Saved nutritional data", 4000);
 					} else if (action == "update") {
-						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
+						Materialize.toast("Updated nutritional data", 4000);
                     }
 					$("#ingredient_name").val(""); //clear ingredient name
 					clearIngredientInputs();
@@ -563,6 +563,7 @@ $(document).ready(function () {
 			if (matchedRecipe) {
                 addRecipeToMealPlan(recipe_name, meal_type);
                 updateNutritionSummary(recipe_name);
+                updateHomeStatus();
 			} else {
 				let $toastContent = $("<span>Recipe not found</span>").add(
 					$(
@@ -574,7 +575,55 @@ $(document).ready(function () {
 		} else {
 			Materialize.toast("Please fill out recipe name", 4000);
 		}
-	});
+    });
+    function updateHomeStatus() {
+        console.log("==> starting updateHomeStatus...");
+		//event.preventDefault();
+		var isFormValid = true;
+
+		let meal = {
+			recipe_name: $("#recipe_name").val(),
+			recipe_name_list: [],
+            meal_type_list: []
+        };
+        if (meal.recipe_name.length == 0) {
+            meal.recipe_name='';
+        }
+
+		$("#meals-list li").each(function () {
+			meal.recipe_name_list.push(
+				$(this).find("span").text().trim()
+			);
+			meal.meal_type_list.push(
+				parseInt($(this).find("div:eq(1)").text().trim())
+			);
+		});
+
+		if ($("#recipe_name").val().length == 0) {
+			//isFormValid = false;
+		} else {
+		}
+        console.log("==> Testing if form is valid...");
+		if (isFormValid) {
+            console.log("==> form is valid", recipe);
+			$.ajax({
+				//create an ajax request to update_recipe_status
+				data: JSON.stringify(meal), //data that gets sent to python
+				type: "POST",
+				dataType: "json",
+				url: "/update_home_status",
+				success: function (result, status, xhr) {
+				},
+				error: function (xhr, status, error) {
+					console.log("Database error", error);
+				},
+      			complete: function (result) {
+	          	},
+			});
+		} else {
+            console.log("Form missing fields");
+		}
+    }
 	function addRecipeToMealPlan(recipe_name, meal_type) {
 		event.preventDefault();
 		//add recipe and meal type
@@ -707,7 +756,7 @@ $(document).ready(function () {
             updateRecipeStatus();
         });
     });
-    function updateRecipeStatus() {//xurs
+    function updateRecipeStatus() {
         console.log("==> starting updateRecipeStatus...");
 		//event.preventDefault();
 		var isFormValid = true;
@@ -800,8 +849,8 @@ $(document).ready(function () {
 
         if (value.length > 0 && amount.length > 0) {//if ingredient name and amount exist
 			if (matchedIngredient) {
-                addIngredientToRecipe(value, amount, unit);//xaitr
-                updateRecipeStatus();//xursc1
+                addIngredientToRecipe(value, amount, unit);
+                updateRecipeStatus();
 			} else {
 				let $toastContent = $("<span>Ingredient not found</span>").add(
 					$(
