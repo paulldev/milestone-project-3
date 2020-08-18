@@ -452,16 +452,13 @@ $(document).ready(function () {
 				success: function (result, status, xhr) {
 					if (action == "save") {
 						Materialize.toast("Saved nutritional data", 4000); // 4000 is the duration of the toast
-						$("#ingredient_name").val(""); //clear ingredient name
-						clearIngredientInputs();
-						$(window).scrollTop(0); //scroll window to top
-						$("#ingredient_name").focus(); //position cursor for next ingredient entry
-						//getNames("/get_names", "ingredient", "name");
 					} else if (action == "update") {
 						Materialize.toast("Updated nutritional data", 4000); // 4000 is the duration of the toast
-						$(window).scrollTop(0); //scroll window to top
-						$("#ingredient_name").focus(); //position cursor for further editing
                     }
+					$("#ingredient_name").val(""); //clear ingredient name
+					clearIngredientInputs();
+					$(window).scrollTop(0); //scroll window to top
+					$("#ingredient_name").focus(); //position cursor for next ingredient entry
                     getNames("/get_names", "ingredient", "name");
 				},
 				error: function (xhr, status, error) {
