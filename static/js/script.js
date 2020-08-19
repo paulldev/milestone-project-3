@@ -126,10 +126,10 @@ $(document).ready(function () {
 			url: "/delete_item",
 			success: function (result, status, xhr) {
 				if (table == "ingredient") {
-					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted ingredient", 2000);
+					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted ingredient", 3000);
     				getNames("/get_names", "ingredient", "name");
 				} else if (table == "recipe") {
-					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 2000);
+					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 3000);
     				getNames("/get_names", "recipe", "name");
 				}
 			},
@@ -195,9 +195,9 @@ $(document).ready(function () {
 				success: function (result, status, xhr) {
                     if (result == 'saved recipe') {
                         if (action == "save") {
-                            Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved recipe", 2000);
+                            Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved recipe", 3000);
                         } else if (action == "update") {
-                            Materialize.toast("<i class='material-icons positive'>cloud_done</i>Updated recipe", 2000);
+                            Materialize.toast("<i class='material-icons positive'>cloud_done</i>Updated recipe", 3000);
                         }
                         $("#recipe_name").val(""); //reset recipe name
                         clearRecipeInputs();
@@ -214,7 +214,7 @@ $(document).ready(function () {
 	          	},
 			});
 		} else {
-			Materialize.toast("<i class='material-icons neutral'>warning</i>All fields must be filled out", 2000);
+			Materialize.toast("<i class='material-icons neutral'>warning</i>All fields must be filled out", 3000);
 			$(window).scrollTop(0); //scroll window to top
 		}
 	}
@@ -401,7 +401,7 @@ $(document).ready(function () {
 							);
 						});
 					}
-					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded recipe data", 2000);
+					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded recipe data", 3000);
 				} else {
                     console.log("Nothing returned");
 				}
@@ -452,9 +452,9 @@ $(document).ready(function () {
 				url: "/save_ingredient_nutrition",
 				success: function (result, status, xhr) {
 					if (action == "save") {
-						Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved nutritional data", 2000);
+						Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved nutritional data", 3000);
 					} else if (action == "update") {
-						Materialize.toast("<i class='material-icons positive'>cloud_done</i>Updated nutritional data", 2000);
+						Materialize.toast("<i class='material-icons positive'>cloud_done</i>Updated nutritional data", 3000);
                     }
 					$("#ingredient_name").val(""); //clear ingredient name
 					clearIngredientInputs();
@@ -467,7 +467,7 @@ $(document).ready(function () {
 				},
 			});
 		} else {
-			Materialize.toast("<i class='material-icons neutral'>warning</i>All fields must be filled out", 2000);
+			Materialize.toast("<i class='material-icons neutral'>warning</i>All fields must be filled out", 3000);
 			$(window).scrollTop(0); //scroll window to top
 		}
 	}
@@ -480,7 +480,7 @@ $(document).ready(function () {
             clearIngredientInputs();
             $(window).scrollTop(0); //scroll window to top
 		} else {
-            Materialize.toast("<i class='material-icons neutral'>warning</i>Ingredient doesn't exist", 2000);
+            Materialize.toast("<i class='material-icons neutral'>warning</i>Ingredient doesn't exist", 3000);
             $(window).scrollTop(0); //scroll window to top
         }
         
@@ -495,7 +495,7 @@ $(document).ready(function () {
             updateRecipeStatus();
             $(window).scrollTop(0); //scroll window to top
         } else {
-            Materialize.toast("<i class='material-icons neutral'>warning</i>Recipe doesn't exist", 2000);
+            Materialize.toast("<i class='material-icons neutral'>warning</i>Recipe doesn't exist", 3000);
             $(window).scrollTop(0); //scroll window to top
         }
     });
@@ -514,10 +514,10 @@ $(document).ready(function () {
 			success: function (result, status, xhr) {
                 if (result == 'deleted recipe') {
                     if (matchedRecipe) {
-                        Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 2000);
+                        Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 3000);
                         getNames("/get_names", "recipe", "name");
                     } else {
-                        Materialize.toast("<i class='material-icons neutral'>warning</i>Recipe doesn't exist", 2000);
+                        Materialize.toast("<i class='material-icons neutral'>warning</i>Recipe doesn't exist", 3000);
                     }
                 }
 			},
@@ -532,7 +532,7 @@ $(document).ready(function () {
             addStepToRecipe(step_number, step_description);
             updateRecipeStatus();
 		} else {
-			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out all step fields", 2000);
+			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out all step fields", 3000);
 		}
 	});
 	function addStepToRecipe(step_number, step_description) {
@@ -554,7 +554,7 @@ $(document).ready(function () {
 		$("#step_number").val(parseInt(step_number) + 1); //increment step number
 		$("#step_description").val(""); //reset step description
 		$("#step_description").focus(); //position cursor for next step description
-		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to step list", 2000);
+		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to step list", 3000);
 	}
 	$("#add-to-meal-plan").on("click", function (event) {
 		event.preventDefault();
@@ -574,7 +574,7 @@ $(document).ready(function () {
 				Materialize.toast($toastContent, 10000);
 			}
 		} else {
-			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out recipe name", 2000);
+			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out recipe name", 3000);
 		}
     });
     function updateHomeStatus() {
@@ -644,7 +644,7 @@ $(document).ready(function () {
             </li>`
         );
 		$("#recipe_name").val(""); //reset recipe name
-		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to meal list", 2000);
+		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to meal list", 3000);
 	}
     function updateRecipeNutritionValues(recipe_name) {
         console.log("Inside updateRecipeNutritionValues", recipe_name);
@@ -912,7 +912,7 @@ $(document).ready(function () {
 				Materialize.toast($toastContent, 10000);
 			}
 		} else {
-			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out all ingredient fields", 2000);
+			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out all ingredient fields", 3000);
 		}
 	});
 
@@ -940,7 +940,7 @@ $(document).ready(function () {
 		$("#ingredient_units").val("gram (g)"); //reset ingredient unit
 		$("#ingredient_units").material_select(); //needs to be re-initialized
 		$("#ingredient_name").focus(); //position cursor for next ingredient entry
-		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to ingredient list", 2000);
+		Materialize.toast("<i class='material-icons positive'>check_circle</i>Added to ingredient list", 3000);
 	}
 	$("#ingredient_name").on("keyup", function (event) {
 		event.preventDefault();
@@ -994,7 +994,7 @@ $(document).ready(function () {
 					$("#iron_amount").val(result[0].iron);
                     $("#zinc_amount").val(result[0].zinc);
                     Materialize.updateTextFields();
-					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 2000);
+					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 3000);
 				}
 			},
 			error: function (xhr, status, error) {
