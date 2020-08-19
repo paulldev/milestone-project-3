@@ -10,18 +10,18 @@
 <div class="row">
     <div class="col s12">
         <h3>Enter ingredient details</h3>
-        <form id="ingredient_details" autocomplete="off" class="col s12">
+        <form id="ingredient_details" class="col s12" autocomplete="off">
             <div class="row">
-                <div class="input-field col s6">
+                <div class="input-field col s12 m6">
                     <i class="material-icons prefix">search</i>
                     <input required id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete">
                     <label for="ingredient_name">Ingredient Name</label>
                 </div>
-                <div class="input-field col s3">
+                <div class="input-field col s6 m2">
                     <input required id="ingredient_amount" name="ingredient_amount" type="number" step="1" class="validate">
                     <label for="ingredient_amount">Amount</label>
                 </div>
-                <div class="input-field col s3">
+                <div class="input-field col s6 m4">
                     <select name="ingredient_unit" id="ingredient_unit">
                         <optgroup label="Weight">
                             <option value="gram (g)" selected>gram (g)</option>
