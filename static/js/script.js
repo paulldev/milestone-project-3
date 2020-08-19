@@ -19,7 +19,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: url,
-			success: function (result, status, xhr) {
+			success: function (result) {
 				//console.log("4. [success:] successful ajax call", result); //this is a js object
 				if (result) {
 					//found in database
@@ -37,10 +37,10 @@ $(document).ready(function () {
 					console.log("5. Couldn't find");
 				}
 			},
-			error: function (xhr, status, error) {
+			error: function (error) {
 				console.log("Database error", error);
 			},
-			complete: function (result) {
+			complete: function () {
 				console.log("AJAX call complete, check NAMES ", ingredients);
 			},
 		});
@@ -53,7 +53,7 @@ $(document).ready(function () {
 		$("input.autocomplete").autocomplete({
 			data: ingredients,
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-			onAutocomplete: function (val) {
+			onAutocomplete: function () {
 				// Callback function when value is autcompleted.
 				matchedIngredient = true;
 				getIngredientNutrition();
@@ -68,7 +68,7 @@ $(document).ready(function () {
 		$("input#ingredient_name").autocomplete({
 			data: ingredients,
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-			onAutocomplete: function (val) {
+			onAutocomplete: function () {
 				// Callback function when value is autcompleted.
 				matchedIngredient = true;
 				//getredientNutrition(); //??? maybe not needed
@@ -79,7 +79,7 @@ $(document).ready(function () {
 		$("input#recipe_name").autocomplete({
 			data: recipes,
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-			onAutocomplete: function (val) {
+			onAutocomplete: function () {
                 // Callback function when value is autcompleted.
 				matchedRecipe = true;
 				clearRecipeInputs();
@@ -100,7 +100,7 @@ $(document).ready(function () {
 		$("input#recipe_name").autocomplete({
 			data: recipes,
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
-			onAutocomplete: function (val) {
+			onAutocomplete: function () {
 				// Callback function when value is autcompleted.
 				matchedRecipe = true;
 				getRecipeData();
@@ -124,7 +124,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/delete_item",
-			success: function (result, status, xhr) {
+			success: function () {
 				if (table == "ingredient") {
 					Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted ingredient", 3000);
     				getNames("/get_names", "ingredient", "name");
@@ -192,7 +192,7 @@ $(document).ready(function () {
 				type: "POST",
 				dataType: "json",
 				url: "/save_recipe",
-				success: function (result, status, xhr) {
+				success: function (result) {
                     if (result == 'saved recipe') {
                         if (action == "save") {
                             Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved recipe", 3000);
@@ -205,10 +205,10 @@ $(document).ready(function () {
                         updateRecipeStatus();
                     }
 				},
-				error: function (xhr, status, error) {
+				error: function (error) {
 					console.log("Database error", error);
 				},
-      			complete: function (result) {
+      			complete: function () {
                     getNames("/get_names", "recipe", "name");
                     updateRecipeNutritionValues(recipe.recipe_name);//update nutrition data for this recipe
 	          	},
@@ -216,71 +216,6 @@ $(document).ready(function () {
 		} else {
 			Materialize.toast("<i class='material-icons neutral'>warning</i>All fields must be filled out", 3000);
 			$(window).scrollTop(0); //scroll window to top
-		}
-	}
-	function saveRecipeStatus() {//xnow probably delete
-		event.preventDefault();
-		var isFormValid = true;
-
-		let recipe = {
-			recipe_name: $("#recipe_name").val(),
-			servings: parseInt($("#servings").val()),
-			ingredient_name_input: $("#ingredient_name").val(),
-			ingredient_amount_input: $("#ingredient_amount").val(),
-			ingredient_name: [],
-			ingredient_amount: [],
-			ingredient_unit: [],
-			step_number_input: $("#step_number").val(),
-			step_description_input: $("#step_description").val(),
-			step_number: [],
-			step_description: [],
-		};
-
-		$("#ingredient-list li").each(function () {
-			recipe.ingredient_name.push(
-				$(this).find("span").text().trim()
-			);
-			recipe.ingredient_amount.push(
-				parseInt($(this).find("div:eq(1)").text().trim())
-			);
-			recipe.ingredient_unit.push(
-				$(this).find("div:eq(2)").text().trim()
-			);
-		});
-		$("#step-list li").each(function () {
-			recipe.step_number.push(
-				parseInt($(this).find("div:eq(0)").text().trim())
-			);
-			recipe.step_description.push(
-				$(this).find("div:eq(1)").text().trim()
-			);
-		});
-
-		if (
-			$("#recipe_name").val().length == 0 ||
-			$("#servings").val().length == 0
-		) {
-			isFormValid = false;
-		} else {
-		}
-
-		if (isFormValid) {
-			//checks if required inputs have a value
-			$.ajax({
-				//create an ajax request to save_recipe
-				data: JSON.stringify(recipe), //data that gets sent to python
-				type: "POST",
-				dataType: "json",
-				url: "/save_recipe_status",
-				success: function (result, status, xhr) {
-				},
-				error: function (xhr, status, error) {
-					console.log("Database error", error);
-				},
-      			complete: function (result) {
-	          	},
-			});
-		} else {
 		}
 	}
 	function clearIngredientInputs() {
@@ -322,7 +257,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/recipe_exists",
-			success: function (result, status, xhr) {
+			success: function (result) {
 				if (result == 'match') {
 					//found recipe in database
 					matchedRecipe = true;
@@ -332,8 +267,8 @@ $(document).ready(function () {
 					clearRecipeInputs();
 				}
 			},
-			error: function (xhr, status, error) {
-				console.log("Database error");
+			error: function (error) {
+				console.log("Database error", error);
 			},
 		});
 	});
@@ -351,7 +286,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/get_recipe_data",
-			success: function (result, status, xhr) {
+			success: function (result) {
 				if (result) {
                     $("#servings").val(result[0].servings);
                     Materialize.updateTextFields();
@@ -406,8 +341,8 @@ $(document).ready(function () {
                     console.log("Nothing returned");
 				}
 			},
-			error: function (xhr, status, error) {
-				console.log("Database error");
+			error: function (error) {
+				console.log("Database error", error);
 			},
 		});
 	}
@@ -450,7 +385,7 @@ $(document).ready(function () {
 				type: "POST",
 				dataType: "json",
 				url: "/save_ingredient_nutrition",
-				success: function (result, status, xhr) {
+				success: function () {
 					if (action == "save") {
 						Materialize.toast("<i class='material-icons positive'>cloud_done</i>Saved nutritional data", 3000);
 					} else if (action == "update") {
@@ -462,7 +397,7 @@ $(document).ready(function () {
 					$("#ingredient_name").focus(); //position cursor for next ingredient entry
                     getNames("/get_names", "ingredient", "name");
 				},
-				error: function (xhr, status, error) {
+				error: function (error) {
 					console.log("Database error", error);
 				},
 			});
@@ -511,7 +446,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/delete_recipe",
-			success: function (result, status, xhr) {
+			success: function (result) {
                 if (result == 'deleted recipe') {
                     if (matchedRecipe) {
                         Materialize.toast("<i class='material-icons negative'>delete_forever</i>Deleted recipe", 3000);
@@ -615,12 +550,12 @@ $(document).ready(function () {
 				type: "POST",
 				dataType: "json",
 				url: "/update_home_status",
-				success: function (result, status, xhr) {
+				success: function () {
 				},
-				error: function (xhr, status, error) {
+				error: function (error) {
 					console.log("Database error", error);
 				},
-      			complete: function (result) {
+      			complete: function () {
 	          	},
 			});
 		} else {
@@ -658,7 +593,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/update_recipe_nutrition_values",
-			success: function (result, status, xhr) {
+			success: function () {
             },
 		});
     }
@@ -673,7 +608,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/update_nutrition_summary",
-			success: function (result, status, xhr) {
+			success: function (result) {
                 if (result) {//xyz
                     console.log(">>>>> Process recipe...", recipe_name);
                     rda = parseInt($("#energy_rda").text());
@@ -779,7 +714,7 @@ $(document).ready(function () {
             },
 		});
     }
-	$("#meals-list").on("click", ".delete_item", function (event) {
+	$("#meals-list").on("click", ".delete_item", function () {
         console.log("**********************RECIPE NAME: ", $(this).parent().parent().find('span').text());
 //   		$("#meals-list li").each(function () {
 
@@ -790,20 +725,20 @@ $(document).ready(function () {
             console.log('<<recipe_name>>', recipe_name);
             updateNutritionSummary(recipe_name, 'subtract');
 //        });
-        $(this).parent().parent().fadeOut('slow', function (event) {
+        $(this).parent().parent().fadeOut('slow', function () {
             $(this).remove();
             updateHomeStatus();//xyz
             //updateNutritionSummary();
         });
     });
-	$("#ingredient-list").on("click", ".delete_item", function (event) {
-        $(this).parent().parent().fadeOut('slow', function (event) {
+	$("#ingredient-list").on("click", ".delete_item", function () {
+        $(this).parent().parent().fadeOut('slow', function () {
             $(this).remove();
             updateRecipeStatus();
         });
     });
-	$("#step-list").on("click", ".delete_item", function (event) {
-        $(this).parent().parent().fadeOut('slow', function (event) {
+	$("#step-list").on("click", ".delete_item", function () {
+        $(this).parent().parent().fadeOut('slow', function () {
             $(this).remove();
             updateRecipeStatus();
         });
@@ -881,12 +816,12 @@ $(document).ready(function () {
 				type: "POST",
 				dataType: "json",
 				url: "/update_recipe_status",
-				success: function (result, status, xhr) {
+				success: function () {
 				},
-				error: function (xhr, status, error) {
+				error: function (error) {
 					console.log("Database error", error);
 				},
-      			complete: function (result) {
+      			complete: function () {
 	          	},
 			});
 		} else {
@@ -954,7 +889,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/ingredient_exists",
-			success: function (result, status, xhr) {
+			success: function (result) {
 				if (result == 'match') {
 					//found ingredient in database
                     matchedIngredient = true;
@@ -964,8 +899,8 @@ $(document).ready(function () {
 					clearIngredientInputs();
 				}
 			},
-			error: function (xhr, status, error) {
-				console.log("Database error");
+			error: function (error) {
+				console.log("Database error", error);
 			},
 		});
 	});
@@ -980,7 +915,7 @@ $(document).ready(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/get_ingredient_nutrition",
-			success: function (result, status, xhr) {
+			success: function (result) {
 				if (result) {
                     $("#ingredient_amount").val(result[0].ingredient_amount);
 					$("#ingredient_unit").val(result[0].ingredient_unit);
@@ -997,8 +932,8 @@ $(document).ready(function () {
 					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 3000);
 				}
 			},
-			error: function (xhr, status, error) {
-				console.log("Database error");
+			error: function (error) {
+				console.log("Database error", error);
 			},
 		});
 	}
