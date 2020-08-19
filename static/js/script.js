@@ -354,6 +354,7 @@ $(document).ready(function () {
 			success: function (result, status, xhr) {
 				if (result) {
                     $("#servings").val(result[0].servings);
+                    Materialize.updateTextFields();
                     //$("#servings").focus();//xxx bug fix???
 					//get ingredients
 					if ($("#ingredient-list li").length == 0) {//if zero ingredients in list (stops ingredients being added every keystroke)
