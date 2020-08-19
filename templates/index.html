@@ -16,7 +16,7 @@
         <h3>Add a meal</h3>
         <form class="col s12" autocomplete="off">
             <div class="row">
-                <div class="input-field col s5">
+                <div class="input-field col s12 m6">
                     <i class="material-icons prefix">search</i>
                     <input
                         id="recipe_name"
@@ -27,7 +27,7 @@
                     />
                     <label for="recipe_name">Recipe Name</label>
                 </div>
-                <div class="input-field col s4">
+                <div class="input-field col s12 m3">
                     <select name="meal_type" id="meal_type">
                         {% for record in meal_type %}
                         <option value="">{{record.mealName}}</option>
@@ -35,7 +35,7 @@
                     </select>
                     <label>Meal type</label>
                 </div>
-                <div class="col s3">
+                <div class="col s12 m3">
                     <button
                         id="add-to-meal-plan"
                         class="waves-effect waves-light right btn"
@@ -55,10 +55,10 @@
                                 <i class="material-icons">navigate_next</i>
                                 <span>{{record.recipe_name}}</span>
                             </div>
-                            <div class="col s2 valign-wrapper">
+                            <div class="col s4 valign-wrapper">
                                 {{record.meal_type}}
                             </div>
-                            <div class="col s3 valign-wrapper">
+                            <div class="col s2 valign-wrapper">
                                 <i class="material-icons delete_item">delete_forever</i>
                             </div>
                         </li>
