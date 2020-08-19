@@ -5,8 +5,8 @@ $(document).ready(function () {
 	let matchedRecipe = false;
 	$(".button-collapse").sideNav();
 	$("select").material_select();
-	//gns
-	function getNames(url, table, column) {
+
+    function getNames(url, table, column) {
 		//get names from the database using an ajax call
 		$.ajax({
 			//create an ajax request to get_names()
@@ -981,7 +981,7 @@ $(document).ready(function () {
 			url: "/get_ingredient_nutrition",
 			success: function (result, status, xhr) {
 				if (result) {
-					$("#ingredient_amount").val(result[0].ingredient_amount);
+                    $("#ingredient_amount").val(result[0].ingredient_amount);
 					$("#ingredient_unit").val(result[0].ingredient_unit);
 					//https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
 					$("#ingredient_unit").material_select(); //needs to be re-initialized
@@ -991,7 +991,8 @@ $(document).ready(function () {
 					$("#protein_amount").val(result[0].protein);
 					$("#calcium_amount").val(result[0].calcium);
 					$("#iron_amount").val(result[0].iron);
-					$("#zinc_amount").val(result[0].zinc);
+                    $("#zinc_amount").val(result[0].zinc);
+                    Materialize.updateTextFields();
 					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 2000);
 				}
 			},
