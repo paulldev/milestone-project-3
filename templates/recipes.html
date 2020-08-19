@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 <div class="row">
     <div class="col s12">
@@ -22,7 +22,7 @@
                     <div class="input-field col s12 m4">
                         <i class="material-icons prefix">people</i>
                         <input id="servings" name="servings" type="number" class="validate"
-                        value={% if servings %}{{servings}}{% endif %}>
+                        value="{% if servings %}{{servings}}{% endif %}">
                         <label for="servings">Servings</label>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="input-field col s6 m2 l2">
                         <input id="ingredient_amount" type="number" step="1" class="validate"
-                        value={% if ingredient_amount %}{{ingredient_amount}}{% endif %}>
+                        value="{% if ingredient_amount %}{{ingredient_amount}}{% endif %}">
                         <label for="ingredient_amount">Amount</label>
                     </div>
                     <div class="input-field col s6 m4 l4">
@@ -48,6 +48,7 @@
                                 <option value="teaspoon (tsp.)">teaspoon (tsp.)</option>
                                 <option value="tablespoon (tbsp.)">tablespoon (tbsp.)</option>
                                 <option value="millilitre (ml)">millilitre (ml)</option>
+                            </optgroup>
                         </select>
                         <label for="ingredient_units">Units</label>
                     </div>
@@ -55,22 +56,22 @@
                         <button id="add-ingredient-to-recipe" class="waves-effect waves-light right btn" type="submit" action="add-ingredient"><i class="material-icons right">playlist_add</i>Add</button>
                     </div>
                 </div>
-                <div class='row'>
-                    <div class='col s12'>
+                <div class="row">
+                    <div class="col s12">
                         <ul id="ingredient-list">
                             {% for record in ingredient %}
-                                <li class='row list-item'>
-                                    <div class='col s6 valign-wrapper'>
-                                        <i class='material-icons'>navigate_next</i><span>{{record.ingredient_name}}</span>
+                                <li class="row list-item">
+                                    <div class="col s6 valign-wrapper">
+                                        <i class="material-icons">navigate_next</i><span>{{record.ingredient_name}}</span>
                                     </div>
-                                    <div class='col s1 valign-wrapper'>
+                                    <div class="col s1 valign-wrapper">
                                         {{record.ingredient_amount}}
                                     </div>
-                                    <div class='col s4 valign-wrapper'>
+                                    <div class="col s4 valign-wrapper">
                                         {{record.ingredient_unit}}
                                     </div>
-                                    <div class='col s1 valign-wrapper'>
-                                        <i class='material-icons delete_item'>delete_forever</i>
+                                    <div class="col s1 valign-wrapper">
+                                        <i class="material-icons delete_item">delete_forever</i>
                                     </div>
                                 </li>
                             {% endfor %}
@@ -95,15 +96,15 @@
                 </div>
                 <ul id="step-list">
                     {% for record in step %}
-                        <li class='row list-item'>
-                            <div class='col s2 valign-wrapper'>
+                        <li class="row list-item">
+                            <div class="col s2 valign-wrapper">
                                 {{record.step_number}}
                             </div>
-                            <div class='col s9 valign-wrapper'>
+                            <div class="col s9 valign-wrapper">
                                 {{record.step_description}}
                             </div>
-                            <div class='col s1 valign-wrapper'>
-                                <i class='material-icons delete_item'>delete_forever</i>
+                            <div class="col s1 valign-wrapper">
+                                <i class="material-icons delete_item">delete_forever</i>
                             </div>
                         </li>
                     {% endfor %}
