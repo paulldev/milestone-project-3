@@ -371,10 +371,10 @@ $(document).ready(function () {
                                 <div class='col s1 valign-wrapper'>
                                     ${ingredient_amount}
                                 </div>
-                                <div class='col s2 valign-wrapper'>
+                                <div class='col s4 valign-wrapper'>
                                     ${ingredient_unit}
                                 </div>
-                                <div class='col s3 valign-wrapper'>
+                                <div class='col s1 valign-wrapper'>
                                     <i class='material-icons delete_item'>delete_forever</i>
                                 </div>
                             </li>`
@@ -391,10 +391,10 @@ $(document).ready(function () {
                                     <div class='col s2 valign-wrapper'>
                                         ${step_number}
                                     </div>
-                                    <div class='col s7 valign-wrapper'>
+                                    <div class='col s9 valign-wrapper'>
                                         ${step_description}
                                     </div>
-                                        <div class='col s3 valign-wrapper'>
+                                        <div class='col s1 valign-wrapper'>
                                         <i class='material-icons'>delete_forever</i>
                                     </div>
                                 </li>`
@@ -543,10 +543,10 @@ $(document).ready(function () {
                   <div class='col s2 valign-wrapper'>
                       ${step_number}
                   </div>
-                  <div class='col s7 valign-wrapper'>
+                  <div class='col s9 valign-wrapper'>
                       ${step_description}
                   </div>
-                      <div class='col s3 valign-wrapper'>
+                      <div class='col s1 valign-wrapper'>
                       <i class='material-icons delete_item'>delete_forever</i>
                   </div>
               </li>`
@@ -635,10 +635,10 @@ $(document).ready(function () {
                 <div class='col s6 valign-wrapper'>
                     <i class='material-icons'>navigate_next</i><span>${recipe_name}</span>
                 </div>
-                <div class='col s2 valign-wrapper'>
+                <div class='col s4 valign-wrapper'>
                     ${meal_type}
                 </div>
-                <div class='col s3 valign-wrapper'>
+                <div class='col s2 valign-wrapper'>
                     <i class='material-icons delete_item'>delete_forever</i>
                 </div>
             </li>`
@@ -927,10 +927,10 @@ $(document).ready(function () {
                 <div class='col s1 valign-wrapper'>
                     ${amount}
                 </div>
-                <div class='col s2 valign-wrapper'>
+                <div class='col s4 valign-wrapper'>
                     ${unit}
                 </div>
-                <div class='col s3 valign-wrapper'>
+                <div class='col s1 valign-wrapper'>
                     <i class='material-icons delete_item'>delete_forever</i>
                 </div>
             </li>`
