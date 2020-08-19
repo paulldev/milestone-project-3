@@ -1,88 +1,134 @@
-{% extends 'base.html' %}
-{% block content %}
-<h3>Daily Meal Plan</h3>
-<p>Pick recipes for each meal. Try to achieve your nutritional goals.</p>
-<div class="col s12">
-    <a class="waves-effect waves-light right btn"><i class="material-icons right">help</i>Quickstart guide</a>
-</div>
-<h3>Add a meal</h3>
+{% extends 'base.html' %} {% block content %}
 <div class="row">
-    <form class="col s12" autocomplete="off">
-        <div class="row">
-            <div class="input-field col s5">
-                <i class="material-icons prefix">search</i>
-                <input id="recipe_name" name="recipe_name" type="text" class="validate autocomplete"
-                value='{% if recipe_name %}{{recipe_name}}{% endif %}'>
-                <label for="recipe_name">Recipe Name</label>
-            </div>
-            <div class="input-field col s4">
-                <select name="meal_type" id="meal_type">
-                    {% for record in meal_type %}
-                        <option value="">{{record.mealName}}</option>
-                    {% endfor %}
-                </select>
-                <label>Meal type</label>
-            </div>
-            <div class="col s3">
-                <button id="add-to-meal-plan" class="waves-effect waves-light right btn" type="submit" action="add-to-meal-plan"><i class="material-icons right">playlist_add</i>Add</button>
-            </div>
-        </div>
-        <ul id="meals-list">
-            {% for record in meal_list %}
-                <li class='row list-item'>
-                    <div class='col s6 valign-wrapper'>
-                        <i class='material-icons'>navigate_next</i>
-                        <span>{{record.recipe_name}}</span>
-                    </div>
-                    <div class='col s2 valign-wrapper'>
-                        {{record.meal_type}}
-                    </div>
-                    <div class='col s3 valign-wrapper'>
-                        <i class='material-icons delete_item'>delete_forever</i>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </form>
-</div>
-<div id="nutrition-summary" class="row">
     <div class="col s12">
-        <h4>Nutritional summary</h4>
-    </div>
-    <div id="energy_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Energy - <span id="energy">0</span> / <span id="energy_rda">2314</span> kcal</div>
+        <h3>Daily Meal Plan</h3>
+        <p>Pick recipes for each meal. Try to achieve your nutritional goals.</p>
+        <div class="col s12">
+            <a class="waves-effect waves-light right btn"
+                ><i class="material-icons right">help</i>Quickstart guide</a
+            >
         </div>
     </div>
-    <div id="carbohydrate_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Carbohydrate - <span id="carbohydrate">0</span> / <span id="carbohydrate_rda">269</span> g</div>
-        </div>
+</div>
+<div class="divider"></div>
+<div class="row">
+    <div class="col s12">
+        <h3>Add a meal</h3>
+        <form class="col s12" autocomplete="off">
+            <div class="row">
+                <div class="input-field col s5">
+                    <i class="material-icons prefix">search</i>
+                    <input
+                        id="recipe_name"
+                        name="recipe_name"
+                        type="text"
+                        class="validate autocomplete"
+                        value="{% if recipe_name %}{{recipe_name}}{% endif %}"
+                    />
+                    <label for="recipe_name">Recipe Name</label>
+                </div>
+                <div class="input-field col s4">
+                    <select name="meal_type" id="meal_type">
+                        {% for record in meal_type %}
+                        <option value="">{{record.mealName}}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Meal type</label>
+                </div>
+                <div class="col s3">
+                    <button
+                        id="add-to-meal-plan"
+                        class="waves-effect waves-light right btn"
+                        type="submit"
+                        action="add-to-meal-plan"
+                    >
+                        <i class="material-icons right">playlist_add</i>Add
+                    </button>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col s12'>
+                    <ul id="meals-list">
+                        {% for record in meal_list %}
+                        <li class="row list-item">
+                            <div class="col s6 valign-wrapper">
+                                <i class="material-icons">navigate_next</i>
+                                <span>{{record.recipe_name}}</span>
+                            </div>
+                            <div class="col s2 valign-wrapper">
+                                {{record.meal_type}}
+                            </div>
+                            <div class="col s3 valign-wrapper">
+                                <i class="material-icons delete_item">delete_forever</i>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </form>
     </div>
-    <div id="fats_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Fats - <span id="fats">0</span> / <span id="fats_rda">90</span> g</div>
-        </div>
-    </div>
-    <div id="protein_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Protein - <span id="protein">0</span> / <span id="protein_rda">145</span> g</div>
-        </div>
-    </div>
-    <div id="calcium_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Calcium - <span id="calcium">0</span> / <span id="calcium_rda">1000</span> mg</div>
-        </div>
-    </div>
-    <div id="iron_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Iron - <span id="iron">0</span> / <span id="iron_rda">8</span> mg</div>
-        </div>
-    </div>
-    <div id="zinc_bar" class="col s12">
-        <div class="progress">
-            <div class="determinate" style="width: 0%">Zinc - <span id="zinc">0</span> / <span id="zinc_rda">11</span> mg</div>
-        </div>
-    </div>
+</div>
+<div class="divider"></div>
+<div class="row">
+	<div class="col s12">
+		<h4>Nutritional summary</h4>
+	</div>
+	<div id="energy_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Energy - <span id="energy">0</span> /
+				<span id="energy_rda">2314</span> kcal
+			</div>
+		</div>
+	</div>
+	<div id="carbohydrate_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Carbohydrate - <span id="carbohydrate">0</span> /
+				<span id="carbohydrate_rda">269</span> g
+			</div>
+		</div>
+	</div>
+	<div id="fats_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Fats - <span id="fats">0</span> /
+				<span id="fats_rda">90</span> g
+			</div>
+		</div>
+	</div>
+	<div id="protein_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Protein - <span id="protein">0</span> /
+				<span id="protein_rda">145</span> g
+			</div>
+		</div>
+	</div>
+	<div id="calcium_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Calcium - <span id="calcium">0</span> /
+				<span id="calcium_rda">1000</span> mg
+			</div>
+		</div>
+	</div>
+	<div id="iron_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Iron - <span id="iron">0</span> /
+				<span id="iron_rda">8</span> mg
+			</div>
+		</div>
+	</div>
+	<div id="zinc_bar" class="col s12">
+		<div class="progress">
+			<div class="determinate" style="width: 0%;">
+				Zinc - <span id="zinc">0</span> /
+				<span id="zinc_rda">11</span> mg
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
