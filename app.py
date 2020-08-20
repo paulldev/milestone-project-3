@@ -108,9 +108,14 @@ def recipes():
     return render_template("recipes.html", name=name, recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description, ingredient=ingredient, step=step)
 
 
-@app.route('/ingredients')
+@app.route('/ingredients', methods=['POST', 'GET'])
 def ingredients():
-    return render_template("ingredients.html")
+    if request.form:
+        name = request.form['ingredient_name']
+        print(f"request.form: {request.form['ingredient_name']}")
+    else:
+        name = ''
+    return render_template("ingredients.html", name=name)
 
 
 @app.route('/ingredient_exists', methods=['POST'])
