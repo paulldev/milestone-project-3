@@ -501,16 +501,35 @@ $(document).ready(function () {
                 updateNutritionSummary(recipe_name, 'add');//works
                 updateHomeStatus();//works
 			} else {
-				let $toastContent = $("<i class='material-icons neutral'>warning</i><span>Recipe not found</span>").add(
+/*				let $toastContent = $("<i class='material-icons neutral'>warning</i><span>Recipe not found</span>").add(
 					$(
-						'<button class="btn-flat toast-action">CREATE RECIPE</button>'
+						'<button class="btn-flat toast-action recipe-toast">CREATE RECIPE</button>'
 					)
 				);
-				Materialize.toast($toastContent, 10000);
+                Materialize.toast($toastContent, 10000);
+*/
+                Materialize.toast(`<i class='material-icons neutral'>warning</i><span>Recipe not found</span><button class="btn-flat toast-action recipe-toast">CREATE RECIPE</button>`, 10000);
 			}
 		} else {
 			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out recipe name", 3000);
 		}
+    });
+	$(document).on("click", ".recipe-toast", function (event) {
+        console.log("****recipe-toast: ", $("#recipe_name").val());
+		$.ajax({
+			//create an ajax request to update_recipe_nutrition_values
+			data: {
+				//data that gets sent to python
+                name: $("#recipe_name").val(),
+                path: "recipe"
+			},
+    		type: "POST",
+			dataType: "json",
+			url: "/toast_create",
+			success: function (result) {
+                console.log("RESULT: ", result);
+            },
+		});
     });
     function updateHomeStatus() {
         //console.log("==> starting updateHomeStatus...");
