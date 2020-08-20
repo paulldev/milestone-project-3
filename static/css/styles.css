@@ -1,5 +1,8 @@
+body {
+    background-color: #e0f5b9;
+    
 /* Materialize */
-.nav-wrapper {
+}.nav-wrapper {
     background-color: #2ECC71;
 }
 .progress {
@@ -14,23 +17,39 @@
 	text-align: right;
 	white-space: nowrap;
 }
-/*<i class="material-icons check-mark">check_circle</i>*/
-.check-mark {
-    color: green;
+.positive {
+    color: #9cf196;
 }
-/*<i class="material-icons delete-item">delete_forever</i>*/
-.warning {
-    color: orange;
+.neutral {
+    color: #f5b971;
 }
-.delete-item {
-    color: red;
+.negative {
+    color: #fa877f;
 }
 .side-label {
 }
+/* list elements (meals, ingredients, steps) */
 #meals-list .list-item,
 #ingredient-list .list-item,
 #step-list .list-item {
-    background-color: rgb(234, 232, 236);
+
+    background-color: #f5ffcb;
     border-radius: 4px;
     margin-bottom: 4px;
+}
+#meals-list .list-item:hover,
+#ingredient-list .list-item:hover,
+#step-list .list-item:hover {
+    background-color: #c2dbc1;
+
+}
+.delete_item {
+    cursor: pointer;
+}
+.delete_item:hover {
+    color: #fa877f;
+}
+.nutrient {
+    background-color: #f5ffcb;
+
 }
