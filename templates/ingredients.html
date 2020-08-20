@@ -14,7 +14,12 @@
             <div class="row">
                 <div class="input-field col s12 m6">
                     <i class="material-icons prefix">search</i>
-                    <input required id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete">
+                    <input required id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete"
+                        {% if name %}
+                            value="{{name}}"
+                        {% else %}
+                            value=""
+                        {% endif %}>
                     <label for="ingredient_name">Ingredient Name</label>
                 </div>
                 <div class="input-field col s6 m2">
