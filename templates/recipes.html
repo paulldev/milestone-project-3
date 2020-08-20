@@ -26,7 +26,9 @@
                     <div class="input-field col s12 m4">
                         <i class="material-icons prefix">people</i>
                         <input id="servings" name="servings" type="number" class="validate"
-                        {% if servings %}
+                        {% if name %}
+                        value=""
+                        {% elif servings %}
                         value="{{servings}}"
                         {% endif %}>
                         <label for="servings">Servings</label>
@@ -37,14 +39,18 @@
                     <div class="input-field col s12 m6 l6">
                         <i class="material-icons prefix">search</i>
                         <input id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete"
-                        {% if ingredient_name %}
+                        {% if name %}
+                        value=""
+                        {% elif ingredient_name %}
                         value="{{ ingredient_name }}"
                         {% endif %}>
                         <label for="ingredient_name">Ingredient name</label>
                     </div>
                     <div class="input-field col s6 m2 l2">
                         <input id="ingredient_amount" type="number" step="1" class="validate"
-                        {% if ingredient_amount %}
+                        {% if name %}
+                        value=""
+                        {% elif ingredient_amount %}
                         value="{{ingredient_amount}}"
                         {% endif %}>
                         <label for="ingredient_amount">Amount</label>
@@ -69,22 +75,24 @@
                 <div class="row">
                     <div class="col s12">
                         <ul id="ingredient-list">
-                            {% for record in ingredient %}
-                                <li class="row list-item">
-                                    <div class="col s6 valign-wrapper">
-                                        <i class="material-icons">navigate_next</i><span>{{record.ingredient_name}}</span>
-                                    </div>
-                                    <div class="col s1 valign-wrapper">
-                                        {{record.ingredient_amount}}
-                                    </div>
-                                    <div class="col s4 valign-wrapper">
-                                        {{record.ingredient_unit}}
-                                    </div>
-                                    <div class="col s1 valign-wrapper">
-                                        <i class="material-icons delete_item">delete_forever</i>
-                                    </div>
-                                </li>
-                            {% endfor %}
+                            {% if not name %}
+                                {% for record in ingredient %}
+                                    <li class="row list-item">
+                                        <div class="col s6 valign-wrapper">
+                                            <i class="material-icons">navigate_next</i><span>{{record.ingredient_name}}</span>
+                                        </div>
+                                        <div class="col s1 valign-wrapper">
+                                            {{record.ingredient_amount}}
+                                        </div>
+                                        <div class="col s4 valign-wrapper">
+                                            {{record.ingredient_unit}}
+                                        </div>
+                                        <div class="col s1 valign-wrapper">
+                                            <i class="material-icons delete_item">delete_forever</i>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -109,19 +117,21 @@
                     </div>
                 </div>
                 <ul id="step-list">
-                    {% for record in step %}
-                        <li class="row list-item">
-                            <div class="col s2 valign-wrapper">
-                                {{record.step_number}}
-                            </div>
-                            <div class="col s9 valign-wrapper">
-                                {{record.step_description}}
-                            </div>
-                            <div class="col s1 valign-wrapper">
-                                <i class="material-icons delete_item">delete_forever</i>
-                            </div>
-                        </li>
-                    {% endfor %}
+                    {% if not name %}
+                        {% for record in step %}
+                            <li class="row list-item">
+                                <div class="col s2 valign-wrapper">
+                                    {{record.step_number}}
+                                </div>
+                                <div class="col s9 valign-wrapper">
+                                    {{record.step_description}}
+                                </div>
+                                <div class="col s1 valign-wrapper">
+                                    <i class="material-icons delete_item">delete_forever</i>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
                 </ul>
                 <div class="row">
                     <div class="col s12">
