@@ -835,12 +835,8 @@ $(document).ready(function () {
                 addIngredientToRecipe(value, amount, unit);
                 updateRecipeStatus();
 			} else {
-				let $toastContent = $("<i class='material-icons neutral'>warning</i><span>Ingredient not found</span>").add(
-					$(
-						'<button class="btn-flat toast-action">CREATE INGREDIENT</button>'
-					)
-				);
-				Materialize.toast($toastContent, 10000);
+                Materialize.toast(`<i class='material-icons neutral'>warning</i><span>Ingredient not found</span>
+                <form action="/ingredients" method="POST"><button class="btn-flat toast-action ingredient-toast" name="ingredient_name" value="${$("#ingredient_name").val()}">CREATE INGREDIENT</button></form>`, 10000);
 			}
 		} else {
 			Materialize.toast("<i class='material-icons neutral'>warning</i>Please fill out all ingredient fields", 3000);
