@@ -56,9 +56,13 @@ def index():
     return render_template("index.html", meal_type=meal_type, recipe_name=recipe_name, meal_list=meal_list)
 
 
-@app.route('/recipes')
+@app.route('/recipes', methods=['POST', 'GET'])
 def recipes():
-    print(f"OPENING RECIPES.HTML")
+    if request.form:
+        name = request.form['recipe_name']
+        print(f"request.form: {request.form['recipe_name']}")
+    else:
+        name = ''
     recipe_name = ''
     servings = ''
     ingredient_name = ''
@@ -101,24 +105,12 @@ def recipes():
             print(f"Steps: {step}")
     finally:
         connection.close()
-    return render_template("recipes.html", recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description, ingredient=ingredient, step=step)
+    return render_template("recipes.html", name=name, recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description, ingredient=ingredient, step=step)
 
 
 @app.route('/ingredients')
 def ingredients():
     return render_template("ingredients.html")
-
-
-@app.route('/toast_create', methods=['POST', 'GET'])
-def toast_create():
-    name = request.form['name']
-    path = request.form['path']
-    print(f"RECIPE NAME = {name}")
-    print(f"PATH = {path}")
-    print(url_for('recipes'))
-#    return jsonify("WORKED!")
-#    return render_template(url_for('recipes'), name=name, path=path)
-    return render_template("recipes.html", name=name, path=path)
 
 
 @app.route('/ingredient_exists', methods=['POST'])
