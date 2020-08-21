@@ -17,6 +17,12 @@ body {
 	text-align: right;
 	white-space: nowrap;
 }
+.side-nav li>a {
+    color: #ffffff;
+}
+.side-nav {
+    background-color: #2ECC71;
+}
 .positive {
     color: #9cf196;
 }
