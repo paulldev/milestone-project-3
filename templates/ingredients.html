@@ -6,152 +6,153 @@
         <p>Everything starts with the ingredients. That's where you'll find all those wonderful nutrients!</p>
     </div>
 </div>
-<div class="divider"></div>
 <div class="row">
-    <div class="col s12">
-        <h3>Enter ingredient details</h3>
-        <form id="ingredient_details" class="col s12" autocomplete="off">
-            <div class="row">
-                <div class="input-field col s12 m6">
-                    <i class="material-icons prefix">search</i>
-                    <input required id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete"
-                        {% if name %}
-                            value="{{name}}"
-                        {% else %}
-                            value=""
-                        {% endif %}>
-                    <label for="ingredient_name">Ingredient Name</label>
+    <div class="col s12 card" id="recipe-details-card">
+        <h3 class="col s12 card-title">Enter ingredient details</h3>
+        <div class="row">
+            <form id="ingredient_details" class="col s12" autocomplete="off">
+                <div class="row">
+                    <div class="input-field col s12 m6">
+                        <i class="material-icons prefix">search</i>
+                        <input required id="ingredient_name" name="ingredient_name" type="text" class="validate autocomplete"
+                            {% if name %}
+                                value="{{name}}"
+                            {% else %}
+                                value=""
+                            {% endif %}>
+                        <label for="ingredient_name">Ingredient Name</label>
+                    </div>
+                    <div class="input-field col s6 m2">
+                        <input required id="ingredient_amount" name="ingredient_amount" type="number" step="1" class="validate">
+                        <label for="ingredient_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m4">
+                        <select name="ingredient_unit" id="ingredient_unit">
+                            <optgroup label="Weight">
+                                <option value="gram (g)" selected>gram (g)</option>
+                            </optgroup>
+                            <optgroup label="Volume">
+                                <option value="teaspoon (tsp.)">teaspoon (tsp.)</option>
+                                <option value="tablespoon (tbsp.)">tablespoon (tbsp.)</option>
+                                <option value="millilitre (ml)">millilitre (ml)</option>
+                            </optgroup>
+                        </select>
+                        <label for="ingredient_unit">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m2">
-                    <input required id="ingredient_amount" name="ingredient_amount" type="number" step="1" class="validate">
-                    <label for="ingredient_amount">Amount</label>
+                <div class="nutrient row card">
+                    <div class="col s12 m6">
+                        <label for="energy_amount" class="side-label">Energy</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="energy_amount" name="energy_amount" type="number" step="1" class="validate">
+                        <label for="energy_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="energy_units" id="energy_units">
+                            <option value="kcal" selected>kcal (calorie)</option>
+                        </select>
+                        <label for="energy_units">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m4">
-                    <select name="ingredient_unit" id="ingredient_unit">
-                        <optgroup label="Weight">
-                            <option value="gram (g)" selected>gram (g)</option>
-                        </optgroup>
-                        <optgroup label="Volume">
-                            <option value="teaspoon (tsp.)">teaspoon (tsp.)</option>
-                            <option value="tablespoon (tbsp.)">tablespoon (tbsp.)</option>
-                            <option value="millilitre (ml)">millilitre (ml)</option>
-                        </optgroup>
-                    </select>
-                    <label for="ingredient_unit">Unit</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="carbohydrate_amount" class="side-label">Carbohydrates</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="carbohydrate_amount" name="carbohydrate_amount" type="number" step="1" class="validate">
+                        <label for="carbohydrate_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="carb_units" id="carb_units">
+                            <option value="gram" selected>gram (g)</option>
+                        </select>
+                        <label for="carb_units">Unit</label>
+                    </div>
                 </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="energy_amount" class="side-label">Energy</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="fats_amount" class="side-label">Fats</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="fats_amount" name="fats_amount" type="number" step="1" class="validate">
+                        <label for="fats_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="fat_units" id="fat_units">
+                            <option value="gram" selected>gram (g)</option>
+                        </select>
+                        <label for="fat_units">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m3">
-                    <input required id="energy_amount" name="energy_amount" type="number" step="1" class="validate">
-                    <label for="energy_amount">Amount</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="protein_amount" class="side-label">Protein</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="protein_amount" name="protein_amount" type="number" step="1" class="validate">
+                        <label for="protein_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="protein_units" id="protein_units">
+                            <option value="gram" selected>gram (g)</option>
+                        </select>
+                        <label for="protein_units">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="energy_units" id="energy_units">
-                        <option value="kcal" selected>kcal (calorie)</option>
-                    </select>
-                    <label for="energy_units">Unit</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="calcium_amount" class="side-label">Calcuim</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="calcium_amount" name="calcium_amount" type="number" step="1" class="validate">
+                        <label for="calcium_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="calcium_units" id="calcium_units">
+                            <option value="milligram" selected>milligram (mg)</option>
+                        </select>
+                        <label for="calcium_units">Unit</label>
+                    </div>
                 </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="carbohydrate_amount" class="side-label">Carbohydrates</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="iron_amount" class="side-label">Iron</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="iron_amount" name="iron_amount" type="number" step="1" class="validate">
+                        <label for="iron_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="iron_units" id="iron_units">
+                            <option value="milligram" selected>milligram (mg)</option>
+                        </select>
+                        <label for="iron_units">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m3">
-                    <input required id="carbohydrate_amount" name="carbohydrate_amount" type="number" step="1" class="validate">
-                    <label for="carbohydrate_amount">Amount</label>
+                <div class="row nutrient card">
+                    <div class="col s12 m6">
+                        <label for="zinc_amount" class="side-label">Zinc</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <input required id="zinc_amount" name="zinc_amount" type="number" step="1" class="validate">
+                        <label for="zinc_amount">Amount</label>
+                    </div>
+                    <div class="input-field col s6 m3">
+                        <select disabled name="zinc_units" id="zinc_units">
+                            <option value="milligram" selected>milligram (mg)</option>
+                        </select>
+                        <label for="zinc_units">Unit</label>
+                    </div>
                 </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="carb_units" id="carb_units">
-                        <option value="gram" selected>gram (g)</option>
-                    </select>
-                    <label for="carb_units">Unit</label>
+                <div class="row">
+                    <div class="col s12 save-buttons">
+                        <button id="save-nutrition-data" class="waves-effect waves-light right btn" type="submit" action="save"><i class="material-icons right">save</i>Save</button>
+                        <button id="delete-nutrition-data" class="waves-effect waves-light right btn" type="submit" action="delete"><i class="material-icons right">delete_forever</i>Delete</button>
+                    </div>
                 </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="fats_amount" class="side-label">Fats</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <input required id="fats_amount" name="fats_amount" type="number" step="1" class="validate">
-                    <label for="fats_amount">Amount</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="fat_units" id="fat_units">
-                        <option value="gram" selected>gram (g)</option>
-                    </select>
-                    <label for="fat_units">Unit</label>
-                </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="protein_amount" class="side-label">Protein</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <input required id="protein_amount" name="protein_amount" type="number" step="1" class="validate">
-                    <label for="protein_amount">Amount</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="protein_units" id="protein_units">
-                        <option value="gram" selected>gram (g)</option>
-                    </select>
-                    <label for="protein_units">Unit</label>
-                </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="calcium_amount" class="side-label">Calcuim</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <input required id="calcium_amount" name="calcium_amount" type="number" step="1" class="validate">
-                    <label for="calcium_amount">Amount</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="calcium_units" id="calcium_units">
-                        <option value="milligram" selected>milligram (mg)</option>
-                    </select>
-                    <label for="calcium_units">Unit</label>
-                </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="iron_amount" class="side-label">Iron</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <input required id="iron_amount" name="iron_amount" type="number" step="1" class="validate">
-                    <label for="iron_amount">Amount</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="iron_units" id="iron_units">
-                        <option value="milligram" selected>milligram (mg)</option>
-                    </select>
-                    <label for="iron_units">Unit</label>
-                </div>
-            </div>
-            <div class="row nutrient">
-                <div class="col s12 m6">
-                    <label for="zinc_amount" class="side-label">Zinc</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <input required id="zinc_amount" name="zinc_amount" type="number" step="1" class="validate">
-                    <label for="zinc_amount">Amount</label>
-                </div>
-                <div class="input-field col s6 m3">
-                    <select disabled name="zinc_units" id="zinc_units">
-                        <option value="milligram" selected>milligram (mg)</option>
-                    </select>
-                    <label for="zinc_units">Unit</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <button id="save-nutrition-data" class="waves-effect waves-light right btn" type="submit" action="save"><i class="material-icons right">save</i>Save</button>
-                    <button id="delete-nutrition-data" class="waves-effect waves-light right btn" type="submit" action="delete"><i class="material-icons right">delete_forever</i>Delete</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
