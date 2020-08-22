@@ -1,10 +1,20 @@
 body {
-    background-color: #e0f5b9;
-    
+    background-color: #aed581;
+/*    color: #ffffff;*/
+}
 /* Materialize */
-}.nav-wrapper {
+/* navbar */
+.nav-wrapper {
+    background-color: #33691e;
+}
+/* Side navbar */
+.side-nav li>a {
+    color: #ffffff;
+}
+.side-nav {
     background-color: #2ECC71;
 }
+/* Progress bar for nutrition summary */
 .progress {
     height: 2rem;
 }
@@ -17,45 +27,89 @@ body {
 	text-align: right;
 	white-space: nowrap;
 }
-.side-nav li>a {
-    color: #ffffff;
-}
-.side-nav {
-    background-color: #2ECC71;
-}
+/* Colours for toast message icons */
 .positive {
-    color: #9cf196;
+    color: #689f38;
 }
 .neutral {
-    color: #f5b971;
+    color: #fdbd30;
 }
 .negative {
-    color: #fa877f;
+    color: #ef4438;
 }
+/* Labels for each nutrition item of an ingredient */
 .side-label {
 }
-/* list elements (meals, ingredients, steps) */
+/* dynamic list elements (meals, ingredients, steps) */
+.list-item {
+    background-color: pink;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+}
+/*********************************************************************************** margins - list items */
+/* margin for recipe list items */
+#ingredient-list .list-item,
+#step-list .list-item {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+}
+/* margin for ingredient nutrients */
+#ingredient_details .nutrient {
+    margin: 0 0.75rem 0 0.75rem;
+}
+/************************************************************************************************* colours */
+/* list items */
 #meals-list .list-item,
 #ingredient-list .list-item,
 #step-list .list-item {
-
-    background-color: #f5ffcb;
-    border-radius: 4px;
-    margin-bottom: 4px;
+    background-color: #a5a7aa;
+    color: #1c1c1d;
+    border-radius: 3px;
+    margin-bottom: 0.25rem;
 }
+/* list items (on hover) */
 #meals-list .list-item:hover,
 #ingredient-list .list-item:hover,
 #step-list .list-item:hover {
-    background-color: #c2dbc1;
-
+    background-color: #26a8df;
+    color: #1c1c1d;
+}
+/* main cards */
+#add-meal-card,
+#nutrition-summary-card,
+#recipe-details-card,
+#ingredient-details-card {
+/*    background-color: #c5e1a5;*/
+    background-color: #c5e1a5;
+    color: #1c1c1d;
+}
+/* inner cards */
+#ingredient-row,
+#step-row {
+    background-color: #dcedc8;
+    color: #1c1c1d;
+}
+#ingredient_details .nutrient {
+    background-color: #dcedc8;
+    margin-bottom: 0.75rem;
+/*    margin-left: 0.25rem;
+    margin-right: 0.25rem;*/
+}
+#ingredient-row,
+#step-row {
+/*    background-color: #e0f5b9;
+    margin-left: 0;
+    margin-right: 0;
+    margin: 0 1rem 0 1rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;*/
 }
 .delete_item {
     cursor: pointer;
 }
 .delete_item:hover {
-    color: #fa877f;
+    color: #ef4438;
 }
-.nutrient {
-    background-color: #f5ffcb;
-
+.save-buttons button {
+    margin: 0.75rem 0 0 0.75rem;
 }
