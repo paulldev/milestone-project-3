@@ -1,6 +1,6 @@
 body {
     background-color: #aed581;
-/*    color: #ffffff;*/
+    color: #1c1c1d;
 }
 /* Materialize */
 /* navbar */
@@ -12,20 +12,25 @@ body {
     color: #ffffff;
 }
 .side-nav {
-    background-color: #2ECC71;
+    background-color: #33691e;
 }
 /* Progress bar for nutrition summary */
 .progress {
     height: 2rem;
+    background-color: #ef4438;
 }
 .determinate {
 	width: 0;
 	transition: width 1s ease-in-out;
 	padding: 8px;
 	position: relative;
-    color: #000000;
+    color: #1c1c1d;
 	text-align: right;
 	white-space: nowrap;
+}
+/* green progress bar */
+.progress .determinate {
+    background-color: #689f38;
 }
 /* Colours for toast message icons */
 .positive {
@@ -39,6 +44,8 @@ body {
 }
 /* Labels for each nutrition item of an ingredient */
 .side-label {
+    color: #1c1c1d;
+    font-size: 1rem;
 }
 /* dynamic list elements (meals, ingredients, steps) */
 .list-item {
