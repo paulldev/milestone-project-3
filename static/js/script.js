@@ -70,8 +70,8 @@ $(document).ready(function () {
 			limit: 200, // The max amount of results that can be shown at once. Default: Infinity.
 			onAutocomplete: function () {
 				// Callback function when value is autcompleted.
-				matchedIngredient = true;
-				//getredientNutrition(); //??? maybe not needed
+                matchedIngredient = true;
+				Materialize.toast("<i class='material-icons positive'>check_circle</i>Found ingredient", 3000);
 			},
 			minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 		});
@@ -463,7 +463,7 @@ $(document).ready(function () {
 		event.preventDefault();
 		let step_number = $("#step_number").val();
 		let step_description = $("#step_description").val();
-		if ((step_number.length > 0) & (step_description.length > 0)) {//if step number and description exist
+		if ((step_number.length > 0) & (step_description.length > 0)) {//if step number and description are filled in
             addStepToRecipe(step_number, step_description);
             updateRecipeStatus();
 		} else {
@@ -885,7 +885,7 @@ $(document).ready(function () {
 				if (result == 'match') {
 					//found ingredient in database
                     matchedIngredient = true;
-					getIngredientNutrition();
+                    getIngredientNutrition();
 				} else if (result == "no match") {
 					matchedIngredient = false;
 					clearIngredientInputs();
@@ -909,7 +909,6 @@ $(document).ready(function () {
 			url: "/get_ingredient_nutrition",
 			success: function (result) {
 				if (result) {
-                    $("#ingredient_amount").val(result[0].ingredient_amount);
 					$("#ingredient_unit").val(result[0].ingredient_unit);
 					//https://stackoverflow.com/questions/30341095/change-value-of-materialize-select-box-by-jquery/35934475
 					$("#ingredient_unit").material_select(); //needs to be re-initialized
@@ -920,8 +919,16 @@ $(document).ready(function () {
 					$("#calcium_amount").val(result[0].calcium);
 					$("#iron_amount").val(result[0].iron);
                     $("#zinc_amount").val(result[0].zinc);
+                    //prevent ingredient amount being filled in on any page, except ingredients page
+                    console.log("TESTING");
+                    if (location.href.match(/ingredients/)) {
+                        $("#ingredient_amount").val(result[0].ingredient_amount);
+    					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 3000);
+                    } else {
+                        $("#ingredient_amount").val();
+    					Materialize.toast("<i class='material-icons positive'>check_circle</i>Found ingredient", 3000);
+                    }
                     Materialize.updateTextFields();
-					Materialize.toast("<i class='material-icons positive'>check_circle</i>Loaded nutritional data", 3000);
 				}
 			},
 			error: function (error) {
