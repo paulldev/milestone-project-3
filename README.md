@@ -37,6 +37,13 @@ As you add eacg recipe to your list of meals, you will get an updated, visual, o
 
 > How is the information structured and how is it logically grouped.
 
+The data will be stored in a MySQL database with the following structure:
+![EER diagram](https://github.com/paulldev/milestone-project-3/blob/master/documentation/EER_diagram.png?raw=true)
+
+The web app is divided into 3 main pages as is seen from the wireframe:
+![Wireframe](https://github.com/paulldev/milestone-project-3/blob/master/documentation/wireframe.png?raw=true)
+
+
 The information is logically grouped into 3 main groups:
 
 - **1. Ingredients:**
@@ -69,8 +76,10 @@ Each recipe contains a list of ingredients used, and a list of steps used to mak
 
 - **3. Meals:**
 Each meal has the following data:
-- The recipe usedxxx
+- The recipe used
 - The meal type (breakfast, lunch, dinner, etc)
+- The list of meals
+- The visual representation of your total nutrient intake for the day
 
 ### Skeleton Plane
 
@@ -86,9 +95,6 @@ The recipes page will be represented as a form which can be filled out and saved
 
 - **Ingredients:**
 The ingredients page will be represented as a form which can be filled out and saved, or populated by searching for an existing ingredient.
-
-The data will be stored in a MySQL database with the following structure:
-![EER diagram](https://github.com/paulldev/milestone-project-3/blob/master/documentation/EER_diagram.png?raw=true)
 
 Navigation will be done with the navbar links.
 Another navigation scenario is when the user tries to add an ingredient/recipe that doesn't exist. This will prompt the user to navigate to the recipe/ingredient page where they can create recipe/ingredient. The name will be brought from the sending page to the landing page, where it will be awaiting the rest of the form to be filled in.
@@ -124,6 +130,8 @@ If the ingredient is new, the user must fill out the form and then save it to th
 
 
 ## Features
+- Status tables allow users to navigate to different pages without losing their data. If you are creating a new recipe and you are entering an ingredient that doesn't exist in the database, you can navigate to the ingredients page, create the ingredient, and return to the recipe page an continue where you left off.
+- When searching for a recipe or an ingredient, the Materialize autocomplete feature is used (https://materializecss.com/autocomplete.html). A local object is kept up-to-date, which is used to populate the drop down list based on your search text.
 
 ## Future features to implement
 
