@@ -221,6 +221,12 @@ From inside **DevTools > Sources > Watch**, we add each variable to be tested as
 |ingredients.html|click delete button (ingredient exists)|clear form once delete is complete|Pass|
 |ingredients.html|click delete button (ingredient does not exist)|display toast message "ingredient doesn't exist"|Pass|
 
+There is some test data in the database for you to use, or you can create your own. Here is the test data:
+![Ingredients](https://github.com/paulldev/milestone-project-3/blob/master/documentation/ingredients.png?raw=true)
+![Recipes](https://github.com/paulldev/milestone-project-3/blob/master/documentation/recipes.png?raw=true)
+There recipes have no steps, you will have to create them yourself!
+
+
 ## Deployment
 
 All development was done using Gitpod as the IDE. Regular commits were made, which were then pushed to GitHub.
