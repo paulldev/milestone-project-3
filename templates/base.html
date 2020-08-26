@@ -23,9 +23,8 @@
 		<header>
 			<nav>
 				<div class="nav-wrapper">
-					<a href="{{ url_for('index') }}" class="brand-logo"
-						>Nutriplan</a
-					>
+					<a href="{{ url_for('index') }}" class="brand-logo">
+						<span class="hide-on-small-only"><img src="{{ url_for('static', filename='images/meal_cropped1.jpg') }}" class="responsive-img circle z-depth-2" alt="Image of food"></span><span>Nutriplan</span></a>
 					<a
 						href="#"
 						data-activates="mobile-demo"
