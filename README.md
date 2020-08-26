@@ -88,7 +88,7 @@ The recipes page will be represented as a form which can be filled out and saved
 The ingredients page will be represented as a form which can be filled out and saved, or populated by searching for an existing ingredient.
 
 The data will be stored in a MySQL database with the following structure:
-![EER diagram](https://github.com/paulldev/milestone-project-3/blob/master/documentation/EER diagram.png?raw=true)
+![EER diagram](https://github.com/paulldev/milestone-project-3/blob/master/documentation/EER_diagram.png?raw=true)
 
 Navigation will be done with the navbar links.
 Another navigation scenario is when the user tries to add an ingredient/recipe that doesn't exist. This will prompt the user to navigate to the recipe/ingredient page where they can create recipe/ingredient. The name will be brought from the sending page to the landing page, where it will be awaiting the rest of the form to be filled in.
