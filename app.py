@@ -8,28 +8,15 @@ from flask import Flask, render_template, url_for, request, jsonify, redirect
 app = Flask(__name__)
 
 if os.environ.get('ENVIRONMENT') == 'gitpod':
-    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
-    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
-    print(f"DB_NAME> {os.environ.get('DB_NAME')}")
-    print(f"DB_USER> {os.environ.get('DB_USER')}")
-    print(f"PORT> {os.environ.get('PORT')}")
-    print(f"IP> {os.environ.get('IP')}")
     app.debug = True
 else:
-    print(f"ENVIRONMENT> {os.environ.get('ENVIRONMENT')}")
-    print(f"DB_HOST> {os.environ.get('DB_HOST')}")
-    print(f"DB_NAME> {os.environ.get('DB_NAME')}")
-    print(f"DB_USER> {os.environ.get('DB_USER')}")
-    print(f"PORT> {os.environ.get('PORT')}")
-    print(f"IP> {os.environ.get('IP')}")
     app.degug = False
 
 
 @app.route('/')
 def index():
-#    recipe_name = ''
-#    meal_list = ''
     try:
+        #database connection credentials are stored as environment variables for security
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
         # Run a query (get meal types)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -60,9 +47,9 @@ def index():
 def recipes():
     if request.form:
         name = request.form['recipe_name']
-        print(f"request.form: {request.form['recipe_name']}")
     else:
         name = ''
+
     recipe_name = ''
     servings = ''
     ingredient_name = ''
@@ -77,7 +64,6 @@ def recipes():
             sql = "SELECT * FROM statusRecipeItem;"
             cursor.execute(sql)
             recipe = cursor.fetchall()
-            print(f"RECIPE = {recipe}")
             if recipe:
                 if recipe[0]['recipe_name']:
                     recipe_name = recipe[0]['recipe_name']
@@ -96,13 +82,11 @@ def recipes():
             sql = "SELECT * FROM statusRecipeIngredientList;"
             cursor.execute(sql)
             ingredient = cursor.fetchall()
-            print(f"Ingredients: {ingredient}")
 
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM statusRecipeStepList;"
             cursor.execute(sql)
             step = cursor.fetchall()
-            print(f"Steps: {step}")
     finally:
         connection.close()
     return render_template("recipes.html", name=name, recipe_name=recipe_name, servings=servings, ingredient_name=ingredient_name, ingredient_amount=ingredient_amount, step_number=step_number, step_description=step_description, ingredient=ingredient, step=step)
@@ -112,7 +96,6 @@ def recipes():
 def ingredients():
     if request.form:
         name = request.form['ingredient_name']
-        print(f"request.form: {request.form['ingredient_name']}")
     else:
         name = ''
     return render_template("ingredients.html", name=name)
@@ -132,7 +115,6 @@ def ingredient_exists():
             cursor.execute(sql)
             result = cursor.fetchone()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     if result:
@@ -150,13 +132,12 @@ def recipe_exists():
         # Connect to the database
         connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
-        # Run a query
+        # Run a query (check if recipe exists)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT name, COUNT(*) FROM recipe WHERE name = '{recipe}' GROUP BY name;"
             cursor.execute(sql)
             result = cursor.fetchone()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     if result:
@@ -189,11 +170,9 @@ def get_ingredient_nutrition():
 def update_home_status():
     #get data from request object
     received_data = request.form
-    print(f"==> RECEIVED DATA: {received_data}")
     #https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
         data=key
-    print(f"==> Data: {data}")
     data_dict=json.loads(data)
 
     recipe_name = data_dict['recipe_name']
@@ -217,20 +196,12 @@ def update_home_status():
 
         # Run a query (save item data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            #print(f"Insert recipe_name: '{recipe_name}'")
-            #print(f"Insert ingredient_name: '{ingredient_name}'")
-            #print(f"Insert ingredient_amount: {ingredient_amount}")
-            #print(f"Insert step_number: {step_number}")
-            #print(f"Insert step_description: '{step_description}'")
             sql = f"INSERT INTO statusRecipeItem (recipe_name) VALUES ('{recipe_name}');"
             cursor.execute(sql)
             connection.commit()
 
         # Run a query (save ingredients list data)
         for index in range(len(recipe_name_list)):
-#            print(f"(FOR) Insert ingredient_name: '{ingredient_name_list[index]}'")
-#            print(f"(FOR) Insert ingredient_amount: {ingredient_amount_list[index]}")
-#            print(f"(FOR) Insert ingredient_unit: '{ingredient_unit_list[index]}'")
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"INSERT INTO statusMealItemList (recipe_name, meal_type) VALUES ('{recipe_name_list[index]}', '{meal_type_list[index]}');"
                 cursor.execute(sql)
@@ -242,15 +213,12 @@ def update_home_status():
     return jsonify("updated home status")
 
 
-@app.route('/update_recipe_status', methods=['POST'])#xnow
+@app.route('/update_recipe_status', methods=['POST'])
 def update_recipe_status():
     #get data from request object
     received_data = request.form
-    print(f"==> RECEIVED DATA: {received_data}")
-    #https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
         data=key
-    print(f"==> Data: {data}")
     data_dict=json.loads(data)
 
     recipe_name = data_dict['recipe_name']
@@ -286,38 +254,24 @@ def update_recipe_status():
 
         # Run a query (save item data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            #print(f"Insert recipe_name: '{recipe_name}'")
-            #print(f"Insert servings: {servings}")
-            #print(f"Insert ingredient_name: '{ingredient_name}'")
-            #print(f"Insert ingredient_amount: {ingredient_amount}")
-            #print(f"Insert step_number: {step_number}")
-            #print(f"Insert step_description: '{step_description}'")
             sql = f"INSERT INTO statusRecipeItem (recipe_name, servings, ingredient_name, ingredient_amount, step_number, step_description) VALUES ('{recipe_name}', {servings}, '{ingredient_name}', {ingredient_amount}, {step_number}, '{step_description}');"
             cursor.execute(sql)
             connection.commit()
 
         # Run a query (save ingredients list data)
         for index in range(len(ingredient_name_list)):
-#            print(f"(FOR) Insert ingredient_name: '{ingredient_name_list[index]}'")
-#            print(f"(FOR) Insert ingredient_amount: {ingredient_amount_list[index]}")
-#            print(f"(FOR) Insert ingredient_unit: '{ingredient_unit_list[index]}'")
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"INSERT INTO statusRecipeIngredientList (ingredient_name, ingredient_amount,ingredient_unit) VALUES ('{ingredient_name_list[index]}', {ingredient_amount_list[index]}, '{ingredient_unit_list[index]}');"
                 cursor.execute(sql)
                 connection.commit()
 
         # Run a query (save steps list data)
-        print(f"==> length = {len(step_number_list)}")
         for step_index in range(len(step_number_list)):
-            print(f"==> step_index = {step_index}")
-            print(f"Insert step_number: {step_number_list[step_index]}")
-            print(f"Insert step_description: {step_description_list[step_index]}")
             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 sql = f"INSERT INTO statusRecipeStepList (step_number, step_description) VALUES ({step_number_list[step_index]}, '{step_description_list[step_index]}');"
                 cursor.execute(sql)
                 connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify("updated recipe status")
@@ -341,7 +295,7 @@ def get_recipe_data():
             results.append(servings) #add servings to our results array (to be read by jquery)
 
         # Run a query (get list of ingredients)
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:#plucey do I need so many columns returned?
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
             ingredients = cursor.fetchall()  #returns a dictionary
@@ -354,7 +308,6 @@ def get_recipe_data():
             steps = cursor.fetchall()  #returns a dictionary
             results.append(steps) #add steps to our results array (to be read by jquery)
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify(results) #returns list: servings (value), ingredients (list), steps (list)
@@ -391,7 +344,6 @@ def delete_recipe():
             cursor.execute(sql)
             connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify("deleted recipe")
@@ -412,7 +364,6 @@ def update_nutrition_summary():
             cursor.execute(sql)
             result = cursor.fetchone()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify(result)
@@ -435,7 +386,6 @@ def delete_item():
             cursor.execute(sql)
             connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify("deleted")
@@ -470,7 +420,6 @@ def save_ingredient_nutrition():
             result = cursor.fetchall()  #returns a dictionary
             connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify('success')
@@ -491,17 +440,11 @@ def update_recipe_nutrition_values():
             cursor.execute(sql)
             recipe_data = cursor.fetchall()
 
-            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']
-            converted_values = []
-            print("========================================================================================================")
-            print("=================================== START ==============================================================")
-            print("========================================================================================================")
+            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']#nutrient names to process
+            converted_values = []#stores converted nutritional values
             
             # process each ingredient in recipe
             for recipe_index in range(len(recipe_data)):
-                print(f"=== FOR EACH INGREDIENT (Processing ingredient {recipe_index}) =========================================")
-                print(f"Converted_values[] : {converted_values}")
-
                 servings = recipe_data[recipe_index]['servings']
                 recipe_id = recipe_data[recipe_index]['ID']
  
@@ -525,6 +468,7 @@ def update_recipe_nutrition_values():
 
                         conversion_value = get_conversion_value(recipe_ingredient_unit, ingredient_unit)
 
+                        #convertes nutritional data from one unit to another (if necessary). Factors in serving value also.
                         converted_result = (nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
 
                         if recipe_index == 0:
@@ -535,7 +479,6 @@ def update_recipe_nutrition_values():
                             converted_values[nutrient_index] = round(converted_total)
     
                         if nutrient_index == len(names_to_convert)-1:
-                            print("**********************TIME TO WRITE TO DATABASE**********************")
                             # Run a query
                             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
                                 #https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
@@ -543,13 +486,13 @@ def update_recipe_nutrition_values():
                                 cursor.execute(sql)
                                 connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify('updated recipe nutrition values')
 
 
 def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
+    #caters for all cominations of unit conversions
     if recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'teaspoon (tsp.)':
         return 0.24
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'tablespoon (tbsp.)':
@@ -575,17 +518,15 @@ def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'tablespoon (tbsp.)':
         return 0.067
     else:
-        return 1
+        return 1 #if units match, then no conversion is requires. Therefore 1 is returned.
 
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
     #get data from request object
     received_data = request.form
-    #https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
         data=key
-    print(f"data: {data}")
     data_dict=json.loads(data)
 
     action = data_dict['action']
@@ -650,91 +591,6 @@ def save_recipe():
                 cursor.execute(sql)
                 connection.commit()
     finally:
-        #  Close the connection, regardless of whether or not the above was successful
-        connection.close()
-
-    return jsonify("saved recipe")
-
-
-@app.route('/save_recipe_status', methods=['POST'])#xnow probably delete
-def save_recipe_status():
-    #initialize variables
-    recipe_name = ''
-    servings = ''
-    ingredient_name_input = ''
-    ingredient_amount_input = ''
-    ingredient_name = ''
-    ingredient_amount = ''
-    ingredient_unit = ''
-    step_number_input = ''
-    step_description_input = ''
-    step_number = ''
-    step_description = ''
-
-    #get data from request object
-    received_data = request.form
-    #https://www.youtube.com/watch?v=2OYkhatUZmQ
-    for key in received_data.keys():
-        data=key
-    print(f"data: {data}")
-    data_dict=json.loads(data)
-
-    recipe_name = data_dict['recipe_name']
-    servings = data_dict['servings']
-    ingredient_name_input = data_dict['ingredient_name_input']
-    ingredient_amount_input = data_dict['ingredient_amount_input']
-    
-    ingredient_name = data_dict['ingredient_name']
-    ingredient_amount = data_dict['ingredient_amount']
-    ingredient_unit = data_dict['ingredient_unit']
-    step_number_input = data_dict['step_number_input']
-    step_description_input = data_dict['step_description_input']
-    step_number = data_dict['step_number']
-    step_description = data_dict['step_description']
-
-    try:
-        # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-
-        # Run a query (clear table data)
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"DELETE FROM statusRecipeItem;"
-            cursor.execute(sql)
-            connection.commit()
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"DELETE FROM statusRecipeIngredientList;"
-            cursor.execute(sql)
-            connection.commit()
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"DELETE FROM statusRecipeStepList;"
-            cursor.execute(sql)
-            connection.commit()
-
-        # Run a query (save item data)
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            print(f"'{recipe_name}'")
-            print(f"{servings}")
-            print(f"'{ingredient_name}'")
-            print(f"{ingredient_amount}")
-            print(f"{step_number}")
-            print(f"'{step_description}'")
-            sql = f"INSERT INTO statusRecipeItem (recipe_name, servings, ingredient_name, ingredient_amount, step_number, step_description) VALUES ('{recipe_name}', {servings}, '{ingredient_name}', {ingredient_amount}, {step_number}, '{step_description}');"
-            cursor.execute(sql)
-            connection.commit()
-
-        # Run a query (save ingredients list data)
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"INSERT INTO statusRecipeIngredientList (ingredient_name, ingredient_amount, ingredient_unit) VALUES ('{ingredient_name}', {ingredient_amount}, '{ingredient_unit}');"
-            cursor.execute(sql)
-            connection.commit()
-
-        # Run a query (save steps list data)
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"INSERT INTO statusRecipeStepList (step_number, step_description) VALUES ({step_number}, '{step_description}');"
-            cursor.execute(sql)
-            connection.commit()
-    finally:
-        #  Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify("saved recipe")
@@ -756,7 +612,6 @@ def get_names():
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
     finally:
-        # Close the connection, regardless of whether or not the above was successful
         connection.close()
     
     return jsonify(result)
@@ -773,27 +628,6 @@ def name_exists(table, column_name, name):
             cursor.execute(sql)
             result = cursor.fetchall()  #returns a dictionary
     finally:
-        # Close the connection, regardless of whether or not the above was successful
-        connection.close()
-
-    return jsonify(result)
-
-#xxxxx maybe unused?
-def get_value(table, column, name):
-    try:
-        # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
-
-        # Run a query
-        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
-            cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
-            if result:
-                print('result is:')
-                print(result)
-    finally:
-        # Close the connection, regardless of whether or not the above was successful
         connection.close()
 
     return jsonify(result)
