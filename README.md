@@ -27,7 +27,6 @@ The topic of nutrition is very complex and detailed, and I wanted to simplify it
 
 > Which features (based on information from the strategy plane) do you want to include in your design?
 
-The web app 
 I want the web app to have 3 main pages:
 - **Daily meal plan (home):** this is where you can add recipes to your daily meal plan. What will you eat for breakfast? What will you eat for lunch? What will you eat for dinner?
 As you add eacg recipe to your list of meals, you will get an updated, visual, overview of your daily nutrition. The values used are based on the RDA for each nutrient.
@@ -87,6 +86,9 @@ The recipes page will be represented as a form which can be filled out and saved
 
 - **Ingredients:**
 The ingredients page will be represented as a form which can be filled out and saved, or populated by searching for an existing ingredient.
+
+The data will be stored in a MySQL database with the following structure:
+![EER diagram](/documentation/EER diagram.png)
 
 Navigation will be done with the navbar links.
 Another navigation scenario is when the user tries to add an ingredient/recipe that doesn't exist. This will prompt the user to navigate to the recipe/ingredient page where they can create recipe/ingredient. The name will be brought from the sending page to the landing page, where it will be awaiting the rest of the form to be filled in.
