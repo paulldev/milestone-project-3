@@ -1,131 +1,131 @@
 body {
-    background-color: #aed581;
-    color: #1c1c1d;
+	background-color: #aed581;
+	color: #1c1c1d;
 }
 /* Materialize */
 /* navbar */
 .nav-wrapper {
-    background-color: #33691e;
+	background-color: #33691e;
 }
 /* Side navbar */
-.side-nav li>a {
-    color: #ffffff;
+.side-nav li > a {
+	color: #ffffff;
 }
 .side-nav {
-    background-color: #33691e;
+	background-color: #33691e;
 }
 /* Progress bar for nutrition summary */
 .progress {
-    height: 2rem;
-    background-color: #ef4438;
+	height: 2rem;
+	background-color: #ef4438;
 }
 .determinate {
 	width: 0;
 	transition: width 1s ease-in-out;
 	padding: 8px;
 	position: relative;
-    color: #1c1c1d;
+	color: #1c1c1d;
 	text-align: right;
 	white-space: nowrap;
 }
 /* green progress bar */
 .progress .determinate {
-    background-color: #689f38;
+	background-color: #689f38;
 }
 /* Colours for toast message icons */
 .positive {
-    color: #689f38;
+	color: #689f38;
 }
 .neutral {
-    color: #fdbd30;
+	color: #fdbd30;
 }
 .negative {
-    color: #ef4438;
+	color: #ef4438;
 }
 /* Labels for each nutrition item of an ingredient */
 .side-label {
-    color: #1c1c1d;
-    font-size: 1rem;
+	color: #1c1c1d;
+	font-size: 1rem;
 }
 /* dynamic list elements (meals, ingredients, steps) */
 .list-item {
-    background-color: pink;
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
+	background-color: pink;
+	margin-left: 0.75rem;
+	margin-right: 0.75rem;
 }
 /*********************************************************************************** margins - list items */
 /* margin for recipe list items */
 #ingredient-list .list-item,
 #step-list .list-item {
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
+	margin-left: 0.75rem;
+	margin-right: 0.75rem;
 }
 /* margin for ingredient nutrients */
 #ingredient_details .nutrient {
-    margin: 0 0.75rem 0 0.75rem;
+	margin: 0 0.75rem 0 0.75rem;
 }
 /************************************************************************************************* colours */
 /* list items */
 #meals-list .list-item,
 #ingredient-list .list-item,
 #step-list .list-item {
-    background-color: #a5a7aa;
-    color: #1c1c1d;
-    border-radius: 3px;
-    margin-bottom: 0.25rem;
+	background-color: #a5a7aa;
+	color: #1c1c1d;
+	border-radius: 3px;
+	margin-bottom: 0.25rem;
 }
 /* list items (on hover) */
 #meals-list .list-item:hover,
 #ingredient-list .list-item:hover,
 #step-list .list-item:hover {
-    background-color: #26a8df;
-    color: #1c1c1d;
+	background-color: #26a8df;
+	color: #1c1c1d;
 }
 /* main cards */
 #add-meal-card,
 #nutrition-summary-card,
 #recipe-details-card,
 #ingredient-details-card {
-    background-color: #c5e1a5;
-    color: #1c1c1d;
+	background-color: #c5e1a5;
+	color: #1c1c1d;
 }
 /* inner cards */
 #ingredient-row,
 #step-row {
-    background-color: #dcedc8;
-    color: #1c1c1d;
+	background-color: #dcedc8;
+	color: #1c1c1d;
 }
 #ingredient_details .nutrient {
-    background-color: #dcedc8;
-    margin-bottom: 0.75rem;
+	background-color: #dcedc8;
+	margin-bottom: 0.75rem;
 }
 /* save/delete buttons */
 .delete_item {
-    cursor: pointer;
+	cursor: pointer;
 }
 .delete_item:hover {
-    color: #ef4438;
+	color: #ef4438;
 }
 .save-buttons button {
-    margin: 0.75rem 0 0 0.75rem;
+	margin: 0.75rem 0 0 0.75rem;
 }
 /* site logo */
 .brand-logo img {
-    height: 2.5rem;
-    width: 2.5rem;
-    margin-top: 1rem;
-    margin-left: 1rem;
-    margin-right: 0.25rem;
+	height: 2.5rem;
+	width: 2.5rem;
+	margin-top: 1rem;
+	margin-left: 1rem;
+	margin-right: 0.25rem;
 }
 /* anchor links (intro text for each page) */
 .custom-link {
-    color: #1c1c1d;
-    background: #c5e1a5;
-    border-radius: 3px;
-    padding: 1px 3px 1px 3px;
-    cursor: pointer;
+	color: #1c1c1d;
+	background: #c5e1a5;
+	border-radius: 3px;
+	padding: 1px 3px 1px 3px;
+	cursor: pointer;
 }
 .custom-link:hover {
-    color: #ffffff;
-    background: #33691e;
+	color: #ffffff;
+	background: #33691e;
 }

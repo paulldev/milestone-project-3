@@ -1,70 +1,81 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row">
-    <div class="col s12">
-        <h3>Daily Meal Plan</h3>
-        <p>Add a recipe for each meal. Try to achieve your nutritional goals!<br>
-        We recommend that you begin with creating the <a href="{{ url_for('ingredients') }}" class="custom-link">ingredients</a> you intend to use in your recipe. Then you can create the <a href="{{ url_for('recipes') }}" class="custom-link">recipes</a> that use these ingredients. Finally you are ready to add your recipes to your daily meal plan.<br>
-        Enjoy happy, healthy eating!
-        </p>
-    </div>
+	<div class="col s12">
+		<h3>Daily Meal Plan</h3>
+		<p>
+			Add a recipe for each meal. Try to achieve your nutritional
+			goals!<br />
+			We recommend that you begin with creating the
+			<a href="{{ url_for('ingredients') }}" class="custom-link"
+				>ingredients</a
+			>
+			you intend to use in your recipe. Then you can create the
+			<a href="{{ url_for('recipes') }}" class="custom-link">recipes</a>
+			that use these ingredients. Finally you are ready to add your
+			recipes to your daily meal plan.<br />
+			Enjoy happy, healthy eating!
+		</p>
+	</div>
 </div>
 <div class="row">
-    <div class="col s12 card" id="add-meal-card">
-        <h3 class="card-title">Add a meal</h3>
-        <form class="col s12" autocomplete="off">
-            <div class="row">
-                <div class="input-field col s12 m6">
-                    <i class="material-icons prefix">search</i>
-                    <input
-                        id="recipe_name"
-                        name="recipe_name"
-                        type="text"
-                        class="validate autocomplete"
-                        value="{% if recipe_name %}{{recipe_name}}{% endif %}"
-                    />
-                    <label for="recipe_name">Recipe Name</label>
-                </div>
-                <div class="input-field col s12 m3">
-                    <select name="meal_type" id="meal_type">
-                        {% for record in meal_type %}
-                        <option value="">{{record.mealName}}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Meal type</label>
-                </div>
-                <div class="col s12 m3">
-                    <button
-                        id="add-to-meal-plan"
-                        class="waves-effect waves-light right btn"
-                        type="submit"
-                        action="add-to-meal-plan"
-                    >
-                        <i class="material-icons right">playlist_add</i>Add
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <ul id="meals-list">
-                        {% for record in meal_list %}
-                        <li class="row list-item">
-                            <div class="col s6 valign-wrapper">
-                                <i class="material-icons">navigate_next</i>
-                                <span>{{record.recipe_name}}</span>
-                            </div>
-                            <div class="col s4 valign-wrapper">
-                                {{record.meal_type}}
-                            </div>
-                            <div class="col s2 valign-wrapper">
-                                <i class="material-icons delete_item">delete_forever</i>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </form>
-    </div>
+	<div class="col s12 card" id="add-meal-card">
+		<h3 class="card-title">Add a meal</h3>
+		<form class="col s12" autocomplete="off">
+			<div class="row">
+				<div class="input-field col s12 m6">
+					<i class="material-icons prefix">search</i>
+					<input
+						id="recipe_name"
+						name="recipe_name"
+						type="text"
+						class="validate autocomplete"
+						value="{% if recipe_name %}{{recipe_name}}{% endif %}"
+					/>
+					<label for="recipe_name">Recipe Name</label>
+				</div>
+				<div class="input-field col s12 m3">
+					<select name="meal_type" id="meal_type">
+						{% for record in meal_type %}
+						<option value="">{{record.mealName}}</option>
+						{% endfor %}
+					</select>
+					<label>Meal type</label>
+				</div>
+				<div class="col s12 m3">
+					<button
+						id="add-to-meal-plan"
+						class="waves-effect waves-light right btn"
+						type="submit"
+						action="add-to-meal-plan"
+					>
+						<i class="material-icons right">playlist_add</i>Add
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<ul id="meals-list">
+						{% for record in meal_list %}
+						<li class="row list-item">
+							<div class="col s6 valign-wrapper">
+								<i class="material-icons">navigate_next</i>
+								<span>{{record.recipe_name}}</span>
+							</div>
+							<div class="col s4 valign-wrapper">
+								{{record.meal_type}}
+							</div>
+							<div class="col s2 valign-wrapper">
+								<i class="material-icons delete_item"
+									>delete_forever</i
+								>
+							</div>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 <div class="row card" id="nutrition-summary-card">
 	<div class="col s12">

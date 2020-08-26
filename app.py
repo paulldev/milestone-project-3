@@ -16,8 +16,9 @@ else:
 @app.route('/')
 def index():
     try:
-        #database connection credentials are stored as environment variables for security
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        # database connection credentials are stored as environment variables for security
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
         # Run a query (get meal types)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM mealType;"
@@ -58,7 +59,8 @@ def recipes():
     step_description = ''
 
     try:
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
         # Run a query (get recipe data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = "SELECT * FROM statusRecipeItem;"
@@ -103,14 +105,15 @@ def ingredients():
 
 @app.route('/ingredient_exists', methods=['POST'])
 def ingredient_exists():
-    #get data from request object
+    # get data from request object
     ingredient = request.form['ingredient_name']
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            #https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
+            # https://www.tutorialspoint.com/best-way-to-test-if-a-row-exists-in-a-mysql-table#:~:text=To%20test%20whether%20a%20row,false%20is%20represented%20as%200.
             sql = f"SELECT name, COUNT(*) FROM ingredient WHERE name='{ingredient}' GROUP BY name;"
             cursor.execute(sql)
             result = cursor.fetchone()
@@ -125,12 +128,13 @@ def ingredient_exists():
 
 @app.route('/recipe_exists', methods=['POST'])
 def recipe_exists():
-    #get data from request object
+    # get data from request object
     recipe = request.form['recipe_name']
-    
+
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (check if recipe exists)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -148,12 +152,13 @@ def recipe_exists():
 
 @app.route('/get_ingredient_nutrition', methods=['POST'])
 def get_ingredient_nutrition():
-    #get data from request object
+    # get data from request object
     ingredient_name = request.form['ingredient_name']
- 
+
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -168,21 +173,22 @@ def get_ingredient_nutrition():
 
 @app.route('/update_home_status', methods=['POST'])
 def update_home_status():
-    #get data from request object
+    # get data from request object
     received_data = request.form
-    #https://www.youtube.com/watch?v=2OYkhatUZmQ
+    # https://www.youtube.com/watch?v=2OYkhatUZmQ
     for key in received_data.keys():
-        data=key
-    data_dict=json.loads(data)
+        data = key
+    data_dict = json.loads(data)
 
     recipe_name = data_dict['recipe_name']
-    
+
     recipe_name_list = data_dict['recipe_name_list']
     meal_type_list = data_dict['meal_type_list']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (clear table data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -215,17 +221,17 @@ def update_home_status():
 
 @app.route('/update_recipe_status', methods=['POST'])
 def update_recipe_status():
-    #get data from request object
+    # get data from request object
     received_data = request.form
     for key in received_data.keys():
-        data=key
-    data_dict=json.loads(data)
+        data = key
+    data_dict = json.loads(data)
 
     recipe_name = data_dict['recipe_name']
     servings = data_dict['servings']
     ingredient_name = data_dict['ingredient_name']
     ingredient_amount = data_dict['ingredient_amount']
-    
+
     ingredient_name_list = data_dict['ingredient_name_list']
     ingredient_amount_list = data_dict['ingredient_amount_list']
     ingredient_unit_list = data_dict['ingredient_unit_list']
@@ -236,7 +242,8 @@ def update_recipe_status():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (clear table data)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -279,55 +286,61 @@ def update_recipe_status():
 
 @app.route('/get_recipe_data', methods=['POST'])
 def get_recipe_data():
-    #get data from request object
+    # get data from request object
     recipe_name = request.form['recipe_name']
-    results = []#results list will contain the results from our queries
+    results = []  # results list will contain the results from our queries
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT servings FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
-            servings = cursor.fetchone()  #returns a dictionary
-            results.append(servings) #add servings to our results array (to be read by jquery)
+            servings = cursor.fetchone()  # returns a dictionary
+            # add servings to our results array (to be read by jquery)
+            results.append(servings)
 
         # Run a query (get list of ingredients)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.name, recipeIngredient.ingredient_amount, recipeIngredient.ingredient_unit, recipeIngredient.ingredientID, ingredient.name FROM recipe AS recipe INNER JOIN recipeIngredient ON recipe.ID=recipeIngredient.recipeID INNER JOIN ingredient ON ingredient.ID=recipeIngredient.ingredientID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
-            ingredients = cursor.fetchall()  #returns a dictionary
-            results.append(ingredients) #add ingredients to our results array (to be read by jquery)
+            ingredients = cursor.fetchall()  # returns a dictionary
+            # add ingredients to our results array (to be read by jquery)
+            results.append(ingredients)
 
         # Run a query (get list of steps)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT recipe.name, step.recipeID, step.stepNumber, step.stepDescription FROM step AS step INNER JOIN recipe ON recipe.ID=step.recipeID WHERE recipe.name='{recipe_name}';"
             cursor.execute(sql)
-            steps = cursor.fetchall()  #returns a dictionary
-            results.append(steps) #add steps to our results array (to be read by jquery)
+            steps = cursor.fetchall()  # returns a dictionary
+            # add steps to our results array (to be read by jquery)
+            results.append(steps)
     finally:
         connection.close()
 
-    return jsonify(results) #returns list: servings (value), ingredients (list), steps (list)
+    # returns list: servings (value), ingredients (list), steps (list)
+    return jsonify(results)
 
 
 @app.route('/delete_recipe', methods=['POST'])
 def delete_recipe():
-    #get data from request object
+    # get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipeID)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
             result = cursor.fetchone()
-            recipe_id=result['ID']
+            recipe_id = result['ID']
         # Run a query (delete from recipeIngredient table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"DELETE FROM recipeIngredient WHERE recipeID = {recipe_id};"
@@ -351,12 +364,13 @@ def delete_recipe():
 
 @app.route('/update_nutrition_summary', methods=['POST'])
 def update_nutrition_summary():
-    #get data from request object
+    # get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get nutrition summary)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -371,14 +385,15 @@ def update_nutrition_summary():
 
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
-    #get data from request object
+    # get data from request object
     table = request.form['table']
     column = request.form['column']
     value = request.form['value']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -393,7 +408,7 @@ def delete_item():
 
 @app.route('/save_ingredient_nutrition', methods=['POST'])
 def save_ingredient_nutrition():
-    #get data from request object
+    # get data from request object
     action = request.form['action']
     ingredient_name = request.form['ingredient_name']
     ingredient_amount = request.form['ingredient_amount']
@@ -408,7 +423,8 @@ def save_ingredient_nutrition():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -417,7 +433,7 @@ def save_ingredient_nutrition():
             elif action == "update":
                 sql = f"UPDATE ingredient SET ingredient_amount={ingredient_amount}, ingredient_unit='{ingredient_unit}', energy={energy_amount}, carbohydrate={carbohydrate_amount}, fats={fats_amount}, protein={protein_amount}, calcium={calcium_amount}, iron={iron_amount}, zinc={zinc_amount} WHERE name='{ingredient_name}';"
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
+            result = cursor.fetchall()  # returns a dictionary
             connection.commit()
     finally:
         connection.close()
@@ -427,12 +443,13 @@ def save_ingredient_nutrition():
 
 @app.route('/update_recipe_nutrition_values', methods=['POST'])
 def update_recipe_nutrition_values():
-    #get data from request object
+    # get data from request object
     recipe_name = request.form['recipe_name']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (get recipe_id, servings)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -440,14 +457,15 @@ def update_recipe_nutrition_values():
             cursor.execute(sql)
             recipe_data = cursor.fetchall()
 
-            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein', 'calcium', 'iron', 'zinc']#nutrient names to process
-            converted_values = []#stores converted nutritional values
-            
+            names_to_convert = ['energy', 'carbohydrate', 'fats', 'protein',
+                                'calcium', 'iron', 'zinc']  # nutrient names to process
+            converted_values = []  # stores converted nutritional values
+
             # process each ingredient in recipe
             for recipe_index in range(len(recipe_data)):
                 servings = recipe_data[recipe_index]['servings']
                 recipe_id = recipe_data[recipe_index]['ID']
- 
+
                 # process each nutrient to be converted
                 for nutrient_index in range(len(names_to_convert)):
                     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -459,29 +477,33 @@ def update_recipe_nutrition_values():
                         nutrition_value = nutrient_data[0][names_to_convert[nutrient_index]]
 
                         recipe_ingredient_amount = recipe_data[recipe_index]['ingredient_amount']
- 
+
                         ingredient_amount = recipe_data[recipe_index]['ingredient.ingredient_amount']
 
                         recipe_ingredient_unit = recipe_data[recipe_index]['ingredient_unit']
-                        
+
                         ingredient_unit = recipe_data[recipe_index]['ingredient.ingredient_unit']
 
-                        conversion_value = get_conversion_value(recipe_ingredient_unit, ingredient_unit)
+                        conversion_value = get_conversion_value(
+                            recipe_ingredient_unit, ingredient_unit)
 
-                        #convertes nutritional data from one unit to another (if necessary). Factors in serving value also.
-                        converted_result = (nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
+                        # convertes nutritional data from one unit to another (if necessary). Factors in serving value also.
+                        converted_result = (
+                            nutrition_value * ((recipe_ingredient_amount * conversion_value)/ingredient_amount))/servings
 
                         if recipe_index == 0:
                             converted_total = converted_result
                             converted_values.append(round(converted_total))
                         else:
-                            converted_total = converted_result + converted_values[nutrient_index]
-                            converted_values[nutrient_index] = round(converted_total)
-    
+                            converted_total = converted_result + \
+                                converted_values[nutrient_index]
+                            converted_values[nutrient_index] = round(
+                                converted_total)
+
                         if nutrient_index == len(names_to_convert)-1:
                             # Run a query
                             with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                                #https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
+                                # https://www.mysqltutorial.org/mysql-insert-or-update-on-duplicate-key-update/
                                 sql = f"UPDATE recipe SET {names_to_convert[0]} = {converted_values[0]}, {names_to_convert[1]} = {converted_values[1]}, {names_to_convert[2]} = {converted_values[2]}, {names_to_convert[3]} = {converted_values[3]}, {names_to_convert[4]} = {converted_values[4]}, {names_to_convert[5]} = {converted_values[5]}, {names_to_convert[6]} = {converted_values[6]} WHERE ID = {recipe_id};"
                                 cursor.execute(sql)
                                 connection.commit()
@@ -492,7 +514,7 @@ def update_recipe_nutrition_values():
 
 
 def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
-    #caters for all cominations of unit conversions
+    # caters for all cominations of unit conversions
     if recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'teaspoon (tsp.)':
         return 0.24
     elif recipe_ingredient_unit == 'gram (g)' and ingredient_unit == 'tablespoon (tbsp.)':
@@ -518,16 +540,17 @@ def get_conversion_value(recipe_ingredient_unit, ingredient_unit):
     elif recipe_ingredient_unit == 'millilitre (ml)' and ingredient_unit == 'tablespoon (tbsp.)':
         return 0.067
     else:
-        return 1 #if units match, then no conversion is requires. Therefore 1 is returned.
+        # if units match, then no conversion is requires. Therefore 1 is returned.
+        return 1
 
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
-    #get data from request object
+    # get data from request object
     received_data = request.form
     for key in received_data.keys():
-        data=key
-    data_dict=json.loads(data)
+        data = key
+    data_dict = json.loads(data)
 
     action = data_dict['action']
     recipe_name = data_dict['recipe_name']
@@ -540,7 +563,8 @@ def save_recipe():
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query (save/update recipe table)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -555,7 +579,7 @@ def save_recipe():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT ID FROM recipe WHERE name='{recipe_name}';"
             cursor.execute(sql)
-            result = cursor.fetchone()#returns a dictionary
+            result = cursor.fetchone()  # returns a dictionary
             recipe_id = result['ID']
 
         # Run a query (delete current recipe steps)
@@ -598,35 +622,37 @@ def save_recipe():
 
 @app.route('/get_names', methods=['POST'])
 def get_names():
-    #get data from request object
+    # get data from request object
     table = request.form['table']
     column = request.form['column']
 
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT {column} FROM {table};"
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
+            result = cursor.fetchall()  # returns a dictionary
     finally:
         connection.close()
-    
+
     return jsonify(result)
 
 
 def name_exists(table, column_name, name):
     try:
         # Connect to the database
-        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
+        connection = pymysql.connect(host=os.environ.get('DB_HOST'), user=os.environ.get(
+            'DB_USER'), password=os.environ.get('DB_PASSWORD'), db=os.environ.get('DB_NAME'))
 
         # Run a query
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             sql = f"SELECT {column_name}, COUNT(*) FROM {table} WHERE {column_name} = '{name}' GROUP BY {column_name};"
             cursor.execute(sql)
-            result = cursor.fetchall()  #returns a dictionary
+            result = cursor.fetchall()  # returns a dictionary
     finally:
         connection.close()
 
