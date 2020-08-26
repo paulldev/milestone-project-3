@@ -4,7 +4,8 @@
 
 ### Repository: https://github.com/paulldev/milestone-project-3
 
-### Project wireframe and structure: https://github.com/paulldev/milestone-project-2/blob/master/wireframe-milestone-3.pdf
+### Project wireframe and flowcharts: https://github.com/paulldev/milestone-project-3/blob/master/documentation/wireframe-flowcharts-milestone-3.pdf
+NOTE: It doesn't display the flowcharts properly in Github, please download pdf first and then open the pdf file. 
 
 ## Introduction
 
@@ -135,7 +136,7 @@ If the ingredient is new, the user must fill out the form and then save it to th
 
 ## Future features to implement
 
-- add user logins (covered in next course module). This will prevent users' recipes and ingredients being overwritten or deleted.
+- add user logins (covered in next course modules). This will prevent users' recipes and ingredients being overwritten or deleted.
 
 ## Technologies used
 
