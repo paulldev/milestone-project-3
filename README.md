@@ -47,28 +47,28 @@ The web app is divided into 3 main pages as is seen from the wireframe:
 
 The information is logically grouped into 3 main groups:
 
-- **1. Ingredients:**
-Each ingredient has the following nutritional data:
-- amount
-- unit of measurement
-- energy value
-- carbohydrate value
-- fats value
-- protein value
-- calcium value
-- iron value
-- zinc value
+**1. Ingredients:**
+- Each ingredient has the following nutritional data:
+  - amount
+  - unit of measurement
+  - energy value
+  - carbohydrate value
+  - fats value
+  - protein value
+  - calcium value
+  - iron value
+  - zinc value
 
-- **2. Recipes:**
-Each recipe has the following data:
-- servings (the amount of people the recipe feeds)
-- energy value
-- carbohydrate value
-- fats value
-- protein value
-- calcium value
-- iron value
-- zinc value
+**2. Recipes:**
+- Each recipe has the following data:
+  - servings (the amount of people the recipe feeds)
+  - energy value
+  - carbohydrate value
+  - fats value
+  - protein value
+  - calcium value
+  - iron value
+  - zinc value
 
 The nutritional values in each recipe, are based on the servings, the amount of the ingredient used in the recipe, and the unit measurement used in the recipe. They are accumilitive totals.
 If a recipe lists a certain ingredient using a different measurement unit than the ingredient itself, the nutritional values will be converted by the app.
