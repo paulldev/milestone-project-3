@@ -150,9 +150,7 @@ If the ingredient is new, the user must fill out the form and then save it to th
 | Croppola               | Tool      | https://croppola.com/                                          | To crop my images                                                                     |
 | Reduce Images          | Tool      | https://www.reduceimages.com/                                  | To reduce the size of my images                                                       |
 | Real favicon generator | Tool      | https://realfavicongenerator.net                               | To generate favicons from an image    
-
 | MySQL Workbench | Tool      | https://www.mysql.com/products/workbench/                               | To create EER diagram, run queries. 
-
 | ClearDB | Heroku 3rd party add-on      | https://www.cleardb.com/                               | To allow a MySQL database to be used.                                                    |
 
 ## Testing
