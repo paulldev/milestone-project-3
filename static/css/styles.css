@@ -86,7 +86,6 @@ body {
 #nutrition-summary-card,
 #recipe-details-card,
 #ingredient-details-card {
-/*    background-color: #c5e1a5;*/
     background-color: #c5e1a5;
     color: #1c1c1d;
 }
@@ -99,18 +98,8 @@ body {
 #ingredient_details .nutrient {
     background-color: #dcedc8;
     margin-bottom: 0.75rem;
-/*    margin-left: 0.25rem;
-    margin-right: 0.25rem;*/
 }
-#ingredient-row,
-#step-row {
-/*    background-color: #e0f5b9;
-    margin-left: 0;
-    margin-right: 0;
-    margin: 0 1rem 0 1rem;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;*/
-}
+/* save/delete buttons */
 .delete_item {
     cursor: pointer;
 }
@@ -120,9 +109,23 @@ body {
 .save-buttons button {
     margin: 0.75rem 0 0 0.75rem;
 }
+/* site logo */
 .brand-logo img {
     height: 2.5rem;
     width: 2.5rem;
     margin-top: 1rem;
-    margin-left: 2rem;
+    margin-left: 1rem;
+    margin-right: 0.25rem;
+}
+/* anchor links (intro text for each page) */
+.custom-link {
+    color: #1c1c1d;
+    background: #c5e1a5;
+    border-radius: 3px;
+    padding: 1px 3px 1px 3px;
+    cursor: pointer;
+}
+.custom-link:hover {
+    color: #ffffff;
+    background: #33691e;
 }
