@@ -411,6 +411,7 @@ $(document).ready(function () {
 		if (matchedIngredient) {
             let value = $("#ingredient_name").val();
             deleteItem("ingredient", "name", value);
+            delete ingredients[value];//also delete property from ingredients object
             $("#ingredient_name").val(""); //clear ingredient name
             clearIngredientInputs();
             $(window).scrollTop(0); //scroll window to top
@@ -425,6 +426,7 @@ $(document).ready(function () {
 		if (matchedRecipe) {
             let recipe_name = $("#recipe_name").val();
             deleteRecipe(recipe_name);
+            delete recipes[recipe_name];//also delete property from recipes object
             $("#recipe_name").val(""); //reset recipe name
             clearRecipeInputs();
             updateRecipeStatus();
