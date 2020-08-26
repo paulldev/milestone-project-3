@@ -138,7 +138,9 @@ If the ingredient is new, the user must fill out the form and then save it to th
 | Materialize              | Framework | https://materializecss.com/                                      | To make layout easier                                                                 |
 | Croppola               | Tool      | https://croppola.com/                                          | To crop my images                                                                     |
 | Reduce Images          | Tool      | https://www.reduceimages.com/                                  | To reduce the size of my images                                                       |
-| Real favicon generator | Tool      | https://realfavicongenerator.net                               | To generate favicons from an image                                                    |
+| Real favicon generator | Tool      | https://realfavicongenerator.net                               | To generate favicons from an image    
+
+| MySQL Workbench | Tool      | https://www.mysql.com/products/workbench/                               | To create EER diagram, run queries.                                                    |
 
 ## Testing
 
@@ -210,21 +212,18 @@ From inside **DevTools > Sources > Watch**, we add each variable to be tested as
 
 ## Deployment
 
-All development was done locally using vscode as the IDE. Regular commits were made locally, which were then pushed to GitHub.
+All development was done locally using Gitpod as the IDE. Regular commits were made, which were then pushed to GitHub.
 When working on certain features, a new branch was created, which was then merged with the master branch after it was tested to be working.
 
-The project is hosted on **GitHub Pages** at the following url: https://paulldev.github.io/milestone-project-2/
-The project **repository** is located at the following url:
-https://github.com/paulldev/milestone-project-2
+The project is hosted on **Heroku** at the following url: https://ci-milestone-project-3.herokuapp.com/
+The project **repository** is located at the following url: https://github.com/paulldev/milestone-project-3
 
 ## Credits
 
 ### Media
 
-Image besite 'Nutriplan' (royalty free): https://pixabay.com/photos/casserole-dish-vegetable-tomato-2776735/
-All media icons were created by me using Gimp.
+Image beside 'Nutriplan' (royalty free): https://pixabay.com/photos/casserole-dish-vegetable-tomato-2776735/
 
 ## Acknowledgements
 
 Special thanks to my mentor, Aaron Sinnott. I appreciated his insight, advice, and his time.
-I would also thank the staff members I interviewed for taking time to show me their current system and to talk to me about features that they desired.
