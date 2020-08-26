@@ -223,30 +223,30 @@ The project is hosted on **Heroku** at the following url: https://ci-milestone-p
 The project **repository** is located at the following url: https://github.com/paulldev/milestone-project-3
 
 ### Deployment to Heroku:
-Create a repository using the template from https://github.com/Code-Institute-Org/gitpod-full-template
-Install Flask: `pip3 install flask`
-Create app.py. This is our Python app.
-Create a templates folder which will contain our html template files.
-Add base.html to our templates folder. Then add index.html which will extend base.html.
-Add Materialize framework.
-Create a Heroku app ci-milestone-project-3
-Login to Heroku from Gitpod: `heroku login`
-Test that Heroku app has been created successfully: `heroku apps`
-Create a new Git repository: `git init`
-Create our requirements.txt file: `pip3 freeze --local > requirements.txt`
-Create our Procfile: echo web: `python app.py > Procfile`
-Add all our files to our repository: `git add .`
-Commit: `git commit -m “’Initial commit”`
-Associate our Heroku app as our remote master branch:
-`heroku git:remote -a ci-milestone-project-3`
-Push to Heroku: `git push heroku master`
-From Heroku website (Settings tab), specify IP (0.0.0.0) and PORT (5000).
-From Heroku website (Deploy tab), link our Github with Heroku.
-Our app can now be viewed at https://ci-milestone-project-3.herokuapp.com/
-Install our mysql database “vmpdb”. Also create all the tables.
-Install PyMySQL library using: `pip3 install pymysql`
-Store database credentials in environment variables.
-Add 3rd party add-on 'ClearDB' to Heroku to enable app to use a MySQL database.
+- Create a repository using the template from https://github.com/Code-Institute-Org/gitpod-full-template
+- Install Flask: `pip3 install flask`
+- Create app.py. This is our Python app.
+- Create a templates folder which will contain our html template files.
+- Add base.html to our templates folder. Then add index.html which will extend base.html.
+- Add Materialize framework.
+- Create a Heroku app ci-milestone-project-3
+- Login to Heroku from Gitpod: `heroku login`
+- Test that Heroku app has been created successfully: `heroku apps`
+- Create a new Git repository: `git init`
+- Create our requirements.txt file: `pip3 freeze --local > requirements.txt`
+- Create our Procfile: echo web: `python app.py > Procfile`
+- Add all our files to our repository: `git add .`
+- Commit: `git commit -m “’Initial commit”`
+- Associate our Heroku app as our remote master branch:
+- `heroku git:remote -a ci-milestone-project-3`
+- Push to Heroku: `git push heroku master`
+- From Heroku website (Settings tab), specify IP (0.0.0.0) and PORT (5000).
+- From Heroku website (Deploy tab), link our Github with Heroku.
+- Our app can now be viewed at https://ci-milestone-project-3.herokuapp.com/
+- Install our mysql database “vmpdb”. Also create all the tables.
+- Install PyMySQL library using: `pip3 install pymysql`
+- Store database credentials in environment variables.
+- Add 3rd party add-on 'ClearDB' to Heroku to enable app to use a MySQL database.
 
 ## Credits
 
