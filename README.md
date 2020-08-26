@@ -1,4 +1,4 @@
-# Nutriplan ![Barnevakt](images/favicon-32x32.png)
+# Nutriplan
 
 ### Live website: https://ci-milestone-project-3.herokuapp.com/
 
