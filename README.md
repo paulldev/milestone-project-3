@@ -75,12 +75,12 @@ If a recipe lists a certain ingredient using a different measurement unit than t
 
 Each recipe contains a list of ingredients used, and a list of steps used to make the recipe.
 
-- **3. Meals:**
-Each meal has the following data:
-- The recipe used
-- The meal type (breakfast, lunch, dinner, etc)
-- The list of meals
-- The visual representation of your total nutrient intake for the day
+**3. Meals:**
+- Each meal has the following data:
+  - The recipe used
+  - The meal type (breakfast, lunch, dinner, etc)
+  - The list of meals
+  - The visual representation of your total nutrient intake for the day
 
 ### Skeleton Plane
 
