@@ -224,7 +224,8 @@ From inside **DevTools > Sources > Watch**, we add each variable to be tested as
 There is some test data in the database for you to use, or you can create your own. Here is the test data:
 ![Ingredients](https://github.com/paulldev/milestone-project-3/blob/master/documentation/ingredients.png?raw=true)
 ![Recipes](https://github.com/paulldev/milestone-project-3/blob/master/documentation/recipes.png?raw=true)
-There recipes have no steps, you will have to create them yourself!
+
+These recipes have no steps, you will have to create them yourself!
 
 
 ## Deployment
